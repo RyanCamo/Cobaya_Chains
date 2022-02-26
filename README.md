@@ -11,7 +11,7 @@ The current .yaml files here are jobs that have already been run and can be used
 Each .yaml file will have a line of the form:
   external: import_module('X').Y
 
-To run a particular job:
+BEFORE running a particular job:
 
 'X' can be changed to:
 
@@ -62,3 +62,8 @@ To run a particular job:
 
 
 Finally, make sure to change the name of the output folder at the bottom of the .yaml file.
+
+
+To run a job:
+
+Type 'cobaya-run Z.yaml' in the terminal. Where Z is the name of your .yaml file.
