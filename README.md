@@ -23,7 +23,7 @@ To run a particular job:
     
     By default the SN data is using DES5YR_UNBIN. 
     This can be changed within the likelihood files that constrain against SN data by changing the relative file paths. 
-    Note however that different SN data needs be imported differently.
+    Note however that different SN data need to be imported differently.
   
   
   Y represents the abbreviation for a particular non standard model. 
@@ -59,3 +59,6 @@ To run a particular job:
     FCa     - Flat Cardassian 
     
     DGP     - DGP 
+
+
+Finally, make sure to change the name of the output folder at the bottom of the .yaml file.
