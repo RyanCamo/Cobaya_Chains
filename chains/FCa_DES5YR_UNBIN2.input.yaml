@@ -1,0 +1,29 @@
+likelihood:
+  FCa:
+    external: import_module('my_likelihoods').FCa
+params:
+  om:
+    prior:
+      min: 0.1
+      max: 0.7
+    ref: 0.4
+    proposal: 0.01
+    latex: \Omega_{m}
+  q:
+    prior:
+      min: 0
+      max: 3
+    ref: 0.5
+    proposal: 0.01
+    latex: q
+  n:
+    prior:
+      min: -3
+      max: 0.5
+    ref: 0.1
+    proposal: 0.01
+    latex: n
+sampler:
+  mcmc:
+    max_tries: 10000
+output: FCa_DES5YR_UNBIN2

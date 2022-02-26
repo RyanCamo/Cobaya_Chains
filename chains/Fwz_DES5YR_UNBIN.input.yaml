@@ -1,0 +1,28 @@
+likelihood:
+  Fwz:
+    external: import_module('my_likelihoods').Fwz
+params:
+  om:
+    prior:
+      min: 0.1
+      max: 0.9
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_m
+  w0:
+    prior:
+      min: -10
+      max: 10
+    ref: 0.5
+    proposal: 0.01
+    latex: \omega_{0}
+  wz:
+    prior:
+      min: -10
+      max: 10
+    ref: 0.5
+    proposal: 0.01
+    latex: \omega_{z}
+sampler:
+  mcmc: null
+output: Fwz_DES5YR_UNBIN

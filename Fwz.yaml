@@ -1,0 +1,32 @@
+likelihood:
+  Fwz:
+    external: import_module('DES5YR_UNBIN_likelihoods').Fwz # Change the model here
+    
+
+params: # DONE 
+  om:
+    prior: {min: 0.1, max: 0.9}
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_m
+  w0:
+    prior: {min: -10, max: 10}
+    ref: 0.5
+    proposal: 0.01
+    latex: \omega_{0}
+  wz:
+    prior: {min: -10, max: 10}
+    ref: 0.5
+    proposal: 0.01
+    latex: \omega_{z}
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/Fwz_DES5YR_UNBIN # DONE

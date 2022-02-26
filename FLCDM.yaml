@@ -1,0 +1,23 @@
+likelihood:
+  FLCDM:
+    external: import_module('DES5YR_UNBIN_likelihoods').FLCDM # Change the model here
+    
+
+params: # DONE 
+  om:
+    prior: {min: 0.1, max: 2}
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_m
+  #model: 2
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/FLCDM_DES5YR_UNBIN # DONE

@@ -1,0 +1,30 @@
+likelihood:
+  FLCDM1:
+    #external: import_module('DES5YR_UNBIN_likelihoods').FwCDM # Change the model here
+    external: import_module('likelihoods_BAO_CMB').FwCDM
+    
+
+params: # DONE 
+  om:
+    prior: {min: 0.0, max: 0.5}
+    ref: 0.05
+    proposal: 0.01
+    latex: \Omega_m
+  w:
+    prior: {min: -2, max: 1}
+    ref: -0.1
+    proposal: 0.01
+    latex: \omega
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+    max_tries: 10000
+    #Rminus1_stop: 0.001
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/FwCDM_BAO_CMB_NEW # DONE

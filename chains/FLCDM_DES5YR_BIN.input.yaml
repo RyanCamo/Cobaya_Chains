@@ -1,0 +1,14 @@
+likelihood:
+  FLCDM1:
+    external: import_module('my_likelihoods').FLCDM
+params:
+  om:
+    prior:
+      min: 0.1
+      max: 2
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_m
+sampler:
+  mcmc: null
+output: FLCDM_DES5YR_BIN

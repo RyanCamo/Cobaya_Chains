@@ -1,0 +1,28 @@
+likelihood:
+  FLCDM1:
+    external: import_module('/likelihoods/DES5YR_UNBIN_likelihoods').LCDM # Change the model here
+    #external: import_module('BAO_CMB_likelihood').LCDM 
+    
+
+params: # DONE 
+  om:
+    prior: {min: 0.1, max: 2}
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_m
+  ol:
+    prior: {min: 0.1, max: 2}
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_{\Lambda}
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/LCDM_test # DONE

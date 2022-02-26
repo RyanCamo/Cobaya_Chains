@@ -1,0 +1,34 @@
+likelihood:
+  FCa:
+    external: import_module('DES5YR_UNBIN_likelihoods').FCa # Change the model here
+    
+
+params: # DONE 
+  om:
+    prior: {min: 0.1, max: 0.7}
+    ref: 0.4
+    proposal: 0.01
+    latex: \Omega_{m}
+  q:
+    prior: {min: 0, max: 3}
+    ref: 0.5
+    proposal: 0.01
+    latex: q
+  n:
+    prior: {min: -3, max: 0.5}
+    ref: 0.1
+    proposal: 0.01
+    latex: n
+
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+    max_tries: 10000
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/FCa_DES5YR_UNBIN2 # DONE

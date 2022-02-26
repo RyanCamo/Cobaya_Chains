@@ -1,0 +1,29 @@
+likelihood:
+  FGChap:
+    external: import_module('DES5YR_UNBIN_likelihoods').FGChap # Change the model here
+    
+
+params: # DONE 
+  A:
+    prior: {min: 0.1, max: 2}
+    ref: 0.5
+    proposal: 0.001
+    latex: A
+  a:
+    prior: {min: -1, max: 2}
+    ref: 0.3
+    proposal: 0.001
+    latex: \alpha
+
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+    max_tries: 10000
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/FGChap_DES5YR_UNBIN # DONE

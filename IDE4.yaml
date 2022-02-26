@@ -1,0 +1,38 @@
+likelihood:
+  IDE4:
+    external: import_module('DES5YR_UNBIN_likelihoods').IDE4 # Change the model here
+    
+
+params: # DONE 
+  cdm:
+    prior: {min: 0.01, max: 1}
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_{cdm}
+  ol:
+    prior: {min: 0.01, max: 1}
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_{\Lambda}
+  w:
+    prior: {min: -5, max: 5}
+    ref: -0.8
+    proposal: 0.1
+    latex: \omega
+  e:
+    prior: {min: -0.5, max: 0.5}
+    ref: 0.05
+    proposal: 0.001
+    latex: \varepsilon
+
+#prior: # Addition prios to be imposed
+#  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
+#                   x - y, loc=0, scale=0.3)'
+
+sampler: # DONE - CAN BE REFINED
+  mcmc:
+    max_tries: 10000
+
+#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
+
+output: chains/IDE4_DES5YR_UNBIN # DONE

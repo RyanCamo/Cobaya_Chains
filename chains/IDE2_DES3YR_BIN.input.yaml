@@ -1,0 +1,36 @@
+likelihood:
+  IDE2:
+    external: import_module('my_likelihoods').IDE2
+params:
+  cdm:
+    prior:
+      min: 0.01
+      max: 1
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_{cdm}
+  ol:
+    prior:
+      min: 0.01
+      max: 1
+    ref: 0.5
+    proposal: 0.01
+    latex: \Omega_{\Lambda}
+  w:
+    prior:
+      min: -5
+      max: 5
+    ref: -0.8
+    proposal: 0.1
+    latex: \omega
+  e:
+    prior:
+      min: -0.5
+      max: 0.5
+    ref: 0.05
+    proposal: 0.001
+    latex: \varepsilon
+sampler:
+  mcmc:
+    max_tries: 10000
+output: IDE2_DES3YR_BIN
