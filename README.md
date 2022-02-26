@@ -14,24 +14,44 @@ Each .yaml file will have a line of the form:
 To run a particular job:
 
 'X' can be changed to:
+
   likelihoods_BAO_CMB - To constrain the model Y against CMB/BAO data
+  
   likelihoods_SN - To constrain the model Y against SN data
+  
   likelihoods_BAO_CMB_SN - To constrain model Y against SN+CMB/BAO data
   
+  
   Y represents the abbreviation for a particular non standard model. 
+  
   The non-standard models currently supported are:
+  
     FLCDM   - Flat Lambda_CDM
+    
     LCDM    - Lambda_CDM
+    
     FwCDM   - Flat omega_CDM
+    
     wCDM    - omega_CDM
+    
     Fwa     - Flat linear parameterisation of omega as a function of scalefactor
+    
     Fwz     - Flat linear parameterisation of omega as a function of redshift
+    
     IDE1    - Interacting Dark Energy & Dark Matter: Q = Hερ_d
+    
     IDE2    - Interacting Dark Energy & Dark Matter: Q = Hερ_c
+    
     IDE4    - Interacting Dark Energy & Dark Matter: Q = Hε (ρ_c * ρ_d)/(ρ_c + ρ_d)
+    
     Chap    - Standard Chaplygin Gas
+    
     FGChap  - Flat Generalised Chaplygin Gas
+    
     GChap   - Generalised Chaplygin Gas
+    
     NGCG    - New Generalised Chaplygin Gas
+    
     FCa     - Flat Cardassian 
+    
     DGP     - DGP 
