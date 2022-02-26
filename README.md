@@ -22,10 +22,6 @@ To run a particular job:
     likelihoods_BAO_CMB_SN  - To constrain model Y against SN+CMB/BAO data
   
     IDE1    - Interacting Dark Energy & Dark Matter: Q = Hερ_d
-    
-    IDE2    - Interacting Dark Energy & Dark Matter: Q = Hερ_c
-    
-    IDE4    - Interacting Dark Energy & Dark Matter: Q = Hε (ρ_c * ρ_d)/(ρ_c + ρ_d)
   
   
   Y represents the abbreviation for a particular non standard model. 
