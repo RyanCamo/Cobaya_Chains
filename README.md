@@ -15,11 +15,11 @@ To run a particular job:
 
 'X' can be changed to:
 
-  likelihoods_BAO_CMB - To constrain the model Y against CMB/BAO data
+  likelihoods_BAO_CMB     - To constrain the model Y against CMB/BAO data
   
-  likelihoods_SN - To constrain the model Y against SN data
+  likelihoods_SN          - To constrain the model Y against SN data
   
-  likelihoods_BAO_CMB_SN - To constrain model Y against SN+CMB/BAO data
+  likelihoods_BAO_CMB_SN  - To constrain model Y against SN+CMB/BAO data
   
   
   Y represents the abbreviation for a particular non standard model. 
