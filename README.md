@@ -15,7 +15,7 @@ To run a particular job:
 
 'X' can be changed to:
 
-  likelihoods_BAO_CMB_ρ_c + ρ_d     - To constrain the model Y against CMB/BAO data
+  likelihoods_BAO_CMB     - To constrain the model Y against CMB/BAO data
   
   likelihoods_SN          - To constrain the model Y against SN data
   
