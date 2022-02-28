@@ -1,6 +1,6 @@
 likelihood:
   FLCDM1:
-    external: import_module('/likelihoods/DES5YR_UNBIN_likelihoods').LCDM # Change the model here
+    external: import_module('likelihoods_SN').LCDM # Change the model here
     #external: import_module('BAO_CMB_likelihood').LCDM 
     
 

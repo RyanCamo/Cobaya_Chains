@@ -1,6 +1,6 @@
 likelihood:
   DGP:
-    external: import_module('DES5YR_UNBIN_likelihoods').DGP # Change the model here
+    external: import_module('likelihoods_SN').DGP # Change the model here
     
 
 params: # DONE 

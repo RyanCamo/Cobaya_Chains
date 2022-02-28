@@ -1,6 +1,6 @@
 likelihood:
   NGCG:
-    external: import_module('likelihoods_DES5YR_UNBIN').NGCG # Change the model here
+    external: import_module('likelihoods_SN').NGCG # Change the model here
     
 
 params: # DONE 

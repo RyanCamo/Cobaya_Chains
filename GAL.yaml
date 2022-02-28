@@ -1,24 +1,20 @@
 likelihood:
-  wCDM:
-    external: import_module('likelihoods_SN').wCDM # Change the model here
+  GAL:
+    external: import_module('likelihoods_SN').GAL # Change the model here
     
 
 params: # DONE 
   om:
-    prior: {min: 0.2, max: 2}
-    ref: 0.3
-    proposal: 0.001
-    latex: \Omega_m
-  ol:
-    prior: {min: 0.2, max: 2}
-    ref: 0.75
-    proposal: 0.001
-    latex: \Omega_{\Lambda}
-  w:
-    prior: {min: -2, max: 2}
+    prior: {min: 0, max: 1}
     ref: 0.5
     proposal: 0.001
-    latex: \omega
+    latex: \Omega_{m}
+  og:
+    prior: {min: 0, max: 1}
+    ref: 0.5
+    proposal: 0.001
+    latex: \Omega_{g}
+
 
 #prior: # Addition prios to be imposed
 #  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
@@ -30,4 +26,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/wCDM_DES5YR_UNBIN # DONE
+output: chains/GAL_DES5YR_UNBIN # DONE

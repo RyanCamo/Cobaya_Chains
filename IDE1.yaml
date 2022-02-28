@@ -1,6 +1,6 @@
 likelihood:
   IDE1:
-    external: import_module('DES5YR_UNBIN_likelihoods').IDE1 # Change the model here
+    external: import_module('likelihoods_SN').IDE1 # Change the model here
     
 
 params: # DONE 

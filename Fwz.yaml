@@ -1,6 +1,6 @@
 likelihood:
   Fwz:
-    external: import_module('DES5YR_UNBIN_likelihoods').Fwz # Change the model here
+    external: import_module('likelihoods_SN').Fwz # Change the model here
     
 
 params: # DONE 

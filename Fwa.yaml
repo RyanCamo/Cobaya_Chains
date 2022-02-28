@@ -1,6 +1,6 @@
 likelihood:
   Fwa:
-    external: import_module('DES5YR_UNBIN_likelihoods').Fwa # Change the model here
+    external: import_module('likelihoods_SN').Fwa # Change the model here
     
 
 params: # DONE 

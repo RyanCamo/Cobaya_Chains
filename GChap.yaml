@@ -1,6 +1,6 @@
 likelihood:
   GChap:
-    external: import_module('DES5YR_UNBIN_likelihoods').GChap # Change the model here
+    external: import_module('likelihoods_SN').GChap # Change the model here
     
 
 params: # DONE 
