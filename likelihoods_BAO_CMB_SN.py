@@ -572,6 +572,44 @@ def NGCG(om, A, a, w):
     log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
     return log_SN + log_CMB_BAO
 
+# 11) Galileon Tracker Solution 2x parameters, \Omega_m, \Omega_g
+def GAL_Hz_inverse(z, om, og):
+    ok  = 1 - om - og
+    Hz = np.sqrt(0.5*ok*(1+z)**2 + 0.5*om*(1+z)**3 + np.sqrt(og + 0.25*((om*(1+z)+ok)**2)*(1+z)**4))
+    return 1.0 / Hz
+
+def GAL(om, og):
+    ok = 1- om-og
+    x = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zs]) # SN
+    q = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zss]) # CMB/BAO
+    y = np.array([quad(GAL_Hz_inverse, 0, 1090, args=(om, og))[0]]) # last scattering
+    if ok < 0.0:
+        R0 = 1 / np.sqrt(-ok)
+        D = R0 * np.sin(x / R0)
+        E = R0 * np.sin(y / R0)
+        F = R0 * np.sin(q / R0)
+    elif ok > 0.0:
+        R0 = 1 / np.sqrt(ok)
+        D = R0 * np.sinh(x / R0)
+        E = R0 * np.sinh(y / R0)
+        F = R0 * np.sinh(q / R0)
+    else:
+        D = x
+        E = y
+        F = q
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    log_SN = SN_cov_log_likelihood(dist_mod, mu, cov)
+
+    # Calculates values used for the CMB/BAO log likelihoodfor this model
+    ang_star = E / (1+1090)
+    ang_dist = F / (1 + zss)
+    Hz = np.sqrt(0.5*ok*(1+zss)**2 + 0.5*om*(1+zss)**3 + np.sqrt(og + 0.25*((om*(1+zss)+ok)**2)*(1+zss)**4))
+    D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
+    model = (ang_star)*(1+1090) / D_V
+    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    return log_SN + log_CMB_BAO
+
 
 if __name__ == "__main__":
     #logp = LCDM(0.31,0.7)

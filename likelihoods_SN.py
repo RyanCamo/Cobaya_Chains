@@ -328,6 +328,28 @@ def NGCG(om, A, a, w):
     logp = cov_log_likelihood(dist_mod, mu, cov)
     return logp
 
+# 11) Galileon Tracker Solution 2x parameters, \Omega_m, \Omega_g
+def GAL_Hz_inverse(z, om, og):
+    ok  = 1 - om - og
+    Hz = np.sqrt(0.5*ok*(1+z)**2 + 0.5*om*(1+z)**3 + np.sqrt(og + 0.25*((om*(1+z)+ok)**2)*(1+z)**4))
+    return 1.0 / Hz
+
+def GAL(om, og):
+    ok  = 1 - om - og
+    x = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zs])
+    if ok < 0.0:
+        R0 = 1 / np.sqrt(-ok)
+        D = R0 * np.sin(x / R0)
+    elif ok > 0.0:
+        R0 = 1 / np.sqrt(ok)
+        D = R0 * np.sinh(x / R0)
+    else:
+        D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
 if __name__ == "__main__":
     #logp = LCDM(0.31,0.7)
     logp = FwCDM(0.3,-1)
