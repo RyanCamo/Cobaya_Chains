@@ -34,16 +34,56 @@ cov = mu_diag+cov1
 #zss = np.array([0.20, 0.35])
 
 # Current CMB/BAO data being used - Planck, 2018 & eBoss, 2020
-# Data
+# f data f = Dv/rd 
 f1 = 21.11 # z = 0.20
 f2 = 5.15 # z = 0.35
 f = np.array([f1, f2])
-# Data_Error
+
+# g data g = Dm/rd 
+g1 = 9.22
+g2 = 7.06
+g3 = 5.28
+g4 = 3.07
+g5 = 2.51
+g6 = 2.53
+g = np.array([g1, g2, g3, g4, g5, g6])
+
+# h data h = Dh/rd 
+h1 = 3.77
+h2 = 4.22
+h3 = 4.88
+h4 = 7.11
+h5 = 10.57
+h6 = 10.39
+h = np.array([h1, h2, h3, h4, h5, h6])
+
+# f Data_Error
 err_f1 = 0.82 # plus/minus error for f1
 err_f2 = 0.18 # plus/minus error for f2
 f_err = np.array([err_f1, err_f2])
+
+# g Data_Error
+err_g1 = 0.82 
+err_g2 = 0.18 
+err_g3 = 0.82 
+err_g4 = 0.18 
+err_g5 = 0.82 
+err_g6 = 0.18 
+g_err = np.array([err_g1, err_g2, err_g3, err_g4, err_g5, err_g6])
+
+# h Data_Error
+err_h1 = 0.12
+err_h2 = 0.11 
+err_h3 = 0.14 
+err_h4 = 0.30 
+err_h5 = 0.33 
+err_h6 = 0.39 
+h_err = np.array([err_h1, err_h2, err_h3, err_h4, err_h5, err_h6])
+
 # Redshift
-zss = np.array([0.15, 0.85])
+zss = np.array([0.15, 0.85]) # Redshift array for dv/rd data
+zm = np.array([0.38, 0.51, 0.70, 1.48, 2.33, 2.33]) # Redshift array for dm/rd data
+zh = np.array([0.38, 0.51, 0.70, 1.48, 2.33, 2.33]) # Redshift array for dh/rd data
 
 
 #### The SN-Likelihood function:
@@ -89,13 +129,29 @@ def FLCDM(om):
     y = np.array([quad(FLCDM_Hz_inverse, 0, 1090, args=(om, ol))[0]]) # Last Scattering
     E = y
     ang_star = E / (1+1090)
-    q = np.array([quad(FLCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(FLCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zss]) # dv/rd data
     F = q
     ang_dist = F / (1 + zss)
     Hz = np.sqrt((1 + zss) ** 2 * (om * zss + 1) - ol * zss * (zss + 2))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model) # likelihood for dv/rd data
+
+    # calculates the values used for Dm/rd data - zm array
+    m = np.array([quad(FLCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zm]) #dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/( np.sqrt((1 + zh) ** 2 * (om * zh + 1) - ol * zh * (zh+ 2)))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 
@@ -107,22 +163,26 @@ def LCDM_Hz_inverse(z,om,ol):
 def LCDM(om, ol):
     ok = 1.0 - om - ol
     x = np.array([quad(LCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zs]) # SN 
-    q = np.array([quad(LCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(LCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zss]) # dv/rd data
     y = np.array([quad(LCDM_Hz_inverse, 0, 1090, args=(om, ol))[0]]) # last scattering
+    m = np.array([quad(LCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zm]) # dm/rd data
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = ["$\Omega_m$","$\Omega_{\Lambda}$"]
@@ -134,7 +194,21 @@ def LCDM(om, ol):
     Hz = np.sqrt((1 + zss) ** 2 * (om * zss + 1) - ol * zss * (zss + 2))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    # calculates the values used for Dm/rd data - zm array
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/( np.sqrt((1 + zh) ** 2 * (om * zh + 1) - ol * zh * (zh + 2)))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 
@@ -163,7 +237,23 @@ def FwCDM(om, w):
     Hz = np.sqrt((om*(1+zss)**(3) + ol*(1+zss)**(3*(1+w))))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    # calculates the values used for Dm/rd data - zm array
+    m = np.array([quad(FwCDM_Hz_inverse, 0, z, args=(om, w))[0] for z in zm]) 
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt((om*(1+zh)**(3) + ol*(1+zh)**(3*(1+w)))))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 4) Constant wCDM with 3x parameters, \Omega_M, \Omega_{\Lambda} and \omega 
@@ -177,20 +267,25 @@ def wCDM(om,ol,w):
     x = np.array([quad(wCDM_Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zs]) # SN
     q = np.array([quad(wCDM_Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zss]) # CMB/BAO
     y = np.array([quad(wCDM_Hz_inverse, 0, 1090, args=(om, ol, w))[0]]) # last scattering
+    m = np.array([quad(wCDM_Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zm]) # dm/rd 
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
+        
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = ["$\Omega_m$","$\Omega_{\Lambda}$",r"$\omega$"]
@@ -203,7 +298,20 @@ def wCDM(om,ol,w):
     Hz = np.sqrt((omega_k*(1+zss)**(2) + om*(1+zss)**(3) + ol*(1+zss)**(3*(1+w))))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt((omega_k*(1+zh)**(2) + om*(1+zh)**(3) + ol*(1+zh)**(3*(1+w)))))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 5) Flat w(a) with 3x parameters, \Omega_M, \omega_0 and \omega_a 
@@ -231,7 +339,22 @@ def Fwa(om, w0, wa):
     Hz = np.sqrt( (om*(1+zss)**(3)) + (ol * ((1+zss)**(3*(1+w0+wa))) * (np.exp(-3*wa*(1-((1+zss)**(-1))))) ) )
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = np.array([quad(Fwa_Hz_inverse, 0, z, args=(om, w0, wa))[0] for z in zm]) # dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt( (om*(1+zh)**(3)) + (ol * ((1+zh)**(3*(1+w0+wa))) * (np.exp(-3*wa*(1-((1+zh)**(-1))))) ) ))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh   
     return log_SN + log_CMB_BAO
 
 # 6) IDE1 Q = H e rho_x
@@ -243,22 +366,26 @@ def IDE_Hz_inverse1(z, cdm, ol, w, e):
 def IDE1(cdm,ol,w,e):
     ok = 1 -ol - cdm
     x = np.array([quad(IDE_Hz_inverse1, 0, z, args=(cdm, ol, w, e))[0] for z in zs]) # SN
-    q = np.array([quad(IDE_Hz_inverse1, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(IDE_Hz_inverse1, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # dv/rd
     y = np.array([quad(IDE_Hz_inverse1, 0, 1090, args=(cdm, ol, w, e))[0]]) # last scattering
+    m = np.array([quad(IDE_Hz_inverse1, 0, z, args=(cdm, ol, w, e))[0] for z in zm]) # dm/rd data
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
@@ -270,7 +397,20 @@ def IDE1(cdm,ol,w,e):
     Hz = np.sqrt(cdm*(1+zss)**3 + ol*(1-(e/(3*w + e)))*(1+zss)**((3*(1+w)+e)) + ok*(1+zss)**2) 
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt(cdm*(1+zh)**3 + ol*(1-(e/(3*w + e)))*(1+zh)**((3*(1+w)+e)) + ok*(1+zh)**2) )
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh 
     return log_SN + log_CMB_BAO
 
 # 7) IDE2 Q = H e rho_c
@@ -282,22 +422,26 @@ def IDE_Hz_inverse2(z, cdm, ol, w, e):
 def IDE2(cdm,ol,w,e):
     ok = 1 -ol - cdm
     x = np.array([quad(IDE_Hz_inverse2, 0, z, args=(cdm, ol, w, e))[0] for z in zs]) # SN
-    q = np.array([quad(IDE_Hz_inverse2, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(IDE_Hz_inverse2, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # dv/rd
+    m = np.array([quad(IDE_Hz_inverse2, 0, z, args=(cdm, ol, w, e))[0] for z in zm]) # dm/rd
     y = np.array([quad(IDE_Hz_inverse2, 0, 1090, args=(cdm, ol, w, e))[0]]) # last scattering
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
@@ -309,7 +453,20 @@ def IDE2(cdm,ol,w,e):
     Hz = np.sqrt(cdm*((1+zss)**(3-e)) * (1-(e)/(3*w +e )) + ol*(1+zss)**(3*(1+w)) + ok*(1+zss)**2) 
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt(cdm*((1+zh)**(3-e)) * (1-(e)/(3*w +e )) + ol*(1+zh)**(3*(1+w)) + ok*(1+zh)**2))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 8) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
@@ -322,22 +479,26 @@ def IDE_Hz_inverse4(z, cdm, ol, w, e):
 def IDE4(cdm,ol,w,e):
     ok = 1 -ol - cdm
     x = np.array([quad(IDE_Hz_inverse4, 0, z, args=(cdm, ol, w, e))[0] for z in zs]) # SN
-    q = np.array([quad(IDE_Hz_inverse4, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(IDE_Hz_inverse4, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # dv/rd
+    m = np.array([quad(IDE_Hz_inverse4, 0, z, args=(cdm, ol, w, e))[0] for z in zm]) # dm/rd
     y = np.array([quad(IDE_Hz_inverse4, 0, 1090, args=(cdm, ol, w, e))[0]]) # last scattering
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
@@ -350,7 +511,21 @@ def IDE4(cdm,ol,w,e):
     Hz = np.sqrt( (cdm*IDE4_const*(1+zss)**(3-e)) + IDE4_const*ol*(1+zss)**(3*(1+w)) + ok*(1+zss)**2) 
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    IDE4_const1 = ( ((1+zh)**(-1*(e+(3*w)))) + (ol/cdm) )**(-e/(e+(3*w)))
+    Dh = 1/(np.sqrt( (cdm*IDE4_const1*(1+zh)**(3-e)) + IDE4_const1*ol*(1+zh)**(3*(1+w)) + ok*(1+zh)**2) )
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 9) Flat w(z) with 3x parameters, \Omega_M, \omega_0 and \omega_a 
@@ -378,7 +553,22 @@ def Fwz(om,w0,wz):
     Hz = np.sqrt( (om*(1+zss)**(3)) + (ol * ((1+zss)**(3*(1+w0-wz))) * (np.exp(3*wz*zss)) ) )
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = np.array([quad(Fwz_Hz_inverse, 0, z, args=(om, w0, wz))[0] for z in zm]) # dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt( (om*(1+zh)**(3)) + (ol * ((1+zh)**(3*(1+w0-wz))) * (np.exp(3*wz*zh)) ) ))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
@@ -405,7 +595,22 @@ def FCa(om, q, n):
     Hz = np.sqrt((om*((zss+1)**3))*(1+(((om**(-q))-1)*((zss+1)**(3*q*(n-1)))))**(1/q))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zm]) #dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt((om*((zh+1)**3))*(1+(((om**(-q))-1)*((zh+1)**(3*q*(n-1)))))**(1/q)))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 11) Flat General Chaplygin 2x parameters, A and \alpha
@@ -431,7 +636,22 @@ def FGChap(A, a):
     Hz = np.sqrt((A + (1-A)*((1+zss)**(3*(1+a))))**(1.0/(1+a)))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = np.array([quad(FGChap_Hz_inverse, 0, z, args=(A, a))[0] for z in zm]) #dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt((A + (1-A)*((1+zh)**(3*(1+a))))**(1.0/(1+a))))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 12) Chaplygin 2x parameters, A and \Omega_K
@@ -441,22 +661,26 @@ def Chap_Hz_inverse(z, A, ok):
 
 def Chap(A, ok):
     x = np.array([quad(Chap_Hz_inverse, 0, z, args=(A, ok))[0] for z in zs]) # SN
-    q = np.array([quad(Chap_Hz_inverse, 0, z, args=(A, ok))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(Chap_Hz_inverse, 0, z, args=(A, ok))[0] for z in zss]) # dv/rd data
+    m = np.array([quad(Chap_Hz_inverse, 0, z, args=(A, ok))[0] for z in zm])  #dm/rd data
     y = np.array([quad(Chap_Hz_inverse, 0, 1090, args=(A, ok))[0]]) # last scattering
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = ["$A$","$\Omega_k$"]
@@ -468,7 +692,20 @@ def Chap(A, ok):
     Hz = np.sqrt(ok*((1+zss)**2)+(1-ok)*np.sqrt(A + (1-A)*((1+zss)**6)))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt(ok*((1+zh)**2)+(1-ok)*np.sqrt(A + (1-A)*((1+zh)**6))))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 
@@ -479,22 +716,26 @@ def GChap_Hz_inverse(z, ok, A ,a):
 
 def GChap(ok, A, a):
     x = np.array([quad(GChap_Hz_inverse, 0, z, args=(ok, A, a))[0] for z in zs]) # SN
-    q = np.array([quad(GChap_Hz_inverse, 0, z, args=(ok, A, a))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(GChap_Hz_inverse, 0, z, args=(ok, A, a))[0] for z in zss]) # dv/rd
+    m = np.array([quad(GChap_Hz_inverse, 0, z, args=(ok, A, a))[0] for z in zm]) #dm/rd data 
     y = np.array([quad(GChap_Hz_inverse, 0, 1090, args=(ok, A, a))[0]]) # last scattering
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = ["$\Omega_K$","$A$",r"$\alpha$"]
@@ -506,7 +747,20 @@ def GChap(ok, A, a):
     Hz = np.sqrt((ok*((1+zss)**2)) + (1-ok)*(A + (1-A)*((1+zss)**(3*(1+a))))**(1/(1+a)))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt((ok*((1+zh)**2)) + (1-ok)*(A + (1-A)*((1+zh)**(3*(1+a))))**(1/(1+a))))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 14) DGP 2x parameters, \Omega_rc, and \Omega_K
@@ -516,22 +770,26 @@ def DGP_Hz_inverse(z, rc, ok):
 
 def DGP(rc, ok):
     x = np.array([quad(DGP_Hz_inverse, 0, z, args=(rc, ok))[0] for z in zs]) # SN
-    q = np.array([quad(DGP_Hz_inverse, 0, z, args=(rc, ok))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(DGP_Hz_inverse, 0, z, args=(rc, ok))[0] for z in zss]) # dv/rd data
+    m = np.array([quad(DGP_Hz_inverse, 0, z, args=(rc, ok))[0] for z in zm]) #dm/rd data
     y = np.array([quad(DGP_Hz_inverse, 0, 1090, args=(rc, ok))[0]]) # last scattering
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = [r"$\Omega_{rc}$", r"$\Omega_K$"]
@@ -543,7 +801,20 @@ def DGP(rc, ok):
     Hz = np.sqrt(ok*((1+zss)**2)+ (((np.sqrt(((1 - ok - 2*(np.sqrt(rc)*np.sqrt(1-ok)))*((1+zss)**3))+ rc )) + np.sqrt(rc) )**2)) 
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt(ok*((1+zh)**2)+ (((np.sqrt(((1 - ok - 2*(np.sqrt(rc)*np.sqrt(1-ok)))*((1+zh)**3))+ rc )) + np.sqrt(rc) )**2)) )
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 15) New General Chaplygin 4x parameters, om, A and \alpha, w - this is the flat version
@@ -569,7 +840,22 @@ def NGCG(om, A, a, w):
     Hz = np.sqrt(om*(1+zss)**3 + ((1-om)*(1+zss)**3)*(1-A*(1-(1+zss)**(3*w*(1+a))))**(1/(1+a)))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = np.array([quad(NGCG_Hz_inverse, 0, z, args=(om, A, a, w))[0] for z in zm]) #dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt(om*(1+zh)**3 + ((1-om)*(1+zh)**3)*(1-A*(1-(1+zh)**(3*w*(1+a))))**(1/(1+a))))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
     return log_SN + log_CMB_BAO
 
 # 11) Galileon Tracker Solution 2x parameters, \Omega_m, \Omega_g
@@ -581,22 +867,26 @@ def GAL_Hz_inverse(z, om, og):
 def GAL(om, og):
     ok = 1- om-og
     x = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zs]) # SN
-    q = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zss]) # CMB/BAO
+    q = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zss]) # dv/rd data
+    m = np.array([quad(GAL_Hz_inverse, 0, z, args=(om, og))[0] for z in zm]) # dm/rd data
     y = np.array([quad(GAL_Hz_inverse, 0, 1090, args=(om, og))[0]]) # last scattering
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
         D = R0 * np.sin(x / R0)
         E = R0 * np.sin(y / R0)
         F = R0 * np.sin(q / R0)
+        M = R0 * np.sin(m / R0)
     elif ok > 0.0:
         R0 = 1 / np.sqrt(ok)
         D = R0 * np.sinh(x / R0)
         E = R0 * np.sinh(y / R0)
         F = R0 * np.sinh(q / R0)
+        M = R0 * np.sinh(m / R0)
     else:
         D = x
         E = y
         F = q
+        M = m
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     log_SN = SN_cov_log_likelihood(dist_mod, mu, cov)
@@ -607,9 +897,21 @@ def GAL(om, og):
     Hz = np.sqrt(0.5*ok*(1+zss)**2 + 0.5*om*(1+zss)**3 + np.sqrt(og + 0.25*((om*(1+zss)+ok)**2)*(1+zss)**4))
     D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
-    log_CMB_BAO = CMB_BAO_log_likelihood(f, f_err, model)
-    return log_SN + log_CMB_BAO
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
 
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt(0.5*ok*(1+zh)**2 + 0.5*om*(1+zh)**3 + np.sqrt(og + 0.25*((om*(1+zh)+ok)**2)*(1+zh)**4)))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2) # likelihood for dh/rd data
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh
+    return log_SN + log_CMB_BAO
 
 if __name__ == "__main__":
     #logp = LCDM(0.31,0.7)
