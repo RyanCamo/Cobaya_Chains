@@ -19,4 +19,4 @@ params:
 sampler:
   mcmc:
     max_tries: 10000
-output: FwCDM_BAO_CMB
+output: FwCDM_BAO_CMB_NEWNEW

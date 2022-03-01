@@ -1,30 +1,30 @@
 theory: null
 likelihood:
-  FLCDM1:
+  GAL:
     type: []
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('likelihoods_BAO_CMB').FwCDM
+    external: import_module('likelihoods_SN').GAL
     input_params:
     - om
-    - w
+    - og
     output_params: []
 params:
   om:
     prior:
-      min: 0.0
-      max: 0.5
-    ref: 0.05
-    proposal: 0.01
-    latex: \Omega_m
-  w:
-    prior:
-      min: -2
+      min: 0
       max: 1
-    ref: -0.1
-    proposal: 0.01
-    latex: \omega
+    ref: 0.5
+    proposal: 0.001
+    latex: \Omega_{m}
+  og:
+    prior:
+      min: 0
+      max: 1
+    ref: 0.5
+    proposal: 0.001
+    latex: \Omega_{g}
 sampler:
   mcmc:
     burn_in: 0
@@ -50,7 +50,7 @@ sampler:
     blocking:
     - - 1
       - - om
-        - w
+        - og
     callback_function: null
     callback_every: null
     seed: null
@@ -59,5 +59,5 @@ sampler:
     drag_limits: null
     fallback_covmat_scale: 4
     version: 3.1.1
-output: FwCDM_BAO_CMB
+output: GAL_DES5YR_UNBIN
 version: 3.1.1
