@@ -1,9 +1,10 @@
 # Cobaya_Chains
 Repository for computing MCMC chains for non-standard models using Cobaya.
 
-The output chains are saved into the chains folder.
+The output chains are saved into the 'chains' folder - which have various sub folders depending on which data set we are using to constrain data
+ie. SN, CMB/BAO, SN+CMB/BAO
 
-The data folder containts supernova data including: DES5YR_UNBIN, DES5YR_BIN, DES3YR_UNBIN, DES3YR_BIN. Where the DES5YR are both mocks.
+The 'data' folder containts supernova data including: DES5YR_UNBIN, DES5YR_BIN, DES3YR_UNBIN, DES3YR_BIN. Where the DES5YR are both mocks.
 
 The .yaml files represent jobs to be completed much like pippin. 
 The current .yaml files here are jobs that have already been run and can be used as examples or changed as required.
