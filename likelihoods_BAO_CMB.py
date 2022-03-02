@@ -487,8 +487,8 @@ def FCa(om, q, n):
     # Calculates values used for the CMB/BAO log likelihoodfor this model
     y = np.array([quad(FCa_Hz_inverse, 0, 1090, args=(om, q, n))[0]]) # Last Scattering
     E = y
-    q = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zs]) #dv/rd data
-    F = q
+    v = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zs]) #dv/rd data
+    F = v
     ang_star = E / (1+1090)
     ang_dist = F / (1 + zs)
     Hz = np.sqrt((om*((zs+1)**3))*(1+(((om**(-q))-1)*((zs+1)**(3*q*(n-1)))))**(1/q))

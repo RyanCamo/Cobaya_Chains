@@ -1,6 +1,6 @@
 likelihood:
   Fwa:
-    external: import_module('likelihoods_SN').Fwa # Change the model here
+    external: import_module('likelihoods_BAO_CMB').Fwa # Change the model here
     
 
 params: # DONE 
@@ -30,4 +30,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/Fwa_DES5YR_UNBIN # DONE
+output: chains/CMB+BAO/Fwa_CMB_BAO

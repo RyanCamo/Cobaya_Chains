@@ -1,6 +1,6 @@
 likelihood:
   NGCG:
-    external: import_module('likelihoods_SN').NGCG # Change the model here
+    external: import_module('likelihoods_BAO_CMB').NGCG # Change the model here
     
 
 params: # DONE 
@@ -36,4 +36,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/NGCG_DES5YR_UNBIN # DONE
+output: chains/CMB+BAO/NGCG_CMB_BAO

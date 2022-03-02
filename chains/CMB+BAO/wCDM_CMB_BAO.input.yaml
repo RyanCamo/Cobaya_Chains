@@ -1,0 +1,29 @@
+likelihood:
+  wCDM:
+    external: import_module('likelihoods_BAO_CMB').wCDM
+params:
+  om:
+    prior:
+      min: 0.2
+      max: 2
+    ref: 0.3
+    proposal: 0.001
+    latex: \Omega_m
+  ol:
+    prior:
+      min: 0.2
+      max: 2
+    ref: 0.75
+    proposal: 0.001
+    latex: \Omega_{\Lambda}
+  w:
+    prior:
+      min: -2
+      max: 2
+    ref: 0.5
+    proposal: 0.001
+    latex: \omega
+sampler:
+  mcmc:
+    max_tries: 10000
+output: wCDM_CMB_BAO

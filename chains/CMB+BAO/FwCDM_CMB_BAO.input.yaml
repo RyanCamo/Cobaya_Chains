@@ -1,0 +1,22 @@
+likelihood:
+  FLCDM1:
+    external: import_module('likelihoods_BAO_CMB').FwCDM
+params:
+  om:
+    prior:
+      min: 0.0
+      max: 0.5
+    ref: 0.05
+    proposal: 0.01
+    latex: \Omega_m
+  w:
+    prior:
+      min: -2
+      max: 1
+    ref: -0.1
+    proposal: 0.01
+    latex: \omega
+sampler:
+  mcmc:
+    max_tries: 10000
+output: FwCDM_CMB_BAO
