@@ -62,7 +62,7 @@ BEFORE running a particular job:
     DGP     - DGP 
 
 
-Finally, make sure to change the name of the output folder at the bottom of the .yaml file depending on where you want your output saved.
+Finally, make sure to change the name of the output file at the bottom of the .yaml and the file path depending on where you want your output saved.
 
 
 To run a job:
