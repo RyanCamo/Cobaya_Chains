@@ -23,7 +23,7 @@ BEFORE running a particular job:
     likelihoods_BAO_CMB_SN  - To constrain model Y against SN+CMB/BAO data
     
     By default the SN data is using DES5YR_UNBIN. 
-    This can be changed within the likelihood files that constrain against SN data by changing the relative file paths. 
+    This can be changed within the likelihood files that constrain models against SN data by changing the relative file paths. 
     Note however that different SN data need to be imported differently.
   
   
