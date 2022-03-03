@@ -57,7 +57,6 @@ def get_bestparams(model,label):
 
     ## TAKING INTO CONSIDERATION THE CORRECT BURN IN. TO OVERWRITE UNCOMMENT #burn = 0.
     burnSN, burnBAO_CMB, burnBAO_CMB_SN  = np.loadtxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model))
-    #burn = 0 to overwrite
     #Cobaya_Chains/chains/CMB+BAO
     if SN == 1 and CMB_BAO == 1:
         samples = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(model), usecols=(cols), comments='#')
@@ -71,7 +70,8 @@ def get_bestparams(model,label):
     else:
         print('Not valid table options..')
         exit()
-    
+
+    #burn = 0 # Uncomment to overwrite
     params = get_param(samples,label,model, burn)
     return params 
 
