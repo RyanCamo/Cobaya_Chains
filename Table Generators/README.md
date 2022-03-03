@@ -1,4 +1,4 @@
-This folder contain that creates tables for relevent sections of the analysis.
+This folder contains code that creates tables for relevent sections of the analysis.
 
 #model comparisons.py 
 This file creates a table that compares each non-standard model. It displays: chi^2/dof, GoF (%), AIC & BIC. 
