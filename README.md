@@ -1,9 +1,10 @@
 # Cobaya_Chains
 Repository for computing MCMC chains for non-standard models using Cobaya.
 
-The output chains are saved into the chains folder.
+The output chains are saved into the 'chains' folder - which have various sub folders depending on which data set we are using to constrain a model
+ie. SN, CMB/BAO, SN+CMB/BAO
 
-The data folder containts supernova data including: DES5YR_UNBIN, DES5YR_BIN, DES3YR_UNBIN, DES3YR_BIN. Where the DES5YR are both mocks.
+The 'data' folder containts supernova data including: DES5YR_UNBIN, DES5YR_BIN, DES3YR_UNBIN, DES3YR_BIN. Where the DES5YR are both mocks.
 
 The .yaml files represent jobs to be completed much like pippin. 
 The current .yaml files here are jobs that have already been run and can be used as examples or changed as required.
@@ -22,7 +23,7 @@ BEFORE running a particular job:
     likelihoods_BAO_CMB_SN  - To constrain model Y against SN+CMB/BAO data
     
     By default the SN data is using DES5YR_UNBIN. 
-    This can be changed within the likelihood files that constrain against SN data by changing the relative file paths. 
+    This can be changed within the likelihood files that constrain models against SN data by changing the relative file paths. 
     Note however that different SN data need to be imported differently.
   
   
@@ -61,7 +62,7 @@ BEFORE running a particular job:
     DGP     - DGP 
 
 
-Finally, make sure to change the name of the output folder at the bottom of the .yaml file.
+Finally, make sure to change the name of the output file at the bottom of the .yaml and the file path depending on where you want your output saved.
 
 
 To run a job:
