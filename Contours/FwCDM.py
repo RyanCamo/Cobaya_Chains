@@ -10,7 +10,7 @@ import matplotlib.patches as mpatches
 
 c = ChainConsumer() 
 
-model = 'LCDM'
+model = 'FwCDM'
 
 # Importing the relevant chains. The output format from Cobaya places the chains from column 2.
 
@@ -20,11 +20,10 @@ BAO_CMB = np.loadtxt('Cobaya_Chains/chains/CMB+BAO/%s_CMB_BAO.1.txt' %(model), u
 BAO_CMB_SN = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(model), usecols=(2, 3), comments='#')
 
 # MANUALLY CHANGE THE BURN HERE.
-burnSN = int(0.01*len(SN))
-burnBAO_CMB = int(0.01*len(BAO_CMB))
-burnBAO_CMB_SN = int(0.001*len(BAO_CMB_SN))
+burnSN = 200
+burnBAO_CMB = 0
+burnBAO_CMB_SN = 200
 np.savetxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model), [burnSN, burnBAO_CMB, burnBAO_CMB_SN], fmt="%10.0f")
-
 
 # Get Info for the model 
 label, begin, legend = get_info(model)
@@ -46,8 +45,8 @@ c.remove_chain('FLCDM_BAO_CMB_SN')
 # Adding the model chains to chainconsumer to plot & plotting things
 fig, ax = plt.subplots(1, 1)
 c.add_chain(SN[burnSN:], parameters=label, linewidth=1.0, name="SN", kde=1.5, color="red",num_free_params=len(begin))
-c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, linewidth=1.0, name="BAO/CMB", kde=1.5, color="#FFD700",num_free_params=len(begin))
-c.add_chain(BAO_CMB_SN[burnBAO_CMB_SN:], parameters=label, linewidth=1.0, name="BAO/CMB+SN", color="#1E90FF",num_free_params=len(begin))
+c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, linewidth=1.0, name="BAO/CMB",  kde=1.5, color="#FFD700",num_free_params=len(begin))
+c.add_chain(BAO_CMB_SN[burnBAO_CMB_SN:], parameters=label, linewidth=1.0, name="BAO/CMB+SN",  kde=1.5, color="#1E90FF",num_free_params=len(begin))
 c.configure(summary=True, shade_alpha=1,statistics="max")
 
 xaxis = label[0] # Which slice to plot?
@@ -55,10 +54,11 @@ yaxis = label[1] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 
-ax.set_xlim(0.20,0.57)
-ax.set_ylim(0.48,1.06)
-#ax.set_xlim(0,1)
-#ax.set_ylim(0,1)
+ax.set_xlim(0.10,0.5)
+ax.set_ylim(-2,0)
+ax.set_xticklabels(['0.1','','0.2','','0.3','','0.4','','0.5'])
+ax.set_yticklabels(['-2.0','','-1.5','','-1.0','-0.5','','0.0'])
+
 plt.minorticks_on()
 ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in")
 
@@ -91,5 +91,5 @@ red_patch = mpatches.Patch(color='#FF0000', label='SN', ec='k')
 yellow_patch = mpatches.Patch(color='#FFD700', label='CMB/BAO', ec='k')
 blue_patch = mpatches.Patch(color='#1E90FF', label='SN+CMB/BAO', ec='k')
 ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='upper left',frameon=False,fontsize=16)
-ax.scatter(fom, 1-fom, marker = 'D', s = 20, c='black', label = r'Flat $\Lambda$')
+ax.scatter(fom, -1, marker = 'D', s = 20, c='black', label = r'Flat $\Lambda$')
 plt.show()

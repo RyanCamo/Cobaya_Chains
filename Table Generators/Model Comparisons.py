@@ -6,6 +6,9 @@ from matplotlib import pyplot as plt
 from model_info import *
 import scipy.special as sc
 
+### THIS CAN ONLY BE USED ON MODELS THAT ALREADY HAVE CONTOURS MADE. THIS ENSURES THE SAME BURNIN IS USED
+### FOR THE AIC/BIC STATISTICS.
+
 # Table generator to compare models
 # This table generator by default is used for my specific output chains file paths and naming conventions
 # and defaults to DES5YR_UNBIN for SN data. If chains are to be loaded in from somewhere else, be sure to 
@@ -37,9 +40,9 @@ else:
 
 
 # This function gets the best fit parameters for the specific chains used.
-def get_param(samples, label, model):
+def get_param(samples, label, model, burn):
     c = ChainConsumer()
-    c.add_chain(samples, parameters=label, linewidth=2.0, name="MCMC", kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="max")
+    c.add_chain(samples[burn:], parameters=label, linewidth=2.0, name="MCMC", kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="max")
     params = []
     for i, labelx in enumerate(label):
         params.append(c.analysis.get_summary(chains="MCMC")[labelx][1])
@@ -52,19 +55,24 @@ def get_bestparams(model,label):
     for i, l in enumerate(label):
         cols.append(i+2)
 
+    ## TAKING INTO CONSIDERATION THE CORRECT BURN IN. TO OVERWRITE UNCOMMENT #burn = 0.
+    burnSN, burnBAO_CMB, burnBAO_CMB_SN  = np.loadtxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model))
+    #burn = 0 to overwrite
     #Cobaya_Chains/chains/CMB+BAO
     if SN == 1 and CMB_BAO == 1:
         samples = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(model), usecols=(cols), comments='#')
+        burn = burnBAO_CMB_SN
     elif SN == 1 and CMB_BAO == 0:
         samples = np.loadtxt('Cobaya_Chains/chains/SN/DES5YR/UNBIN/%s_DES5YR_UNBIN.1.txt' %(model), usecols=(cols), comments='#')
+        burn = burnSN
     elif SN == 0 and CMB_BAO == 1:
         samples = np.loadtxt('Cobaya_Chains/chains/CMB+BAO/%s_CMB_BAO.1.txt' %(model), usecols=(cols), comments='#')
+        burn = burnBAO_CMB
     else:
         print('Not valid table options..')
         exit()
     
-
-    params = get_param(samples,label,model)
+    params = get_param(samples,label,model, burn)
     return params 
 
 def get_table(models):
@@ -88,7 +96,6 @@ def get_table(models):
         chi2 = -p1/0.5
         free_params = len(label)
         dof = dataL - free_params
-
         #Calculating GoF (%)
         GoF = 100*sc.gammaincc(0.5*dof, 0.5*chi2)
 
