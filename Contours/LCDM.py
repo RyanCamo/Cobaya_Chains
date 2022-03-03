@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.integrate import quad
+import sys
+sys.path.append('Cobaya_Chains')
 from model_info import *
 from matplotlib import markers, pyplot as plt
 from chainconsumer import ChainConsumer
@@ -21,16 +23,16 @@ BAO_CMB_SN = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(
 label, begin, legend = get_info(model)
 print(label) # print this so I can check which axis im plotting by default (label[0] & label[1])
 
-## We also wish to overlay FLCDM onto the contour
-## FLCDM Chains & Best fit parameters for BAO/CMB+SN:
-#label_FLCDM, begin_FLCDM, legend_FLCDM = get_info('FLCDM')
-#FLCDM_BAO_CMB_SN = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/FLCDM_CMB_BAO_SN.1.txt', usecols=(2), comments='#')
-#c.add_chain(FLCDM_BAO_CMB_SN, parameters=label_FLCDM, linewidth=2.0, name="FLCDM_BAO_CMB_SN", kde=1.5, color="grey").configure(summary=True, shade_alpha=0.2,statistics="max")
-#fom = c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][1]
-#fomp = c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][2]-c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][1]
-#fomm = c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][1]-c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][0]
-#c.remove_chain('FLCDM_BAO_CMB_SN')
-## add the below line to the plotting section:
+# We also wish to overlay FLCDM onto the contour
+# FLCDM Chains & Best fit parameters for BAO/CMB+SN:
+label_FLCDM, begin_FLCDM, legend_FLCDM = get_info('FLCDM')
+FLCDM_BAO_CMB_SN = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/FLCDM_CMB_BAO_SN.1.txt', usecols=(2), comments='#')
+c.add_chain(FLCDM_BAO_CMB_SN, parameters=label_FLCDM, linewidth=2.0, name="FLCDM_BAO_CMB_SN", kde=1.5, color="grey").configure(summary=True, shade_alpha=0.2,statistics="max")
+fom = c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][1]
+fomp = c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][2]-c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][1]
+fomm = c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][1]-c.analysis.get_summary(chains="FLCDM_BAO_CMB_SN")[r'$\Omega_m$'][0]
+c.remove_chain('FLCDM_BAO_CMB_SN')
+# add the below line to the plotting section:
 #ax.scatter(fom, 1-fom, marker = 'D', s = 50, c='black', label = r'Flat $\Lambda$')
 
 
@@ -49,7 +51,7 @@ ax.set_ylabel(yaxis, fontsize = 18)
 ax.set_xlim(0.20,0.57)
 ax.set_ylim(0.48,1.06)
 #ax.set_xlim(0,1)
-#ax.set_ylim(0,1.05)
+#ax.set_ylim(0,1)
 plt.minorticks_on()
 ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in")
 
@@ -78,8 +80,9 @@ print('%s = %.5s^{%.5s}_{%.5s}$' %(label[1],p1_tot,p1p_tot,p1m_tot))
 #ax.text(0.55,0.57,'$\Omega_m = %10.5s\pm{%10.5s}$' %(om,omp), family='serif',color='black',rotation=0,fontsize=12,ha='right') 
 #ax.text(0.55,0.57-0.05,'$\Omega_{\Lambda} = %10.5s\pm{%10.5s}$' %(ol,olp), family='serif',color='black',rotation=0,fontsize=12,ha='right')
 
-red_patch = mpatches.Patch(color='#FF0000', label='SN')
-yellow_patch = mpatches.Patch(color='#FFD700', label='CMB/BAO')
-blue_patch = mpatches.Patch(color='#1E90FF', label='SN+CMB/BAO')
-ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='upper left',frameon=False,fontsize=12)
+red_patch = mpatches.Patch(color='#FF0000', label='SN', ec='k')
+yellow_patch = mpatches.Patch(color='#FFD700', label='CMB/BAO', ec='k')
+blue_patch = mpatches.Patch(color='#1E90FF', label='SN+CMB/BAO', ec='k')
+ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='upper left',frameon=False,fontsize=16)
+ax.scatter(fom, 1-fom, marker = 'D', s = 20, c='black', label = r'Flat $\Lambda$')
 plt.show()

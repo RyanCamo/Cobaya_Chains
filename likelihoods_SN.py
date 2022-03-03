@@ -277,7 +277,7 @@ def GChap_Hz_inverse(z, ok, A ,a):
     Hz = np.sqrt((ok*((1+z)**2)) + (1-ok)*(A + (1-A)*((1+z)**(3*(1+a))))**(1/(1+a)))
     return 1.0 / Hz
 
-def GChap(ok, A, a):
+def GChap(A, a, ok):
     x = np.array([quad(GChap_Hz_inverse, 0, z, args=(ok, A, a))[0] for z in zs])
     if ok < 0.0:
         R0 = 1 / np.sqrt(-ok)
