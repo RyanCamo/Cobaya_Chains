@@ -213,7 +213,7 @@ def Fwz_Hz_inverse(z,om,w0,wz):
     return 1.0 / Hz
 
 def Fwz(om,w0,wz):
-    x = np.array([quad(Fwa_Hz_inverse, 0, z, args=(om, w0, wz))[0] for z in zs])
+    x = np.array([quad(Fwz_Hz_inverse, 0, z, args=(om, w0, wz))[0] for z in zs])
     D = x
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)

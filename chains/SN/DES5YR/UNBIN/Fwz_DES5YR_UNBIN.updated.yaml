@@ -5,7 +5,7 @@ likelihood:
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('my_likelihoods').Fwz
+    external: import_module('likelihoods_SN').Fwz
     input_params:
     - om
     - w0

@@ -1,6 +1,6 @@
 likelihood:
   Fwz:
-    external: import_module('my_likelihoods').Fwz
+    external: import_module('likelihoods_SN').Fwz
 params:
   om:
     prior:
