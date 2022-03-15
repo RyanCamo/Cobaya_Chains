@@ -50,25 +50,25 @@ g = np.array([g1, g2, g3, g4, g5, g6])
 
 # h data h = Dh/rd 
 h1 = 3.77
-h2 = 4.22
+h2 = 4.23
 h3 = 4.88
-h4 = 7.11
+h4 = 7.12
 h5 = 10.57
 h6 = 10.39
 h = np.array([h1, h2, h3, h4, h5, h6])
 
 # f Data_Error
-err_f1 = 0.82 # plus/minus error for f1
+err_f1 = 0.81 # plus/minus error for f1
 err_f2 = 0.18 # plus/minus error for f2
 f_err = np.array([err_f1, err_f2])
 
 # g Data_Error
-err_g1 = 0.82 
-err_g2 = 0.18 
-err_g3 = 0.82 
-err_g4 = 0.18 
-err_g5 = 0.82 
-err_g6 = 0.18 
+err_g1 = 0.16 
+err_g2 = 0.15
+err_g3 = 0.10 
+err_g4 = 0.08
+err_g5 = 0.13 
+err_g6 = 0.12 
 g_err = np.array([err_g1, err_g2, err_g3, err_g4, err_g5, err_g6])
 
 # h Data_Error
@@ -76,8 +76,8 @@ err_h1 = 0.12
 err_h2 = 0.11 
 err_h3 = 0.14 
 err_h4 = 0.30 
-err_h5 = 0.33 
-err_h6 = 0.39 
+err_h5 = 0.34 
+err_h6 = 0.40 
 h_err = np.array([err_h1, err_h2, err_h3, err_h4, err_h5, err_h6])
 
 # Redshift
@@ -100,13 +100,23 @@ def SN_cov_log_likelihood(mu_model, mu, cov):
 
 #### The CMB/BAO-likelihood function:
 
-def CMB_BAO_log_likelihood(f, f_err, model): 
+def CMB_BAO_log_likelihood1(f, f_err, model): 
     delta = model - f 
     # Might need the below stuff if we use correlation coeffecient.
     #chit2 = np.sum(delta**2 / f_err**2)
     #B = np.sum(delta/f_err**2)
     #C = np.sum(1/f_err**2)
     chi2 =  np.sum((f - model) ** 2 /f_err**2) 
+    return -0.5*chi2
+
+def CMB_BAO_log_likelihood(f, f_err, model): 
+    delta = model - f
+    chit2 = np.sum(delta**2 / f_err**2)
+    B = np.sum(delta/f_err**2)
+    C = np.sum(1/f_err**2)
+    chi2 = chit2 - (B**2 / C) + np.log(C/(2* np.pi))
+    #chi2 =  np.sum((mu - model) ** 2 /mu_err**2) 
+    # original log_likelihood ---->    -0.5 * np.sum((mu - model) ** 2 /mu_err**2) 
     return -0.5*chi2
 
 #### Non-Standard Models:
@@ -915,5 +925,5 @@ def GAL(om, og):
 
 if __name__ == "__main__":
     #logp = LCDM(0.31,0.7)
-    logp = FwCDM(0.3,-1)
+    logp = wCDM(0.3,0.7,-1)
     print(logp)

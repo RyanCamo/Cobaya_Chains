@@ -352,5 +352,5 @@ def GAL(om, og):
 
 if __name__ == "__main__":
     #logp = LCDM(0.31,0.7)
-    logp = FwCDM(0.3,-1)
+    logp = wCDM(0.01, 0.2,1)
     print(logp)

@@ -22,7 +22,7 @@ params:
     prior:
       min: -0.9
       max: 0.9
-    ref: 0.5
+    ref: 0.02
     proposal: 0.0001
     latex: \Omega_{K}
 sampler:

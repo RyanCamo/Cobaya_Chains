@@ -6,7 +6,7 @@ likelihood:
 params: # DONE 
   om:
     prior: {min: 0.1, max: 0.8}
-    ref: 0.5
+    ref: 0.3
     proposal: 0.001
     latex: \Omega_{m}
   A:
@@ -21,7 +21,7 @@ params: # DONE
     latex: \alpha
   w:
     prior: {min: -2, max: 2}
-    ref: -0.8
+    ref: -0.9
     proposal: 0.01
     latex: \omega
 

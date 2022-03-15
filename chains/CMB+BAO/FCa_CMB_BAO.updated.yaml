@@ -23,15 +23,15 @@ params:
     prior:
       min: 0
       max: 3
-    ref: 0.5
+    ref: 0.9
     proposal: 0.01
     latex: q
   n:
     prior:
       min: -3
       max: 0.5
-    ref: 0.1
-    proposal: 0.01
+    ref: 0.01
+    proposal: 0.001
     latex: n
 sampler:
   mcmc:

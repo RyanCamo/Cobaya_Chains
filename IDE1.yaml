@@ -6,17 +6,17 @@ likelihood:
 params: # DONE 
   cdm:
     prior: {min: 0.1, max: 0.8}
-    ref: 0.5
+    ref: 0.3
     proposal: 0.001
     latex: \Omega_{cdm}
   ol:
     prior: {min: 0.1, max: 0.8}
-    ref: 0.5
+    ref: 0.7
     proposal: 0.001
     latex: \Omega_{\Lambda}
   w:
     prior: {min: -2, max: 2}
-    ref: -0.8
+    ref: -0.9
     proposal: 0.01
     latex: \omega
   e:

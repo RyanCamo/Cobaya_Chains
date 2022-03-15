@@ -19,4 +19,4 @@ params:
 sampler:
   mcmc:
     max_tries: 10000
-output: wCDM_CMB_BAO
+output: DGP_CMB_BAO
