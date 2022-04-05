@@ -1,0 +1,22 @@
+likelihood:
+  FLCDM1:
+    external: import_module('likelihoods_SN').LCDM
+params:
+  om:
+    prior:
+      min: 0.1
+      max: 2
+    ref: 0.3
+    proposal: 0.01
+    latex: \Omega_m
+  ol:
+    prior:
+      min: 0.1
+      max: 2
+    ref: 0.7
+    proposal: 0.01
+    latex: \Omega_{\Lambda}
+sampler:
+  mcmc:
+    max_tries: 10000
+output: LCDM_SN

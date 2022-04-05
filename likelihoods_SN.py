@@ -1,6 +1,9 @@
+from re import M
 import numpy as np
 from scipy.integrate import quad
 import pandas as pd
+import sys
+sys.path.append('Cobaya_Chains')
 
 # Calculates the likelihood for different models.
 # Organised as:
@@ -18,13 +21,14 @@ import pandas as pd
 # Each data set needs to be imported differently
 
 # Current data being used:
-DataToUse = 'DES5YR_UNBIN'
+DataToUse = 'UNBIN_DES5YR_LOWZ'
+arr_size = int(np.genfromtxt("data/%s_cov.txt" % (DataToUse), comments='#',dtype=None)[0])
 DES5YR_UNBIN = np.genfromtxt("data/%s_data.txt" % (DataToUse), names=True)
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
 error = DES5YR_UNBIN['MUERR']
-cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/data/%s_cov.txt" % (DataToUse), comments='#',dtype=None)
-cov1 = cov_arr.reshape(1867,1867) 
+cov_arr = np.genfromtxt("data/%s_cov.txt" % (DataToUse), comments='#',dtype=None)[1:]
+cov1 = cov_arr.reshape(arr_size,arr_size) 
 mu_diag = np.diag(error)**2
 cov = mu_diag+cov1
 

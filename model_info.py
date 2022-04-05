@@ -173,7 +173,7 @@ def get_info(x, *params):
 
     if x == 'NGCG':
         label = [r"$\Omega_m$", r"$A$",r"$\alpha$",r"$\omega$"]
-        begin = [0.5, 0.5, 0.2, -0.8]
+        begin = [0.3, 0.5, 0.2, -0.8]
         if len(params) > 0:
             legend = r'NGCG: $\Omega_{m} = %0.2f $, $A = %0.2f $, $\alpha = %0.2f$, $\omega = %0.2f$' % (params[0], params[1],params[2], params[3])
         else:
@@ -182,7 +182,7 @@ def get_info(x, *params):
 
     if x == 'GAL':
         label = [r"$\Omega_m$", r"$\Omega_g$" ]
-        begin = [0.5, 0.5]
+        begin = [0.3, 0.6]
         if len(params) > 0:
             legend = r'GAL: $\Omega_{m} = %0.2f $, $\Omega_g = %0.2f$' % (params[0], params[1])
         else:

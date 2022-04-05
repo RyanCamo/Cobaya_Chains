@@ -1,6 +1,6 @@
 likelihood:
   FLCDM1:
-    external: import_module('likelihoods_BAO_CMB').LCDM # Change the model here
+    external: import_module('likelihoods_SN').LCDM # Change the model here
     #external: import_module('BAO_CMB_likelihood').LCDM 
     
 
@@ -22,7 +22,8 @@ params: # DONE
 
 sampler: # DONE - CAN BE REFINED
   mcmc:
-
+    max_tries: 10000
+    
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO/LCDM_CMB_BAO
+output: chains/SN/LCDM_SN

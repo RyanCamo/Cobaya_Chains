@@ -14,7 +14,7 @@ params:
     prior:
       min: 0.1
       max: 2
-    ref: 0.5
+    ref: 0.3
     proposal: 0.01
     latex: \Omega_m
 sampler:

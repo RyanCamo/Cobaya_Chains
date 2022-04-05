@@ -6,16 +6,17 @@ params:
     prior:
       min: 0.1
       max: 2
-    ref: 0.5
+    ref: 0.3
     proposal: 0.01
     latex: \Omega_m
   ol:
     prior:
       min: 0.1
       max: 2
-    ref: 0.5
+    ref: 0.7
     proposal: 0.01
     latex: \Omega_{\Lambda}
 sampler:
-  mcmc: null
+  mcmc:
+    max_tries: 10000
 output: LCDM_CMB_BAO_SN

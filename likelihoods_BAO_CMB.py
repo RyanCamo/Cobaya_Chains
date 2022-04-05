@@ -180,6 +180,11 @@ def LCDM(om, ol):
 
     # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
     log_CMB_BAO = log_dm + log_dv + log_dh
+
+    # Testing combining
+    #full_z_array = np.concatenate(zs,zm,zh)
+    #full_model_array = np.concatenate(model, model1, model2)
+
     return log_CMB_BAO
 
 # 3) Flat Constant wCDM with 2x paramaters, \Omega_M and \omega 
@@ -782,5 +787,4 @@ def GAL(om, og):
 
 
 if __name__ == "__main__":
-    #logp = LCDM(0.31,0.7)
-    logp = FwCDM(0.3,-1)
+    logp = LCDM(0.3,0.7)

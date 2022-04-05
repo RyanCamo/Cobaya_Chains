@@ -11,13 +11,14 @@ import pandas as pd
 
 
 # Current SN - data being used
-DataToUse = 'DES5YR_UNBIN'
+DataToUse = 'UNBIN_DES5YR_LOWZ'
+arr_size = int(np.genfromtxt("data/%s_cov.txt" % (DataToUse), comments='#',dtype=None)[0])
 DES5YR_UNBIN = np.genfromtxt("data/%s_data.txt" % (DataToUse), names=True)
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
 error = DES5YR_UNBIN['MUERR']
-cov_arr = np.genfromtxt("data/%s_cov.txt" % (DataToUse), comments='#',dtype=None)
-cov1 = cov_arr.reshape(1867,1867) 
+cov_arr = np.genfromtxt("data/%s_cov.txt" % (DataToUse), comments='#',dtype=None)[1:]
+cov1 = cov_arr.reshape(arr_size,arr_size) 
 mu_diag = np.diag(error)**2
 cov = mu_diag+cov1
 
@@ -584,7 +585,7 @@ def Fwz(om,w0,wz):
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
 def FCa_Hz_inverse(z, om, q ,n ):
     Hz = np.sqrt(
-        (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q))
+        (om*((z+1)**3))*((1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q)))
     return 1.0 / Hz
 
 def FCa(om, q, n):
@@ -598,8 +599,8 @@ def FCa(om, q, n):
     # Calculates values used for the CMB/BAO log likelihoodfor this model
     y = np.array([quad(FCa_Hz_inverse, 0, 1090, args=(om, q, n))[0]]) # Last Scattering
     E = y
-    q = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zss]) # CMB/BAO
-    F = q
+    r = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zss]) # CMB/BAO
+    F = r
     ang_star = E / (1+1090)
     ang_dist = F / (1 + zss)
     Hz = np.sqrt((om*((zss+1)**3))*(1+(((om**(-q))-1)*((zss+1)**(3*q*(n-1)))))**(1/q))

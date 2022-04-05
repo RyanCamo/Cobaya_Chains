@@ -1,0 +1,36 @@
+likelihood:
+  NGCG:
+    external: import_module('likelihoods_BAO_CMB_SN').NGCG
+params:
+  om:
+    prior:
+      min: 0.1
+      max: 0.8
+    ref: 0.3
+    proposal: 0.001
+    latex: \Omega_{m}
+  A:
+    prior:
+      min: 0.1
+      max: 1
+    ref: 0.5
+    proposal: 0.001
+    latex: A
+  a:
+    prior:
+      min: -0.5
+      max: 0.5
+    ref: 0.2
+    proposal: 0.001
+    latex: \alpha
+  w:
+    prior:
+      min: -2
+      max: 2
+    ref: -0.9
+    proposal: 0.01
+    latex: \omega
+sampler:
+  mcmc:
+    max_tries: 10000
+output: NGCG_CMB_BAO_SN

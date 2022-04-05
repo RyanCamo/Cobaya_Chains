@@ -18,7 +18,7 @@ import scipy.special as sc
 
 ## TABLE OPTIONS: 1 = True, 0 = False
 SN = 1 # Use SN data in the model comparison table
-CMB_BAO = 1 # Use CMB_BAO data in the model comparison table
+CMB_BAO = 0 # Use CMB_BAO data in the model comparison table
 
 
 # amount of data points per dataset
@@ -42,7 +42,7 @@ else:
 # This function gets the best fit parameters for the specific chains used.
 def get_param(samples, label, model, burn):
     c = ChainConsumer()
-    c.add_chain(samples[burn:], parameters=label, linewidth=2.0, name="MCMC", kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="max")
+    c.add_chain(samples[burn:], parameters=label, linewidth=2.0, name="MCMC", kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="cumulative")
     params = []
     for i, labelx in enumerate(label):
         params.append(c.analysis.get_summary(chains="MCMC")[labelx][1])
@@ -56,7 +56,7 @@ def get_bestparams(model,label):
         cols.append(i+2)
 
     ## TAKING INTO CONSIDERATION THE CORRECT BURN IN. TO OVERWRITE UNCOMMENT #burn = 0.
-    burnSN, burnBAO_CMB, burnBAO_CMB_SN  = np.loadtxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model))
+    burnSN, burnBAO_CMB, burnBAO_CMB_SN  = [0,0,0] #np.loadtxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model))
     #Cobaya_Chains/chains/CMB+BAO
     if SN == 1 and CMB_BAO == 1:
         samples = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(model), usecols=(cols), comments='#')
@@ -73,6 +73,7 @@ def get_bestparams(model,label):
 
     #burn = 0 # Uncomment to overwrite
     params = get_param(samples,label,model, burn)
+    print(params)
     return params 
 
 def get_table(models):
@@ -90,8 +91,8 @@ def get_table(models):
         label, begin, legend = get_info(model.__name__)
         params = get_bestparams(model.__name__,label)
         params = np.array(params)
-        #if model.__name__ == 'FLCDM':
-        #    params = [params]
+        #if model.__name__ == 'FCa':
+        #    params = [0.3, 0.7, 0]
         p1 = model(*params)
         chi2 = -p1/0.5
         free_params = len(label)
@@ -114,6 +115,6 @@ def get_table(models):
 
 if __name__ == "__main__":
     # Models to Create Data from
-    models = [FLCDM, LCDM, FwCDM]
+    models = [FLCDM, FCa]
     #[FLCDM, LCDM, FwCDM, wCDM, IDE1, IDE2, IDE4, FGChap, GChap, FCa, Fwa, Fwz, DGP, GAL, NGCG]
     get_table(models)
