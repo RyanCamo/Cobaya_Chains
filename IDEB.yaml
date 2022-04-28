@@ -1,6 +1,6 @@
 likelihood:
   IDEA:
-    external: import_module('likelihoods_SN').IDEB_2 # Change the model here
+    external: import_module('0').IDEB_2 # Change the model here
     
 
 params: # DONE 
