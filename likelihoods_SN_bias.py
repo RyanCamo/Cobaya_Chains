@@ -16,13 +16,13 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'GAL'
+model = 'IDEB_2'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
-arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
-cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
+cov_arr = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
 
 
 zs = DES5YR_UNBIN['zCMB']
@@ -383,6 +383,22 @@ def IDEB(cdm,ob,w,e):
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = [r"$\Omega_{CDM}$", r"$\Omega_{b}$", r"$\omega$", r"$\epsilon$"]
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
+    # 16) IDE2 Q = H e rho_c
+def IDE_Hz_inverseB_2(z, cdm, ol, w, e):
+    ok = 1.0 - cdm - ol
+    Hz = np.sqrt(ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
+    return 1.0 / Hz
+
+def IDEB_2(cdm,w,e):
+    ol = 1 - cdm
+    x = np.array([quad(IDE_Hz_inverseB_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
+    D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
     logp = cov_log_likelihood(dist_mod, mu, cov)
     return logp
 
