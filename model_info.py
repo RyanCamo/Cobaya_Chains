@@ -216,6 +216,15 @@ def get_info(x, *params):
             legend = 'No parameters provided'
         return label, begin, legend
 
+    if x == 'IDEC_2':
+        label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\varepsilon$"]
+        begin = [0.25, -0.9, 0.03]
+        if len(params) > 0:
+            legend = r'IDE 2: $\Omega_{CDM} = %0.2f $, $\omega = %0.2f $, $\epsilon = %0.2f $' % (params[0], params[1], params[2])
+        else:
+            legend = 'No parameters provided'
+        return label, begin, legend
+
     if x == 'IDEC':
         label = [r"$\Omega_{m}$", r"$\Omega_{b}$", r"$\omega$", r"$\varepsilon$"]
         begin = [0.25, 0.05, -0.9, 0.03]
