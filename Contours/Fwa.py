@@ -48,15 +48,15 @@ L_ol = 0.693
 
 # Adding the model chains to chainconsumer to plot & plotting things
 fig, ax = plt.subplots(1, 1)
-c.add_chain(SN_2, parameters=label, weights=SN_2_weights, linewidth=1.0, name="SN_2", kde=1.5, color="red",num_free_params=len(begin))
-c.add_chain(SN, parameters=label, weights=SN_weights, linewidth=1.2, name="SN", kde=1.5, color="black", linestyle = '-.',num_free_params=len(begin))
-c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB", kde=1.5, color="#FFD700",num_free_params=len(begin))
-c.add_chain(BAO_CMB_SN, parameters=label, weights=BAO_CMB_SN_weights,linewidth=1.0, name="BAO/CMB+SN", kde=1.5, color="#1E90FF",num_free_params=len(begin))
-c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
+c.add_chain(SN_2[burnSN:], parameters=label, weights=SN_2_weights[burnSN:], linewidth=1.0, name="SN_2", kde=1.5, color="red",num_free_params=len(begin))
+c.add_chain(SN[burnSN:], parameters=label, weights=SN_weights[burnSN:], linewidth=1.2, name="SN", kde=1.5, color="black", linestyle = '-.',num_free_params=len(begin))
+c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, weights=BAO_CMB_weights[burnBAO_CMB:],linewidth=1.0, name="BAO/CMB", kde=1.5, color="#FFD700",num_free_params=len(begin))
+c.add_chain(BAO_CMB_SN[:], parameters=label, weights=BAO_CMB_SN_weights[:],linewidth=1.0, name="BAO/CMB+SN", kde=1.5, color="#1E90FF",num_free_params=len(begin))
+c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, weights=BAO_CMB_weights[burnBAO_CMB:],linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
 c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
 
-xaxis = label[0] # Which slice to plot?
-yaxis = label[1] # Which slice to plot?
+xaxis = label[1] # Which slice to plot?
+yaxis = label[2] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 

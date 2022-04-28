@@ -14,7 +14,7 @@ import pandas as pd
 
 # Each data set needs to be imported differently
 
-model = 'Fwz'
+model = 'FCa'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
