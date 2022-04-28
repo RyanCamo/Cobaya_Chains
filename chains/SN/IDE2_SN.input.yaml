@@ -1,0 +1,36 @@
+likelihood:
+  IDE2:
+    external: import_module('likelihoods_SN').IDE2
+params:
+  cdm:
+    prior:
+      min: 0.01
+      max: 1
+    ref: 0.3
+    proposal: 0.001
+    latex: \Omega_{cdm}
+  ol:
+    prior:
+      min: 0.01
+      max: 1
+    ref: 0.7
+    proposal: 0.001
+    latex: \Omega_{\Lambda}
+  w:
+    prior:
+      min: -5
+      max: 5
+    ref: -0.9
+    proposal: 0.01
+    latex: \omega
+  e:
+    prior:
+      min: -0.5
+      max: 0.5
+    ref: 0.05
+    proposal: 0.001
+    latex: \varepsilon
+sampler:
+  mcmc:
+    max_tries: 10000
+output: IDE2_SN

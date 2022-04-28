@@ -5,7 +5,7 @@ likelihood:
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('likelihoods_BAO_CMB').NGCG
+    external: import_module('likelihoods_BAO_CMB_cov').NGCG
     input_params:
     - om
     - A

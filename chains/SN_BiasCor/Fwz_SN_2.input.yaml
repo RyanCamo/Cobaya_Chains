@@ -1,0 +1,29 @@
+likelihood:
+  Fwz:
+    external: import_module('likelihoods_SN_bias').Fwz
+params:
+  om:
+    prior:
+      min: 0.1
+      max: 0.9
+    ref: 0.3
+    proposal: 0.01
+    latex: \Omega_m
+  w0:
+    prior:
+      min: -10
+      max: 10
+    ref: -1.0
+    proposal: 0.01
+    latex: \omega_{0}
+  wz:
+    prior:
+      min: -10
+      max: 10
+    ref: 0.1
+    proposal: 0.01
+    latex: \omega_{z}
+sampler:
+  mcmc:
+    max_tries: 10000
+output: Fwz_SN_2

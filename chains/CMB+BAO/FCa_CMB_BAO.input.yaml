@@ -1,6 +1,6 @@
 likelihood:
   FCa:
-    external: import_module('likelihoods_BAO_CMB').FCa
+    external: import_module('likelihoods_BAO_CMB_cov').FCa
 params:
   om:
     prior:
@@ -19,9 +19,9 @@ params:
   n:
     prior:
       min: -3
-      max: 0.5
+      max: 0.66
     ref: 0.01
-    proposal: 0.001
+    proposal: 0.01
     latex: n
 sampler:
   mcmc:

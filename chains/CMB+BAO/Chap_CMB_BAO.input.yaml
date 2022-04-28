@@ -1,6 +1,6 @@
 likelihood:
   Chap:
-    external: import_module('likelihoods_BAO_CMB').Chap
+    external: import_module('likelihoods_BAO_CMB_cov').Chap
 params:
   A:
     prior:

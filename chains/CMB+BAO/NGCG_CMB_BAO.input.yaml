@@ -1,6 +1,6 @@
 likelihood:
   NGCG:
-    external: import_module('likelihoods_BAO_CMB').NGCG
+    external: import_module('likelihoods_BAO_CMB_cov').NGCG
 params:
   om:
     prior:

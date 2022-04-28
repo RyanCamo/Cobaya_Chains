@@ -1,21 +1,21 @@
 likelihood:
   Fwa:
-    external: import_module('likelihoods_SN').Fwa # Change the model here
+    external: import_module('likelihoods_BAO_CMB_SN').Fwa # Change the model here
     
 
 params: # DONE 
   om:
-    prior: {min: 0.1, max: 0.9}
+    prior: {min: 0.1, max: 0.7}
     ref: 0.3
     proposal: 0.01
     latex: \Omega_m
   w0:
-    prior: {min: -10, max: 10}
+    prior: {min: -2, max: 1}
     ref: -1
     proposal: 0.01
     latex: \omega_{0}
   wa:
-    prior: {min: -10, max: 10}
+    prior: {min: -3, max: 2}
     ref: 0.1
     proposal: 0.01
     latex: \omega_{a}
@@ -30,4 +30,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/SN/Fwa_SN
+output: chains/CMB+BAO+SN/Fwa_CMB_BAO_SN

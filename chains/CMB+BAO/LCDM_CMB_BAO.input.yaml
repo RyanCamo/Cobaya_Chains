@@ -1,6 +1,6 @@
 likelihood:
   FLCDM1:
-    external: import_module('likelihoods_BAO_CMB').LCDM
+    external: import_module('likelihoods_BAO_CMB_cov').LCDM
 params:
   om:
     prior:
@@ -17,5 +17,6 @@ params:
     proposal: 0.01
     latex: \Omega_{\Lambda}
 sampler:
-  mcmc: null
+  mcmc:
+    max_tries: 10000
 output: LCDM_CMB_BAO

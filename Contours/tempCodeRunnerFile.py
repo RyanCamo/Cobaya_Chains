@@ -1,1 +1,1 @@
-[burnBAO_CMB_SN:]
+c.add_chain(SN[burnSN:], parameters=label, weights=SN_weights[burnSN:], linewidth=1.2, name="SN", kde=1.5, color="black", linestyle = '-.',num_free_params=len(begin))

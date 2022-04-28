@@ -1,6 +1,6 @@
 likelihood:
   GChap:
-    external: import_module('likelihoods_BAO_CMB').GChap
+    external: import_module('likelihoods_BAO_CMB_cov').GChap
 params:
   A:
     prior:

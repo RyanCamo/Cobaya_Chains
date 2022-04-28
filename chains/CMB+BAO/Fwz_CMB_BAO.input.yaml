@@ -1,6 +1,6 @@
 likelihood:
   Fwz:
-    external: import_module('likelihoods_BAO_CMB').Fwz
+    external: import_module('likelihoods_BAO_CMB_cov').Fwz
 params:
   om:
     prior:
@@ -24,5 +24,6 @@ params:
     proposal: 0.01
     latex: \omega_{z}
 sampler:
-  mcmc: null
+  mcmc:
+    max_tries: 10000
 output: Fwz_CMB_BAO

@@ -1,6 +1,6 @@
 likelihood:
   FLCDM:
-    external: import_module('likelihoods_BAO_CMB').FLCDM
+    external: import_module('likelihoods_BAO_CMB_cov').FLCDM
 params:
   om:
     prior:

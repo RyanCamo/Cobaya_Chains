@@ -1,6 +1,6 @@
 likelihood:
   GAL:
-    external: import_module('likelihoods_BAO_CMB').GAL
+    external: import_module('likelihoods_BAO_CMB_cov').GAL
 params:
   om:
     prior:

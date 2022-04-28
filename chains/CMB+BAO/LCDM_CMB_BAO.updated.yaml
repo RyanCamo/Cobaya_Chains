@@ -5,7 +5,7 @@ likelihood:
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('likelihoods_BAO_CMB').LCDM
+    external: import_module('likelihoods_BAO_CMB_cov').LCDM
     input_params:
     - om
     - ol
@@ -28,7 +28,7 @@ params:
 sampler:
   mcmc:
     burn_in: 0
-    max_tries: 40d
+    max_tries: 10000
     covmat: null
     covmat_params: null
     proposal_scale: 2.4

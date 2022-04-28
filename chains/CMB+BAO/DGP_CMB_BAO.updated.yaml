@@ -5,7 +5,7 @@ likelihood:
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('likelihoods_BAO_CMB').DGP
+    external: import_module('likelihoods_BAO_CMB_cov').DGP
     input_params:
     - rc
     - ok

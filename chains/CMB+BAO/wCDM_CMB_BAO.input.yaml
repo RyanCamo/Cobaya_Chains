@@ -1,6 +1,6 @@
 likelihood:
   wCDM:
-    external: import_module('likelihoods_BAO_CMB').wCDM
+    external: import_module('likelihoods_BAO_CMB_cov').wCDM
 params:
   om:
     prior:

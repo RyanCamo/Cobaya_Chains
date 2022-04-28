@@ -1,6 +1,6 @@
 likelihood:
   DGP:
-    external: import_module('likelihoods_BAO_CMB').DGP
+    external: import_module('likelihoods_BAO_CMB_cov').DGP
 params:
   rc:
     prior:

@@ -1,6 +1,6 @@
 likelihood:
   FGChap:
-    external: import_module('likelihoods_BAO_CMB').FGChap
+    external: import_module('likelihoods_BAO_CMB_cov').FGChap
 params:
   A:
     prior:

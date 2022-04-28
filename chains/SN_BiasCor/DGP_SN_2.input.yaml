@@ -1,0 +1,22 @@
+likelihood:
+  DGP:
+    external: import_module('likelihoods_SN_bias').DGP
+params:
+  rc:
+    prior:
+      min: 0
+      max: 1
+    ref: 0.1
+    proposal: 0.001
+    latex: \Omega_{rc}
+  ok:
+    prior:
+      min: -0.5
+      max: 0.5
+    ref: 0.2
+    proposal: 0.001
+    latex: \Omega_{K}
+sampler:
+  mcmc:
+    max_tries: 10000
+output: DGP_SN_2
