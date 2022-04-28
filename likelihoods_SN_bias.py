@@ -12,33 +12,25 @@ sys.path.append('Cobaya_Chains')
 ## 3. Models
 
 #### Data 
-## Options: - options not used - this is just for the DES5YR_UNBIN
-## DES5YR UNBINNED = DES5YR_UNBIN
-## DES5YR BINNED = DES5YR_BIN 
-## DES3YR UNBINNED = DES3YR_UNBIN
-## DES3YR BINNED = DES3YR_BIN
+# This uses the data second iteration hubble diagram after changing the BiasCor sims
 
 # Each data set needs to be imported differently
 
-# Current data being used:
-# Uncomment 3 lines when doing normal SN chains
-arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_data.txt", names=True)
+model = 'GAL'
 
+# Current data being used:
 # Below is for second run with BiasCor  - just change model name
-#arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_cov.txt", comments='#',dtype=None)[0])
-#DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_data.txt", names=True)
-#cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_cov.txt", comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
+cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
 
 
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
 error = DES5YR_UNBIN['MUERR']
-cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[1:]
 cov1 = cov_arr.reshape(arr_size,arr_size) 
 mu_diag = np.diag(error)**2
 cov = mu_diag+cov1
-
 
 #### The SN-Likelihood function:
 
@@ -51,7 +43,6 @@ def cov_log_likelihood(mu_model, mu, cov):
     C = np.sum(inv_cov)
     chi2 = chit2 - (B**2 / C) + np.log(C / (2* np.pi))
     return -0.5*chi2 
-
 
 #### Non-Standard Models:
 
@@ -219,70 +210,6 @@ def IDE4(cdm,ol,w,e):
     logp = cov_log_likelihood(dist_mod, mu, cov)
     return logp
 
-# 15) IDE1 Q = H e rho_x
-def IDE_Hz_inverseA(z, cdm, ol, w, e):
-    ok = 1.0 - cdm - ol
-    Hz = np.sqrt(cdm*(1+z)**3 + ol*( ((e)/(w+e))*(1+z)**3 + ((w)/(w+e))*(1+z)**(3*(1+w+e))  )) 
-    return 1.0 / Hz
-
-def IDEA(cdm,w,e):
-    ol = 1 - cdm
-    x = np.array([quad(IDE_Hz_inverseA, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
-    D = x
-    lum_dist = D * (1 + zs)
-    dist_mod = 5 * np.log10(lum_dist)
-    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
-    logp = cov_log_likelihood(dist_mod, mu, cov)
-    return logp
-
-# 16) IDE2 Q = H e rho_c
-def IDE_Hz_inverseB(z, cdm, ol, w, e, ob):
-    ok = 1.0 - cdm - ol
-    Hz = np.sqrt(ob*(1+z)**(3)+ ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
-    return 1.0 / Hz
-
-def IDEB(cdm,ob,w,e):
-    ol = 1 -ob - cdm
-    x = np.array([quad(IDE_Hz_inverseB, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zs])
-    D = x
-    lum_dist = D * (1 + zs)
-    dist_mod = 5 * np.log10(lum_dist)
-    label = [r"$\Omega_{CDM}$", r"$\Omega_{b}$", r"$\omega$", r"$\epsilon$"]
-    logp = cov_log_likelihood(dist_mod, mu, cov)
-    return logp
-
-# 16) IDE2 Q = H e rho_c
-def IDE_Hz_inverseB_2(z, cdm, ol, w, e):
-    ok = 1.0 - cdm - ol
-    Hz = np.sqrt(ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
-    return 1.0 / Hz
-
-def IDEB_2(cdm,w,e):
-    ol = 1 - cdm
-    x = np.array([quad(IDE_Hz_inverseB_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
-    D = x
-    lum_dist = D * (1 + zs)
-    dist_mod = 5 * np.log10(lum_dist)
-    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
-    logp = cov_log_likelihood(dist_mod, mu, cov)
-    return logp
-
-# 18) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
-def IDE_Hz_inverseC(z, cdm, ol, w, e, ob):
-    constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
-    Hz = np.sqrt( ob*(1+z)**3 + cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
-    return 1.0 / Hz
-
-def IDEC(cdm,ob,w,e):
-    ol = 1 - cdm - ob
-    x = np.array([quad(IDE_Hz_inverseC, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zs])
-    D = x
-    lum_dist = D * (1 + zs)
-    dist_mod = 5 * np.log10(lum_dist)
-    label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
-    logp = cov_log_likelihood(dist_mod, mu, cov)
-    return logp
-
 # 19) Flat w(z) with 3x parameters, \Omega_M, \omega_0 and \omega_a - DONE
 def Fwz_Hz_inverse(z,om,w0,wz):
     ol = 1 - om 
@@ -427,7 +354,71 @@ def GAL(om, og):
     logp = cov_log_likelihood(dist_mod, mu, cov)
     return logp
 
+# 15) IDE1 Q = H e rho_x
+def IDE_Hz_inverseA(z, cdm, ol, w, e):
+    ok = 1.0 - cdm - ol
+    Hz = np.sqrt(cdm*(1+z)**3 + ol*( ((e)/(w+e))*(1+z)**3 + ((w)/(w+e))*(1+z)**(3*(1+w+e))  )) 
+    return 1.0 / Hz
+
+def IDEA(cdm,w,e):
+    ol = 1 - cdm
+    x = np.array([quad(IDE_Hz_inverseA, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
+    D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
+# 16) IDE2 Q = H e rho_c
+def IDE_Hz_inverseB(z, cdm, ol, w, e, ob):
+    ok = 1.0 - cdm - ol
+    Hz = np.sqrt(ob*(1+z)**(3)+ ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
+    return 1.0 / Hz
+
+def IDEB(cdm,ob,w,e):
+    ol = 1 -ob - cdm
+    x = np.array([quad(IDE_Hz_inverseB, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zs])
+    D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\Omega_{b}$", r"$\omega$", r"$\epsilon$"]
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
+# 16) IDE2 Q = H e rho_c
+def IDE_Hz_inverseB_2(z, cdm, ol, w, e):
+    ok = 1.0 - cdm - ol
+    Hz = np.sqrt(ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
+    return 1.0 / Hz
+
+def IDEB_2(cdm,w,e):
+    ol = 1 - cdm
+    x = np.array([quad(IDE_Hz_inverseB_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
+    D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
+# 18) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
+def IDE_Hz_inverseC(z, cdm, ol, w, e, ob):
+    constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
+    Hz = np.sqrt( ob*(1+z)**3 + cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
+    return 1.0 / Hz
+
+def IDEC(cdm,ob,w,e):
+    ol = 1 - cdm - ob
+    x = np.array([quad(IDE_Hz_inverseC, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zs])
+    D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
 if __name__ == "__main__":
-    logp = LCDM(0.3,0.7)
-    #logp = wCDM(0.01, 0.2,1)
+    #logp = LCDM(0.31,0.7)
+    logp = FCa(0.310, 0.766, -0.108)
     print(logp)

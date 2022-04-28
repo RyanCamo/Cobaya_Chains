@@ -73,7 +73,7 @@ def get_info(x, *params):
         return label, begin, legend
 
     if x == 'Chap':
-        label = [r"$A$",r"$\Omega_k$"]
+        label = [r"$A$",r"$\Omega_K$"]
         begin = [0.8, 0.2]
         if len(params) > 0:
             legend = r'SCh: $A = %0.2f $ $\Omega_K = %0.2f $' % (params[0], params[1] )
@@ -100,10 +100,10 @@ def get_info(x, *params):
         return label, begin, legend
 
     if x == 'DGP':
-        label = [r"$\Omega_{rc}$", r"$\Omega_K$"]
+        label = [r"$\Omega_{rc}$", r"$\Omega_{K}$"]
         begin = [0.13, 0.02]
         if len(params) > 0:
-            legend = r'DGP: $\Omega_{rc} = %0.2f $, $\Omega_K = %0.2f $' % (params[0], params[1])
+            legend = r'DGP: $\Omega_{rc} = %0.2f $, $\Omega_{K} = %0.2f $' % (params[0], params[1])
         else:
             legend = 'No parameters provided'
         return label, begin, legend
@@ -185,6 +185,42 @@ def get_info(x, *params):
         begin = [0.3, 0.6]
         if len(params) > 0:
             legend = r'GAL: $\Omega_{m} = %0.2f $, $\Omega_g = %0.2f$' % (params[0], params[1])
+        else:
+            legend = 'No parameters provided'
+        return label, begin, legend
+
+    if x == 'IDEA':
+        label = [r"$\Omega_{m}$", r"$\omega$", r"$\varepsilon$"]
+        begin = [0.25, -1.1, 0.05]
+        if len(params) > 0:
+            legend = r'IDE 1: $\Omega_{CDM} = %0.2f $,  $\omega = %0.2f $, $\epsilon = %0.2f $' % (params[0], params[1], params[2])
+        else:
+            legend = 'No parameters provided'
+        return label, begin, legend
+
+    if x == 'IDEB':
+        label = [r"$\Omega_{CDM}$", r"$\Omega_{b}$", r"$\omega$", r"$\varepsilon$"]
+        begin = [0.25, 0.05, -0.9, 0.03]
+        if len(params) > 0:
+            legend = r'IDE 2: $\Omega_{CDM} = %0.2f $, $\Omega_{b} = %0.2f $, $\omega = %0.2f $, $\epsilon = %0.2f $' % (params[0], params[1], params[2], params[3])
+        else:
+            legend = 'No parameters provided'
+        return label, begin, legend
+
+    if x == 'IDEB_2':
+        label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\varepsilon$"]
+        begin = [0.25, -0.9, 0.03]
+        if len(params) > 0:
+            legend = r'IDE 2: $\Omega_{CDM} = %0.2f $, $\omega = %0.2f $, $\epsilon = %0.2f $' % (params[0], params[1], params[2])
+        else:
+            legend = 'No parameters provided'
+        return label, begin, legend
+
+    if x == 'IDEC':
+        label = [r"$\Omega_{m}$", r"$\Omega_{b}$", r"$\omega$", r"$\varepsilon$"]
+        begin = [0.25, 0.05, -0.9, 0.03]
+        if len(params) > 0:
+            legend = r'IDE 3: $\Omega_{CDM} = %0.2f $, $\Omega_{DE} = %0.2f $, $\omega = %0.2f $, $\epsilon = %0.2f $' % (params[0], params[1], params[2], params[3])
         else:
             legend = 'No parameters provided'
         return label, begin, legend

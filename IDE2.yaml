@@ -1,23 +1,23 @@
 likelihood:
   IDE2:
-    external: import_module('likelihoods_BAO_CMB_SN').IDE2 # Change the model here
+    external: import_module('likelihoods_SN').IDE2 # Change the model here
     
 
 params: # DONE 
   cdm:
     prior: {min: 0.01, max: 1}
     ref: 0.3
-    proposal: 0.01
+    proposal: 0.001
     latex: \Omega_{cdm}
   ol:
     prior: {min: 0.01, max: 1}
     ref: 0.7
-    proposal: 0.01
+    proposal: 0.001
     latex: \Omega_{\Lambda}
   w:
     prior: {min: -5, max: 5}
     ref: -0.9
-    proposal: 0.1
+    proposal: 0.01
     latex: \omega
   e:
     prior: {min: -0.5, max: 0.5}
@@ -35,4 +35,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO+SN/IDE2_CMB_BAO_SN
+output: chains/SN/IDE2_SN
