@@ -22,8 +22,8 @@ sys.path.append('Cobaya_Chains')
 
 # Current data being used:
 # Uncomment 3 lines when doing normal SN chains
-arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_data.txt", names=True)
+arr_size = int(np.genfromtxt(r"C:\Users\user\OneDrive\Desktop\Honours\env\Cobaya_Chains\data\UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"C:\Users\user\OneDrive\Desktop\Honours\env\Cobaya_Chains\data\UNBIN_DES5YR_LOWZ_data.txt", names=True)
 
 # Below is for second run with BiasCor  - just change model name
 #arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_cov.txt", comments='#',dtype=None)[0])
@@ -34,7 +34,7 @@ DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
 error = DES5YR_UNBIN['MUERR']
-cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[1:]
+cov_arr = np.genfromtxt(r"C:\Users\user\OneDrive\Desktop\Honours\env\Cobaya_Chains\data\UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[1:]
 cov1 = cov_arr.reshape(arr_size,arr_size) 
 mu_diag = np.diag(error)**2
 cov = mu_diag+cov1
