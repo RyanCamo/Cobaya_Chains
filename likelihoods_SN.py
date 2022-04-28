@@ -275,7 +275,7 @@ def IDE_Hz_inverseC_2(z, cdm, ol, w, e):
 
 def IDEC_2(cdm,w,e):
     ol = 1 - cdm 
-    x = np.array([quad(IDE_Hz_inverseC, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
+    x = np.array([quad(IDE_Hz_inverseC_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
     D = x
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
