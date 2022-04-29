@@ -402,22 +402,6 @@ def IDEB_2(cdm,w,e):
     logp = cov_log_likelihood(dist_mod, mu, cov)
     return logp
 
-# 16) IDE2 Q = H e rho_c
-def IDE_Hz_inverseB_2(z, cdm, ol, w, e):
-    ok = 1.0 - cdm - ol
-    Hz = np.sqrt(ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
-    return 1.0 / Hz
-
-def IDEB_2(cdm,w,e):
-    ol = 1 - cdm
-    x = np.array([quad(IDE_Hz_inverseB_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
-    D = x
-    lum_dist = D * (1 + zs)
-    dist_mod = 5 * np.log10(lum_dist)
-    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
-    logp = cov_log_likelihood(dist_mod, mu, cov)
-    return logp
-
 # 18) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
 def IDE_Hz_inverseC(z, cdm, ol, w, e, ob):
     constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
@@ -431,6 +415,23 @@ def IDEC(cdm,ob,w,e):
     lum_dist = D * (1 + zs)
     dist_mod = 5 * np.log10(lum_dist)
     label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
+    logp = cov_log_likelihood(dist_mod, mu, cov)
+    return logp
+
+
+# 18) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
+def IDE_Hz_inverseC_2(z, cdm, ol, w, e):
+    constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
+    Hz = np.sqrt( cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
+    return 1.0 / Hz
+
+def IDEC_2(cdm,w,e):
+    ol = 1 - cdm 
+    x = np.array([quad(IDE_Hz_inverseC_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs])
+    D = x
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\omega$", r"$\epsilon$"]
     logp = cov_log_likelihood(dist_mod, mu, cov)
     return logp
 

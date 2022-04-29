@@ -1,6 +1,6 @@
 likelihood:
   Fwz:
-    external: import_module('likelihoods_BAO_CMB').Fwz # Change the model here
+    external: import_module('likelihoods_BAO_CMB_cov').Fwz # Change the model here
     
 
 params: # DONE 
