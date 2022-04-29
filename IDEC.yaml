@@ -1,6 +1,6 @@
 likelihood:
   IDEA:
-    external: import_module('likelihoods_SN').IDEC_2 # Change the model here
+    external: import_module('likelihoods_SN_bias').IDEC_2 # Change the model here
     
 
 params: # DONE 
@@ -35,4 +35,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/SN/IDEC_2_SN
+output: chains/SN_BiasCor/IDEC_2_SN_2

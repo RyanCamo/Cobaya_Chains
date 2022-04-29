@@ -1,6 +1,6 @@
 likelihood:
   Fwz:
-    external: import_module('likelihoods_BAO_CMB_cov').Fwz
+    external: import_module('likelihoods_BAO_CMB').Fwz
 params:
   om:
     prior:
