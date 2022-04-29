@@ -14,13 +14,13 @@ import pandas as pd
 
 # Each data set needs to be imported differently
 
-model = 'FCa'
+model = 'IDEC_2'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
-arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
-cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt(r"/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
+cov_arr = np.genfromtxt(r"/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
 
 # Current SN - data being used
 #DataToUse = 'UNBIN_DES5YR_LOWZ'
@@ -1259,6 +1259,64 @@ def IDEC(cdm,ob,w,e):
     # calculate DH
     constC2 = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+zh)**(3*(w+e)))**(-(e)/(w+e))
     Dh = 1/(np.sqrt( ob*(1+zh)**3 + cdm*constC2*(1+zh)**3 +  ol*constC2*(1+zh)**(3*(1+w+e))) )
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2[4:]) # likelihood for dh/rd data
+
+    # 4x BOSS
+    BOSS_model = np.array([model1[0], model2[0], model1[1], model2[1]])
+    log_BOSS = CMB_BAO_cov_log_likelihood(BOSS_model, BOSS_data, BOSS_cov)
+
+    # 2x eBOSS LRG
+    LRG_model = np.array([model1[2], model2[2]])
+    log_LRG = CMB_BAO_cov_log_likelihood(LRG_model, LRG_data, LRG_cov)
+
+    # 2x eBOSS QU
+    QU_model = np.array([model1[3], model2[3]])
+    log_QU = CMB_BAO_cov_log_likelihood(QU_model, QU_data, QU_cov)
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh + log_BOSS + log_LRG + log_QU
+    return log_SN + log_CMB_BAO
+
+
+# 8) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
+def IDEC_Hz_inverse_2(z, cdm, ol, w, e):
+    constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
+    Hz = np.sqrt(cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
+    return 1.0 / Hz
+
+def IDEC_2(cdm,w,e):
+    ol = 1 - cdm 
+    x = np.array([quad(IDEC_Hz_inverse_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs]) # SN
+    q = np.array([quad(IDEC_Hz_inverse_2, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # dv/rd
+    m = np.array([quad(IDEC_Hz_inverse_2, 0, z, args=(cdm, ol, w, e))[0] for z in zm]) # dm/rd
+    y = np.array([quad(IDEC_Hz_inverse_2, 0, 1090, args=(cdm, ol, w, e))[0]]) # last scattering
+    D = x
+    E = y
+    F = q
+    M = m
+    lum_dist = D * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    label = [r"$\Omega_{CDM}$", r"$\Omega_{DE}$", r"$\omega$", r"$\epsilon$"]
+    log_SN = SN_cov_log_likelihood(dist_mod, mu, cov)
+
+    # Calculates values used for the CMB/BAO log likelihoodfor this model
+    ang_star = E / (1+1090)
+    ang_dist = F / (1 + zss)
+    constC1 = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+zss)**(3*(w+e)))**(-(e)/(w+e))
+    Hz = np.sqrt( cdm*constC1*(1+zss)**3 +  ol*constC1*(1+zss)**(3*(1+w+e))) 
+    D_V = ((1 + zss)**2 * ang_dist**2 * (zss)/Hz)**(1/3)
+    model = (ang_star)*(1+1090) / D_V
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1[4:]) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    constC2 = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+zh)**(3*(w+e)))**(-(e)/(w+e))
+    Dh = 1/(np.sqrt(cdm*constC2*(1+zh)**3 +  ol*constC2*(1+zh)**(3*(1+w+e))) )
     model2 = ((ang_star)*(1+1090)) / Dh
     log_dh = CMB_BAO_log_likelihood(h, h_err, model2[4:]) # likelihood for dh/rd data
 
