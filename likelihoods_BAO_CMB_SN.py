@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.integrate import quad
 import pandas as pd
+import sys
+sys.path.append('Cobaya_Chains')
 
 # Calculates the likelihood for different models against SN+BAO/CMB constraints.
 # Organised as:
@@ -18,9 +20,9 @@ model = 'IDEC_2'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
-arr_size = int(np.genfromtxt(r"/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
-cov_arr = np.genfromtxt(r"/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
+cov_arr = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
 
 # Current SN - data being used
 #DataToUse = 'UNBIN_DES5YR_LOWZ'
@@ -1173,7 +1175,7 @@ def IDEB_Hz_inverse_2(z, cdm, ol, w, e):
     Hz = np.sqrt(ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
     return 1.0 / Hz
 
-def IDEB(cdm,w,e):
+def IDEB_2(cdm,w,e):
     ol = 1 - cdm
     x = np.array([quad(IDEB_Hz_inverse_2, 0, z, args=(cdm, ol, w, e))[0] for z in zs]) # SN
     q = np.array([quad(IDEB_Hz_inverse_2, 0, z, args=(cdm, ol, w, e))[0] for z in zss]) # dv/rd
