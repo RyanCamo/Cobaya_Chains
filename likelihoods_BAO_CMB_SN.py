@@ -3,6 +3,7 @@ from scipy.integrate import quad
 import pandas as pd
 import sys
 sys.path.append('Cobaya_Chains')
+from numba import jit, cuda
 
 # Calculates the likelihood for different models against SN+BAO/CMB constraints.
 # Organised as:
@@ -16,7 +17,7 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'Fwa'
+model = 'FCa'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
@@ -634,11 +635,13 @@ def Fwz(om,w0,wz):
     return log_SN + log_CMB_BAO
 
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
+@cuda.jit
 def FCa_Hz_inverse(z, om, q ,n ):
     Hz = np.sqrt(
         (om*((z+1)**3))*((1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q)))
     return 1.0 / Hz
-
+    
+@cuda.jit
 def FCa(om, q, n):
     x = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zs]) # SN
     D = x
