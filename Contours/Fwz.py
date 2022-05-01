@@ -50,9 +50,9 @@ L_ol = 0.693
 fig, ax = plt.subplots(1, 1)
 c.add_chain(SN_2[burnSN:], parameters=label, weights=SN_2_weights[burnSN:], linewidth=1.0, name="SN_2", kde=1.5, color="red",num_free_params=len(begin))
 c.add_chain(SN[burnSN:], parameters=label, weights=SN_weights[burnSN:], linewidth=1.2, name="SN", kde=1.5, color="black", linestyle = '-.',num_free_params=len(begin))
-c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, weights=BAO_CMB_weights[burnBAO_CMB:],linewidth=1.0, name="BAO/CMB", kde=4, color="#FFD700",num_free_params=len(begin))
+c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, weights=BAO_CMB_weights[burnBAO_CMB:],linewidth=1.0, name="BAO/CMB", kde=1.5, color="#FFD700",num_free_params=len(begin))
 c.add_chain(BAO_CMB_SN[burnBAO_CMB_SN:], parameters=label, weights=BAO_CMB_SN_weights[burnBAO_CMB_SN:],linewidth=1.0, name="BAO/CMB+SN", kde=1.5, color="#1E90FF",num_free_params=len(begin))
-c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, weights=BAO_CMB_weights[burnBAO_CMB:],linewidth=1.0, name="BAO/CMB_2", kde=4, color="#FFD700", linestyle = '--', num_free_params=len(begin))
+c.add_chain(BAO_CMB[burnBAO_CMB:], parameters=label, weights=BAO_CMB_weights[burnBAO_CMB:],linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
 c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
 
 xaxis = label[1] # Which slice to plot?

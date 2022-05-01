@@ -76,5 +76,5 @@ if __name__ == "__main__":
     refAIC = 1898.1576586232297
     refBIC = 1903.711469475238
     # Get 1 Model at a time: FOR constraints each time the likelihoods_SN_CMB_BAO.py file needs the model changing!!
-    burnin=1000
-    get_summary(GChap, CMB_BAO_dataL)
+    burnin=0
+    get_summary(Fwa, CMB_BAO_dataL)
