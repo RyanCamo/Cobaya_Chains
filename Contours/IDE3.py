@@ -10,7 +10,7 @@ import matplotlib.patches as mpatches
 
 c = ChainConsumer() 
 
-model = 'IDEC'
+model = 'IDEC_2'
 
 # Get Info for the model 
 label, begin, legend = get_info(model)
@@ -37,7 +37,7 @@ BAO_CMB_SN_weights = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1
 burnSN = 0 #int(0.01*len(SN))
 burnBAO_CMB = 0 #int(0.01*len(BAO_CMB))
 burnBAO_CMB_SN = 0 #int(0.001*len(BAO_CMB_SN))
-#np.savetxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model), [burnSN, burnBAO_CMB, burnBAO_CMB_SN], fmt="%10.0f")
+np.savetxt('Cobaya_Chains/Contours/OUTPUT/BURNIN/%s_Burnin.txt' % (model), [burnSN, burnBAO_CMB, burnBAO_CMB_SN], fmt="%10.0f")
 
 
 # Incase I want to plot FLCDM or LCDM
@@ -55,13 +55,13 @@ c.add_chain(BAO_CMB_SN, parameters=label, weights=BAO_CMB_SN_weights,linewidth=1
 c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
 c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
 
-xaxis = label[0] # Which slice to plot?
-yaxis = label[1] # Which slice to plot?
+xaxis = label[1] # Which slice to plot?
+yaxis = label[2] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 
-#ax.set_xlim(0.10,0.55)
-#ax.set_ylim(0.38,1.1)
+#ax.set_xlim(0.10,-0.55)
+ax.set_xlim(-1.9,-0.55)
 #ax.set_xlim(0,1)
 #ax.set_ylim(0,1)
 plt.minorticks_on()
@@ -97,7 +97,8 @@ print('%s = %.5s^{%.5s}_{%.5s}$' %(label[1],p1_tot,p1p_tot,p1m_tot))
 red_patch = mpatches.Patch(color='#FF0000', label='SN', ec='k')
 yellow_patch = mpatches.Patch(color='#FFD700', label='CMB/BAO', ec='k')
 blue_patch = mpatches.Patch(color='#1E90FF', label='SN+CMB/BAO', ec='k')
-ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='upper left',frameon=False,fontsize=16)
+ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='lower left',frameon=False,fontsize=16)
+ax.scatter(-1, 0, marker = 'o', s = 20, c='black', label = r'$\Lambda$')
 #ax.scatter(fom, 1-fom, marker = 'D', s = 20, c='black', label = r'Flat $\Lambda$')
 #plt.savefig('Cobaya_Chains/Contours/OUTPUT/%s.pdf' % (model), bbox_inches='tight', format = 'pdf')
 plt.show()

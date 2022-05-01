@@ -113,4 +113,4 @@ if __name__ == "__main__":
     # Get 1 Model at a time: FOR SN2 constraints each time the likelihoods_SN_bias.py file needs the model changing!!
     #burnin
     burnin = 0
-    get_summary(GAL, dataL)
+    get_summary(IDEB, dataL)
