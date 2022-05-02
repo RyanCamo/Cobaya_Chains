@@ -2,8 +2,8 @@ import numpy as np
 from scipy.integrate import quad
 import pandas as pd
 import sys
+from numba import jit, cuda # @cuda.jit(device=True) TRY THIS
 sys.path.append('Cobaya_Chains')
-from numba import jit, cuda
 
 # Calculates the likelihood for different models against SN+BAO/CMB constraints.
 # Organised as:
@@ -21,9 +21,9 @@ model = 'FCa'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
-arr_size = int(np.genfromtxt(r"Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
-cov_arr = np.genfromtxt(r"Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
+cov_arr = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
 
 # Current SN - data being used
 #DataToUse = 'UNBIN_DES5YR_LOWZ'
@@ -635,13 +635,12 @@ def Fwz(om,w0,wz):
     return log_SN + log_CMB_BAO
 
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
-@cuda.jit
 def FCa_Hz_inverse(z, om, q ,n ):
     Hz = np.sqrt(
         (om*((z+1)**3))*((1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q)))
     return 1.0 / Hz
-    
-@cuda.jit
+
+
 def FCa(om, q, n):
     x = np.array([quad(FCa_Hz_inverse, 0, z, args=(om, q, n))[0] for z in zs]) # SN
     D = x
