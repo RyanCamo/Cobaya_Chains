@@ -10,7 +10,7 @@ import matplotlib.patches as mpatches
 
 c = ChainConsumer() 
 
-model = 'IDEC_2'
+model = 'IDEC'
 
 # Get Info for the model 
 label, begin, legend = get_info(model)
@@ -55,8 +55,8 @@ c.add_chain(BAO_CMB_SN, parameters=label, weights=BAO_CMB_SN_weights,linewidth=1
 c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
 c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
 
-xaxis = label[1] # Which slice to plot?
-yaxis = label[2] # Which slice to plot?
+xaxis = label[2] # Which slice to plot?
+yaxis = label[3] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 

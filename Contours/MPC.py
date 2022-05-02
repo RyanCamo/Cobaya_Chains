@@ -54,15 +54,15 @@ c.add_chain(BAO_CMB_SN, parameters=label, weights=BAO_CMB_SN_weights,linewidth=1
 c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
 c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
 
-xaxis = label[0] # Which slice to plot?
-yaxis = label[1] # Which slice to plot?
+xaxis = label[1] # Which slice to plot?
+yaxis = label[2] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 
 #ax.set_xlim(0.10,0.55)
 #ax.set_ylim(0.38,1.1)
-#ax.set_xlim(0,1)
-#ax.set_ylim(0,1)
+ax.set_xlim(0.15,3)
+ax.set_ylim(-4,1)
 plt.minorticks_on()
 ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in")
 
