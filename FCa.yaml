@@ -31,4 +31,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO/FCa_CMB_BAO_2
+output: chains/CMB+BAO/FCa_CMB_BAO_u

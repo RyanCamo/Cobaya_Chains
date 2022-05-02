@@ -608,16 +608,19 @@ def FCa(om, q, n):
     return log_CMB_BAO
 
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
-def FCa_Hz_inverse_mod(z, om, q ,n ):
+def FCa_Hz_inverse_mod(u, om, q ,n ):
+    opz = u**2
     Hz = np.sqrt(
-        (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q))
+        (om*((opz)**(-3)))*(1+(((om**(-q))-1)*((opz)**(-3*q*(n-1)))))**(1/q))
     return 1.0 / Hz
 
 def FCa_mod(om, q, n):
     # Calculates values used for the CMB/BAO log likelihoodfor this model
-    y = np.array([quad(FCa_Hz_inverse_mod, 0, 1090, args=(om, q, n))[0]]) # Last Scattering
+    u_1090 = (1+1090)**(-1/2)
+    y = np.array([quad(FCa_Hz_inverse_mod, 1, u_1090, args=(om, q, n))[0]]) # Last Scattering
     E = y
-    v = np.array([quad(FCa_Hz_inverse_mod, 1, u, args=(om, q, n))[0] for z in zs]) #dv/rd data
+    us = (1+zs)**(-1/2)
+    v = np.array([quad(FCa_Hz_inverse_mod, 1, u, args=(om, q, n))[0] for u in us]) #dv/rd data
     F = v
     ang_star = E / (1+1090)
     ang_dist = F / (1 + zs)
@@ -626,7 +629,8 @@ def FCa_mod(om, q, n):
     model = (ang_star)*(1+1090) / D_V
     log_dv = CMB_BAO_log_likelihood(f, f_err, model)
 
-    m = np.array([quad(FCa_Hz_inverse_mod, 0, z, args=(om, q, n))[0] for z in zm]) #dm/rd data
+    um = (1+zm)**(-1/2)
+    m = np.array([quad(FCa_Hz_inverse_mod, 1, u, args=(om, q, n))[0] for u in um]) #dm/rd data
     M = m
     ang_dist1 =  M / (1 + zm)
     model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
