@@ -15,7 +15,7 @@ params: # DONE
     proposal: 0.01
     latex: q
   n:
-    prior: {min: -3, max: 0.66}
+    prior: {min: -3, max: 2}
     ref: 0.01
     proposal: 0.01
     latex: n
@@ -31,4 +31,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO/FCa_CMB_BAO_u
+output: chains/CMB+BAO/FCa_CMB_BAO_high_n
