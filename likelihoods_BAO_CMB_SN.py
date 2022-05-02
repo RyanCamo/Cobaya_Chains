@@ -2,8 +2,11 @@ import numpy as np
 from scipy.integrate import quad
 import pandas as pd
 import sys
+import numba
 from numba import jit, cuda # @cuda.jit(device=True) TRY THIS
 sys.path.append('Cobaya_Chains')
+
+
 
 # Calculates the likelihood for different models against SN+BAO/CMB constraints.
 # Organised as:
@@ -17,7 +20,7 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'FCa'
+model = 'FLCDM'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
@@ -103,10 +106,12 @@ def CMB_BAO_cov_log_likelihood(mu_model, mu, cov):
 #### Non-Standard Models:
 
 # 1) Flat Cosmological Constant with 1x paramater, \Omega_M 
+@jit
 def FLCDM_Hz_inverse(z,om, ol):
     Hz = np.sqrt((1 + z) ** 2 * (om * z + 1) - ol * z * (z + 2))
     return 1.0 / Hz
-    
+
+@jit
 def FLCDM(om):
     ol = 1 - om
     x = np.array([quad(FLCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zs]) # SN

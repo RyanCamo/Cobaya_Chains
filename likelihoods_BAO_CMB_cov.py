@@ -607,6 +607,53 @@ def FCa(om, q, n):
     log_CMB_BAO = log_dm + log_dv + log_dh + log_BOSS + log_LRG + log_QU
     return log_CMB_BAO
 
+# 10) Cardassian with 3x parameters, \Omega_M, q and n
+def FCa_Hz_inverse_mod(z, om, q ,n ):
+    Hz = np.sqrt(
+        (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q))
+    return 1.0 / Hz
+
+def FCa_mod(om, q, n):
+    # Calculates values used for the CMB/BAO log likelihoodfor this model
+    y = np.array([quad(FCa_Hz_inverse_mod, 0, 1090, args=(om, q, n))[0]]) # Last Scattering
+    E = y
+    v = np.array([quad(FCa_Hz_inverse_mod, 1, u, args=(om, q, n))[0] for z in zs]) #dv/rd data
+    F = v
+    ang_star = E / (1+1090)
+    ang_dist = F / (1 + zs)
+    Hz = np.sqrt((om*((zs+1)**3))*(1+(((om**(-q))-1)*((zs+1)**(3*q*(n-1)))))**(1/q))
+    D_V = ((1 + zs)**2 * ang_dist**2 * (zs)/Hz)**(1/3)
+    model = (ang_star)*(1+1090) / D_V
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = np.array([quad(FCa_Hz_inverse_mod, 0, z, args=(om, q, n))[0] for z in zm]) #dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1[4:]) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    Dh = 1/(np.sqrt((om*((zh+1)**3))*(1+(((om**(-q))-1)*((zh+1)**(3*q*(n-1)))))**(1/q)))
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2[4:]) # likelihood for dh/rd data
+
+    # 4x BOSS
+    BOSS_model = np.array([model1[0], model2[0], model1[1], model2[1]])
+    log_BOSS = CMB_BAO_cov_log_likelihood(BOSS_model, BOSS_data, BOSS_cov)
+
+    # 2x eBOSS LRG
+    LRG_model = np.array([model1[2], model2[2]])
+    log_LRG = CMB_BAO_cov_log_likelihood(LRG_model, LRG_data, LRG_cov)
+
+    # 2x eBOSS QU
+    QU_model = np.array([model1[3], model2[3]])
+    log_QU = CMB_BAO_cov_log_likelihood(QU_model, QU_data, QU_cov)
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh + log_BOSS + log_LRG + log_QU
+    return log_CMB_BAO
+
 # 11) Flat General Chaplygin 2x parameters, A and \alpha
 def FGChap_Hz_inverse(z, A, a):
     Hz = np.sqrt((A + (1-A)*((1+z)**(3*(1+a))))**(1.0/(1+a)))
@@ -1190,5 +1237,6 @@ def IDEC_2(cdm,w,e):
 
 
 if __name__ == "__main__":
-    logp = FLCDM(0.27)
-    print(logp)
+    logp_norm = FCa(0.3, 2, 1)
+    #logp_mod = FCa_mod()
+    print(logp_norm)
