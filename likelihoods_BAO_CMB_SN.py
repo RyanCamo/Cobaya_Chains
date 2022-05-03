@@ -106,12 +106,11 @@ def CMB_BAO_cov_log_likelihood(mu_model, mu, cov):
 #### Non-Standard Models:
 
 # 1) Flat Cosmological Constant with 1x paramater, \Omega_M 
-@jit
+
 def FLCDM_Hz_inverse(z,om, ol):
     Hz = np.sqrt((1 + z) ** 2 * (om * z + 1) - ol * z * (z + 2))
     return 1.0 / Hz
 
-@jit
 def FLCDM(om):
     ol = 1 - om
     x = np.array([quad(FLCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zs]) # SN

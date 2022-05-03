@@ -27,8 +27,8 @@ SN = np.loadtxt('Cobaya_Chains/chains/SN/%s_SN.1.txt' %(model), usecols=(cols), 
 SN_weights = np.loadtxt('Cobaya_Chains/chains/SN/%s_SN.1.txt' %(model), usecols=(0), comments='#')
 SN_2 = np.loadtxt('Cobaya_Chains/chains/SN_BiasCor/%s_SN_2.1.txt' %(model), usecols=(cols), comments='#')
 SN_2_weights = np.loadtxt('Cobaya_Chains/chains/SN_BiasCor/%s_SN_2.1.txt' %(model), usecols=(0), comments='#')
-BAO_CMB = np.loadtxt('Cobaya_Chains/chains/CMB+BAO/%s_CMB_BAO.1.txt' %(model), usecols=(cols), comments='#')
-BAO_CMB_weights = np.loadtxt('Cobaya_Chains/chains/CMB+BAO/%s_CMB_BAO.1.txt' %(model), usecols=(0), comments='#')
+BAO_CMB = np.loadtxt('Cobaya_Chains/chains/CMB+BAO/%s_CMB_BAO_u.1.txt' %(model), usecols=(cols), comments='#')
+BAO_CMB_weights = np.loadtxt('Cobaya_Chains/chains/CMB+BAO/%s_CMB_BAO_u.1.txt' %(model), usecols=(0), comments='#')
 BAO_CMB_SN = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(model), usecols=(cols), comments='#')
 BAO_CMB_SN_weights = np.loadtxt('Cobaya_Chains/chains/CMB+BAO+SN/%s_CMB_BAO_SN.1.txt' %(model), usecols=(0), comments='#')
 # google bbox_inches=tight
