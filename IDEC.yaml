@@ -1,6 +1,6 @@
 likelihood:
   IDEA:
-    external: import_module('likelihoods_BAO_CMB_SN').IDEC_2 # Change the model here
+    external: import_module('likelihoods_BAO_CMB_SN').IDEC # Change the model here
     
 
 params: # DONE 
@@ -9,11 +9,11 @@ params: # DONE
     ref: 0.3
     proposal: 0.001
     latex: \Omega_{cdm}
-  #ob:
-  #  prior: {min: 0.001, max: 0.2}
-  #  ref: 0.05
-  #  proposal: 0.001
-  #  latex: \Omega_{b}
+  ob:
+    prior: {min: 0.001, max: 0.2}
+    ref: 0.05
+    proposal: 0.001
+    latex: \Omega_{b}
   w:
     prior: {min: -2, max: 2}
     ref: -0.9
@@ -35,4 +35,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO+SN/IDEC_2_CMB_BAO_SN
+output: chains/CMB+BAO+SN/IDEC_CMB_BAO_SN
