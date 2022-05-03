@@ -62,7 +62,7 @@ if __name__ == "__main__":
             delta_scaled = delta/avg_sig
             delta_err_up_scaled = np.array(It_2_up[j]/avg_sig)
             delta_err_low_scaled = np.array(It_2_low[j]/avg_sig)
-            if model == 'NGCG':
+            if model == 'NGCG': # Just switching up the order (Om was not first in the chain)
                 if j==0:
                     axs[j+1].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
                 elif j==1:
@@ -71,8 +71,14 @@ if __name__ == "__main__":
                     axs[0].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
                 else:
                     axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)                   
-            elif model =='DGP':
+            elif model =='DGP': # DGP has no Om so pushed the parameter down by 1 for the plot
                 axs[j+1].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+            #elif model =='IDE2': # Adding Ocdm and Ob for the first parameter to be Om
+            #    if j==0:
+            #        
+            #        axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+            #    else:
+            #        axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)  
             else:
                 axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
 

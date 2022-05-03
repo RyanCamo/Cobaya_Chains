@@ -16,7 +16,7 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'IDEB'
+model = 'FCa'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
@@ -228,7 +228,7 @@ def Fwz(om,w0,wz):
 # 6) Cardassian with 3x parameters, \Omega_M, q and n
 def FCa_Hz_inverse(z, om, q ,n ):
     Hz = np.sqrt(
-        (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q))
+        (om*((z+1)**3))*((1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q)))
     return 1.0 / Hz
 
 def FCa(om, q, n):
@@ -437,5 +437,5 @@ def IDEC_2(cdm,w,e):
 
 if __name__ == "__main__":
     #logp = LCDM(0.31,0.7)
-    logp = FCa(0.310, 0.766, -0.108)
+    logp = FCa(0.315, 1, 0)
     print(logp)

@@ -18,13 +18,13 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'IDEC'
+model = 'FCa'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
-arr_size = int(np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
-cov_arr = np.genfromtxt(r"BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt(r"Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_data.txt" % (model, model), names=True)
+cov_arr = np.genfromtxt(r"Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model, model), comments='#',dtype=None)[1:]
 
 # Current SN - data being used
 #DataToUse = 'UNBIN_DES5YR_LOWZ'
