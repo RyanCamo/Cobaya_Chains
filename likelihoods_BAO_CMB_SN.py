@@ -2,8 +2,6 @@ import numpy as np
 from scipy.integrate import quad
 import pandas as pd
 import sys
-import numba
-from numba import jit, cuda # @cuda.jit(device=True) TRY THIS
 sys.path.append('Cobaya_Chains')
 
 
@@ -20,7 +18,7 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'FLCDM'
+model = 'IDEC'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
