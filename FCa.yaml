@@ -5,7 +5,7 @@ likelihood:
 
 params: # DONE 
   om:
-    prior: {min: 0.1, max: 0.7}
+    prior: {min: 0, max: 0.7}
     ref: 0.4
     proposal: 0.1
     latex: \Omega_{m}
@@ -31,4 +31,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO/FCa_CMB_BAO
+output: chains/CMB+BAO/FCa_CMB_BAO_new

@@ -1,0 +1,29 @@
+likelihood:
+  FCa:
+    external: import_module('likelihoods_BAO_CMB_cov').FCa
+params:
+  om:
+    prior:
+      min: 0
+      max: 0.7
+    ref: 0.4
+    proposal: 0.1
+    latex: \Omega_{m}
+  q:
+    prior:
+      min: 0
+      max: 3
+    ref: 0.9
+    proposal: 0.1
+    latex: q
+  n:
+    prior:
+      min: -3
+      max: 2
+    ref: 0.01
+    proposal: 0.1
+    latex: n
+sampler:
+  mcmc:
+    max_tries: 10000
+output: FCa_CMB_BAO_new

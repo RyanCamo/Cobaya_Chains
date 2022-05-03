@@ -562,8 +562,8 @@ def Fwz(om,w0,wz):
 
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
 def FCa_Hz_inverse(z, om, q ,n ):
-    Hz = np.sqrt(
-        (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q))
+    Hz = np.sqrt((om*((z+1)**3))*(1+(((om**(-q))-1)/((z+1)**(3*q*(1-n)))    ))**(1/q))
+    #Hz = np.sqrt((om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))    ))**(1/q))
     return 1.0 / Hz
 
 def FCa(om, q, n):
