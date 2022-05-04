@@ -576,7 +576,7 @@ def Fwz_astro(om,w0,wz):
     ang_dist = F / (1 + zs)
     ol = 1 - om 
     #Hz = np.sqrt( (om*(1+zs)**(3)) + (ol * ((1+zs)**(3*(1+w0-wz))) * (np.exp(3*wz*zs)) ) )
-    Hz = c.H(zs).value/299792.458
+    Hz = c.H(zs).value
     D_V = ((1 + zs)**2 * ang_dist**2 * (zs)/Hz)**(1/3)
     model = (ang_star)*(1+1090) / D_V
     log_dv = CMB_BAO_log_likelihood(f, f_err, model)
