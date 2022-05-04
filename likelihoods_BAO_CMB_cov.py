@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.integrate import quad
 import pandas as pd
+from astropy.cosmology import w0wzCDM, FlatLambdaCDM
 
 # Calculates the likelihood for different models against BAO/CMB data
 # Organised as:
@@ -560,10 +561,59 @@ def Fwz(om,w0,wz):
     log_CMB_BAO = log_dm + log_dv + log_dh + log_BOSS + log_LRG + log_QU
     return log_CMB_BAO
 
+def Fwz_astro(om,w0,wz):
+    # Calculates values used for the CMB/BAO log likelihoodfor this model
+    c = w0wzCDM(1, om, 1-om,w0, wz)
+    y = c.comoving_distance(1090).value/299792.458
+
+    #y = np.array([quad(Fwz_Hz_inverse, 0, 1090, args=(om, w0, wz))[0]]) # Last Scattering
+    E = y
+    q = c.comoving_distance(zs).value/299792.458
+    #q = np.array([quad(Fwz_Hz_inverse, 0, z, args=(om, w0, wz))[0] for z in zs]) # dv/rd data
+    F = q
+    ang_star = E / (1+1090)
+
+    ang_dist = F / (1 + zs)
+    ol = 1 - om 
+    #Hz = np.sqrt( (om*(1+zs)**(3)) + (ol * ((1+zs)**(3*(1+w0-wz))) * (np.exp(3*wz*zs)) ) )
+    Hz = c.H(zs).value/299792.458
+    D_V = ((1 + zs)**2 * ang_dist**2 * (zs)/Hz)**(1/3)
+    model = (ang_star)*(1+1090) / D_V
+    log_dv = CMB_BAO_log_likelihood(f, f_err, model)
+
+    m = c.comoving_distance(zm).value/299792.458
+    #m = np.array([quad(Fwz_Hz_inverse, 0, z, args=(om, w0, wz))[0] for z in zm]) # dm/rd data
+    M = m
+    ang_dist1 =  M / (1 + zm)
+    model1 = ((ang_star)*(1+1090)) / ((ang_dist1)*(1+zm))
+    log_dm = CMB_BAO_log_likelihood(g, g_err, model1[4:]) # likelihood for dm/rd data
+
+    # calculates the values used for Dh/rd data - zh array of redshifts
+    # calculate DH
+    #Dh = 1/(np.sqrt( (om*(1+zh)**(3)) + (ol * ((1+zh)**(3*(1+w0-wz))) * (np.exp(3*wz*zh)) ) ))
+    Dh = 1/c.H(zh).value
+    model2 = ((ang_star)*(1+1090)) / Dh
+    log_dh = CMB_BAO_log_likelihood(h, h_err, model2[4:]) # likelihood for dh/rd data
+
+    # 4x BOSS
+    BOSS_model = np.array([model1[0], model2[0], model1[1], model2[1]])
+    log_BOSS = CMB_BAO_cov_log_likelihood(BOSS_model, BOSS_data, BOSS_cov)
+
+    # 2x eBOSS LRG
+    LRG_model = np.array([model1[2], model2[2]])
+    log_LRG = CMB_BAO_cov_log_likelihood(LRG_model, LRG_data, LRG_cov)
+
+    # 2x eBOSS QU
+    QU_model = np.array([model1[3], model2[3]])
+    log_QU = CMB_BAO_cov_log_likelihood(QU_model, QU_data, QU_cov)
+
+    # combined likelihood for this specific parameter set against BAO (dv/rd + dm/rd + dh/rd) data
+    log_CMB_BAO = log_dm + log_dv + log_dh + log_BOSS + log_LRG + log_QU
+    return log_CMB_BAO
+
 # 10) Cardassian with 3x parameters, \Omega_M, q and n
-def FCa_Hz_inverse(z, om, q ,n ):
-    Hz = np.sqrt((om*((z+1)**3))*(1+(((om**(-q))-1)/((z+1)**(3*q*(1-n)))    ))**(1/q))
-    #Hz = np.sqrt((om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))    ))**(1/q))
+def FCa_Hz_inverse(z, om, q ,n ): 
+    Hz = np.sqrt((om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))    ))**(1/q))
     return 1.0 / Hz
 
 def FCa(om, q, n):
@@ -1241,6 +1291,8 @@ def IDEC_2(cdm,w,e):
 
 
 if __name__ == "__main__":
-    logp_norm = FCa(0.3, 2, 1)
+    logp_astro = Fwz_astro(0.3, -1, 0)
+    logp_norm = Fwz(0.3, -1, 0)
     #logp_mod = FCa_mod()
     print(logp_norm)
+    print(logp_astro)
