@@ -17,9 +17,9 @@ c = ChainConsumer()
 theta_star = 0.0104109
 theta_star_err = 0.000003
 ratio = 1.018 # ratio = rd/r_*
-ratio_err = 0.0030
+ratio_err = 0.0030                              ######### NEEDS UPDATING 0.0035
 theta_star1 = ufloat(0.0104109, 0.000003)
-ratio1 = ufloat(1.018, 0.0030)
+ratio1 = ufloat(1.018, 0.0030)                  ######### NEEDS UPDATING 0.0035
 #####################################
 
 
