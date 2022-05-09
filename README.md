@@ -34,7 +34,7 @@ HzFUN_FILE_Generator.py   - creates a file with 2 colums: z H(z) using the best 
                             this file is saved to Files_2 and used within pippin to generate BiasCor simulations for the second analysis.
                             
 PIPPIN_OUTPUTS            - The resulting Hubble diagram after using the new BiasCor simulations for each model
-                            (referenced as'MOD')
+                            (referenced as 'MOD')
                             
 residual_plot.py          - compares the original Hubble diagram to the new Hubble diagram (figures in thesis)
 
