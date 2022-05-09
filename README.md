@@ -2,12 +2,16 @@
 Repository for computing MCMC chains for non-standard models using Cobaya.
 
 The output chains are saved into the 'chains' folder - which have various sub folders depending on which data set we are using to constrain a model
-ie. SN, CMB/BAO, SN+CMB/BAO
+ie. SN, SN_BiasCor, CMB/BAO, SN+CMB/BAO
+
 
 # Data
 The 'data' folder containts supernova data.
+
 The data sets used in my thesis are:
+
 UNBIN_DES5YR_LOWZ_data.txt & UNBIN_DES5YR_LOWZ_cov.txt - Mock Sample
+
 DES5YR_REAL_DIFFIMG_DATA.txt & DES5YR_REAL_DIFFIMG_COV.txt - REAL Blinded Sample (Prior to BiasCor Corrections)
 
 # Result Generators
