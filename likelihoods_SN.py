@@ -15,14 +15,13 @@ sys.path.append('Cobaya_Chains')
 
 # Current data being used:
 # Uncomment 3 lines when doing normal SN chains
-arr_size = int(np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_data.txt", names=True)
-
+arr_size = int(np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_DATA.txt", names=True)
+cov_arr = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[1:]
 
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
 error = DES5YR_UNBIN['MUERR']
-cov_arr = np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[1:]
 cov1 = cov_arr.reshape(arr_size,arr_size) 
 mu_diag = np.diag(error)**2
 cov = mu_diag+cov1
