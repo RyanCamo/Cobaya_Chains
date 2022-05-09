@@ -20,18 +20,22 @@ as well as the code used to get the best fit parameters/GoF%/chi^2 per DoF etc f
 files have further instructions.
 
 # Contours
-The contours folder contains all the code for the contour plots and the output images. There is another README.md file in this folder
+The contours folder contains all the code for the contour plots and the output images. There is another README.md file in this folder.
 
 # CMB_BAO_Data
 This folder contains the data from eBOSS in a subdirectory. The BAO_conversions.py file converts the measurements from eBOSS and Planck into the form used within this thesis. 
 
 # BiasCor_Csomo_Dependencies
 This folder contains:
+
 Hz.py                     - returns H(z) for each model
+
 HzFUN_FILE_Generator.py   - creates a file with 2 colums: z H(z) using the best fit parameters the first SN analysis
                             this file is saved to Files_2 and used within pippin to generate BiasCor simulations for the second analysis.
+                            
 PIPPIN_OUTPUTS            - The resulting Hubble diagram after using the new BiasCor simulations for each model
                             (referenced as'MOD')
+                            
 residual_plot.py          - compares the original Hubble diagram to the new Hubble diagram (figures in thesis)
 
 
