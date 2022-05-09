@@ -7,16 +7,9 @@ sys.path.append('Cobaya_Chains')
 
 # Calculates the likelihood for different models.
 # Organised as:
-## 1. Data to test against - Currently set up for DES5YR_UNBIN
+## 1. Data to test against - Currently set up for the mock data
 ## 2. The likelihood function
 ## 3. Models
-
-#### Data 
-## Options: - options not used - this is just for the DES5YR_UNBIN
-## DES5YR UNBINNED = DES5YR_UNBIN
-## DES5YR BINNED = DES5YR_BIN 
-## DES3YR UNBINNED = DES3YR_UNBIN
-## DES3YR BINNED = DES3YR_BIN
 
 # Each data set needs to be imported differently
 
@@ -24,11 +17,6 @@ sys.path.append('Cobaya_Chains')
 # Uncomment 3 lines when doing normal SN chains
 arr_size = int(np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[0])
 DES5YR_UNBIN = np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_data.txt", names=True)
-
-# Below is for second run with BiasCor  - just change model name
-#arr_size = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_cov.txt", comments='#',dtype=None)[0])
-#DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_data.txt", names=True)
-#cov_arr = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/FLCDM/MOD_FLCDM_cov.txt", comments='#',dtype=None)[1:]
 
 
 zs = DES5YR_UNBIN['zCMB']

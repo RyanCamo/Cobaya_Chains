@@ -18,7 +18,7 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'FCa'
+model = 'Fwz'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
