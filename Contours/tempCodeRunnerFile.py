@@ -1,1 +1,1 @@
-ax.hlines(-1, -5, 5, colors='k', linestyles='--', alpha=0.9)
+, labelsize=14)

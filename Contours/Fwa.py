@@ -60,12 +60,12 @@ yaxis = label[2] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 
-ax.set_xlim(-3,1)
+ax.set_xlim(-3.2,1.03)
 #ax.set_ylim(0.38,1.1)
 #ax.set_xlim(0,1)
 #ax.set_ylim(0,1)
 plt.minorticks_on()
-ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in")
+ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in", labelsize=14)
 
 
 # Best Fit Parameters

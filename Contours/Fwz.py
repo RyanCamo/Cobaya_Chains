@@ -65,7 +65,7 @@ ax.set_ylabel(yaxis, fontsize = 18)
 #ax.set_xlim(0,1)
 #ax.set_ylim(0,1)
 plt.minorticks_on()
-ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in")
+ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in", labelsize=14)
 
 
 # Best Fit Parameters
@@ -97,7 +97,8 @@ print('%s = %.5s^{%.5s}_{%.5s}$' %(label[1],p1_tot,p1p_tot,p1m_tot))
 red_patch = mpatches.Patch(color='#FF0000', label='SN', ec='k')
 yellow_patch = mpatches.Patch(color='#FFD700', label='CMB/BAO', ec='k')
 blue_patch = mpatches.Patch(color='#1E90FF', label='SN+CMB/BAO', ec='k')
-ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='lower left',frameon=False,fontsize=16)
+ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='lower right',frameon=False,fontsize=16)
+ax.scatter(-1, 0, marker = 'o', s = 20, c='black', label = r'Flat $\Lambda$')
 #ax.scatter(fom, 1-fom, marker = 'D', s = 20, c='black', label = r'Flat $\Lambda$')
 #plt.savefig('Cobaya_Chains/Contours/OUTPUT/%s.pdf' % (model), bbox_inches='tight', format = 'pdf')
 plt.show()

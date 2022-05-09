@@ -65,7 +65,7 @@ ax.set_ylabel(yaxis, fontsize = 18)
 #ax.set_xlim(0,1)
 #ax.set_ylim(0,1)
 plt.minorticks_on()
-ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in")
+ax.tick_params(which = 'both', bottom=True, top=True, left=True, right=True, direction="in", labelsize=14)
 
 
 # Best Fit Parameters
