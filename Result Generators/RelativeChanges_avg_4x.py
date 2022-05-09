@@ -6,8 +6,6 @@ from matplotlib import pyplot as plt
 from model_info import *
 import scipy.special as sc
 
-
-
 def get_param(samples, label, weights, burnSN):
     c = ChainConsumer()
     c.add_chain(samples[burnSN:], parameters=label, linewidth=2.0, name="MCMC", weights=weights[burnSN:], kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="cumulative")
@@ -19,7 +17,6 @@ def get_param(samples, label, weights, burnSN):
         params_lower.append(c.analysis.get_summary(chains="MCMC")[labelx][1] - c.analysis.get_summary(chains="MCMC")[labelx][0])
         params.append(c.analysis.get_summary(chains="MCMC")[labelx][1])
     return params, params_upper, params_lower
-
 
 # This function loads in the chain and then calls get_params to get the best fits.
 def get_bestparams(model):
@@ -42,6 +39,17 @@ def get_bestparams(model):
 
     return It_1_val, It_1_up, It_1_low, It_2_val, It_2_up, It_2_low, len(label)
 
+def plot_param(model,ax, xval, yval):
+    label, begin, legend = get_info(model)
+    axs[ax].text(xval,yval, '%s' % (label[ax]), ha='center' ,fontsize=14)
+
+def plot_err(ax, val, high_err, low_err, yval):
+    axs[ax].errorbar(val, yval, xerr=np.array([[low_err ,high_err]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+
+
+
+
+
 if __name__ == "__main__":
     #models = ['wCDM']
     models = ['GAL','DGP', 'IDEC', 'IDEB', 'IDEA', 'FCa', 'NGCG', 'GChap', 'FGChap', 'Chap', 'Fwz', 'Fwa', 'wCDM', 'FwCDM', 'LCDM', 'FLCDM']
@@ -54,33 +62,45 @@ if __name__ == "__main__":
     for i, model in enumerate(models):
         It_1_val, It_1_up, It_1_low, It_2_val, It_2_up, It_2_low, num = get_bestparams(model)
         dicts[model] = num
-        #runnin_count = np.array(list(dicts.values()))
-        #cumsum = runnin_count.cumsum(axis=1)
         for j, s in enumerate(It_1_val):
             delta = It_2_val[j] - It_1_val[j]
             avg_sig = (abs(It_1_up[j])+abs(It_1_low[j]))/2
             delta_scaled = delta/avg_sig
             delta_err_up_scaled = np.array(It_2_up[j]/avg_sig)
             delta_err_low_scaled = np.array(It_2_low[j]/avg_sig)
+            xval = 0.75*(delta_err_up_scaled+delta_scaled)
             if model == 'NGCG': # Just switching up the order (Om was not first in the chain)
-                if j==0:
-                    axs[j+1].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
-                elif j==1:
-                    axs[j+1].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+                if (j==0) or (j==1):
+                    plot_err(j+1, delta_scaled,delta_err_up_scaled, delta_err_low_scaled, i+1)
+                    label, begin, legend = get_info(model)
+                    axs[j+1].text(xval,i+1.1, '%s' % (label[j+1]), ha='center' ,fontsize=14)
                 elif j==2:
-                    axs[0].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+                    plot_err(0, delta_scaled,delta_err_up_scaled, delta_err_low_scaled, i+1)
                 else:
-                    axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)                   
-            elif model =='DGP': # DGP has no Om so pushed the parameter down by 1 for the plot
-                axs[j+1].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
-            #elif model =='IDE2': # Adding Ocdm and Ob for the first parameter to be Om
-            #    if j==0:
-            #        
-            #        axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
-            #    else:
-            #        axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)  
+                    plot_err(j, delta_scaled,delta_err_up_scaled, delta_err_low_scaled, i+1)   
+                    plot_param(model, j, xval,  i+1.1)       
+            elif (model =='DGP') or (model == 'GChap') or (model=='FGChap') or (model == 'Chap'): # Models with no Om
+                plot_err(j+1, delta_scaled,delta_err_up_scaled, delta_err_low_scaled, i+1)
+                label, begin, legend = get_info(model)
+                axs[j+1].text(xval,i+1.1, '%s' % (label[j]), ha='center' ,fontsize=14)
+            elif (model =='IDEB') & (j==0): # Adding Ocdm and Ob for the first parameter to be Om
+                om_It_2 = 0.405
+                om_It_1 = 0.418
+                om_It_1_err =(0.153+0.138)/2
+                om_It_2_up_err = 0.160/om_It_1_err
+                om_It_2_low_err = 0.135/om_It_1_err
+                axs[j].errorbar((om_It_2 - om_It_1)/om_It_1_err, i+1, xerr =np.array([[om_It_2_low_err,om_It_2_up_err]]).T , fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+            elif (model =='IDEC') & (j==0): # Adding Ocdm and Ob for the first parameter to be Om
+                om_It_2 = 0.345
+                om_It_1 = 0.354
+                om_It_1_err =(0.122+0.107)/2
+                om_It_2_up_err = 0.123/om_It_1_err
+                om_It_2_low_err = 0.105/om_It_1_err
+                plot_err(j, (om_It_2 - om_It_1)/om_It_1_err, om_It_2_up_err, om_It_2_low_err, i+1)
             else:
-                axs[j].errorbar(delta_scaled, i+1, xerr=np.array([[delta_err_low_scaled ,delta_err_up_scaled]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
+                plot_err(j, delta_scaled,delta_err_up_scaled, delta_err_low_scaled, i+1)
+                if j!=0:
+                    plot_param(model, j, xval,  i+1.1)
 
 
     # Things to apply to all subplots.
@@ -98,10 +118,10 @@ if __name__ == "__main__":
         axs[i].set_xticklabels(['','$-1\overline{\sigma}$','0','$1\overline{\sigma}$',''])
         axs[i].set_yticks(yinterval)
         axs[i].set_yticklabels(['', *models_overleaf, ''])
-        axs[i].tick_params(which = 'both', bottom=False, top=False, left=False, right=False)
+        axs[i].tick_params(which = 'both', bottom=False, top=False, left=False, right=False, labelsize=14)
         y_min, y_max = axs[i].get_ylim()
-        axs[i].text(0, 1.05*y_max, Sub_Names[i], va='center', ha='center')
-    axs[0].text(-2,-2,r'Note for an Arb. estimate, $\mathrm{P}_{1}=x_{-~\sigma^{-}}^{+~\sigma^{+}}$, $\overline{\sigma}$ is defined as $\overline{\sigma}\equiv \frac{\sigma^{+}+\sigma^{-}}{2}$', family='serif',color='black',rotation=0,fontsize=10,ha='left', va='center')
+        axs[i].text(0, 1.03*y_max, Sub_Names[i], va='center', ha='center' ,fontsize=14)
+    axs[0].text(-2,-2,r'Note for an Arb. estimate, $\mathrm{P}_{1}=x_{-~\sigma^{-}}^{+~\sigma^{+}}$, $\overline{\sigma}$ is defined as $\overline{\sigma}\equiv \frac{\sigma^{+}+\sigma^{-}}{2}$', family='serif',color='black',rotation=0,fontsize=14,ha='left', va='center')
     #axs[3].text(1.8,1.5,r'For an Arb. estimate:', family='serif',color='black',rotation=0,fontsize=10,ha='center', va='center')
     #axs[3].text(1.8,1.25,r'$\mathrm{P}_{1}=x_{-~\sigma^{-}}^{+~\sigma^{+}}$', family='serif',color='black',rotation=0,fontsize=10,ha='center', va='center')
     #axs[3].text(1.8,1,r'$\overline{\sigma}=\frac{\sigma^{+}+\sigma^{-}}{2}$', family='serif',color='black',rotation=0,fontsize=10,ha='center', va='center')

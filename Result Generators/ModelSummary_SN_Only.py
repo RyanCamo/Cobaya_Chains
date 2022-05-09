@@ -81,8 +81,8 @@ if __name__ == "__main__":
     # First we need to indicate what data are after.
 
     ## TABLE OPTIONS: 1 = True, 0 = False - ONLY SELECT 1 
-    SN1 = 0 # Get SN-1 Only Constraints - Before BiasCor Sim changes
-    SN2 = 1 # Get SN-2 Only Constraints - After BiasCor Sim changes
+    SN1 = 1 # Get SN-1 Only Constraints - Before BiasCor Sim changes
+    SN2 = 0 # Get SN-2 Only Constraints - After BiasCor Sim changes
 
     # amount of data points per dataset
     SN1_data = 1891
@@ -113,4 +113,4 @@ if __name__ == "__main__":
     # Get 1 Model at a time: FOR SN2 constraints each time the likelihoods_SN_bias.py file needs the model changing!!
     #burnin
     burnin = 0
-    get_summary(FCa, dataL)
+    get_summary(IDEC, dataL)

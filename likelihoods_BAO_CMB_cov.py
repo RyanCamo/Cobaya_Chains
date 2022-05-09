@@ -44,9 +44,7 @@ QU_cov = np.array([[0.00648069, 0.00936799],[0.00936799, 0.08816128]])
 def CMB_BAO_log_likelihood(f, f_err, model): 
     delta = model - f
     chit2 = np.sum(delta**2 / f_err**2)
-    B = np.sum(delta/f_err**2)
-    C = np.sum(1/f_err**2)
-    chi2 = chit2 #- (B**2 / C) + np.log(C/(2* np.pi))
+    chi2 = chit2 
     return -0.5*chi2
 
 # For the correlated data
@@ -55,9 +53,7 @@ def CMB_BAO_cov_log_likelihood(mu_model, mu, cov):
     inv_cov = np.linalg.inv(cov)
     deltaT = np.transpose(delta)
     chit2 = np.sum(delta @ inv_cov @ deltaT)
-    B = np.sum(delta @ inv_cov)
-    C = np.sum(inv_cov)
-    chi2 = chit2 #- (B**2 / C) + np.log(C / (2* np.pi))
+    chi2 = chit2 
     return -0.5*chi2 
 
 #### Non-Standard Models:

@@ -16,7 +16,7 @@ sys.path.append('Cobaya_Chains')
 
 # Each data set needs to be imported differently
 
-model = 'FCa'
+model = 'Fwz'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name
@@ -436,6 +436,6 @@ def IDEC_2(cdm,w,e):
     return logp
 
 if __name__ == "__main__":
-    #logp = LCDM(0.31,0.7)
-    logp = FCa(0.315, 1, 0)
+    logp = FLCDM(0.31)
+    #logp = FCa(0.315, 1, 0)
     print(logp)
