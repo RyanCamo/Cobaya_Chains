@@ -1,11 +1,11 @@
 likelihood:
   FLCDM:
-    external: import_module('likelihoods_BAO_CMB_SN').FLCDM # Change the model here
+    external: import_module('likelihoods_SN').FLCDM # Change the model here
     
 
 params: # DONE 
   om:
-    prior: {min: 0.1, max: 2}
+    prior: {min: 0, max: 2}
     ref: 0.3
     proposal: 0.01
     latex: \Omega_m
@@ -20,4 +20,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO+SN/test
+output: chains/SN/DIFFIMG_FLCDM
