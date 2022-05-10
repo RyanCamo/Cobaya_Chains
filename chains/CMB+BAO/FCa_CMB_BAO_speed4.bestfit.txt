@@ -1,2 +1,0 @@
-#        weight    minuslogpost              om               q               n   minuslogprior minuslogprior__0            chi2       chi2__FCa
-              1       7.4554949      0.34753196               3      0.51481992       2.3513753        2.3513753       10.208239       10.208239

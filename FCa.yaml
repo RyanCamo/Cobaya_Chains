@@ -26,9 +26,17 @@ params: # DONE
 #                   x - y, loc=0, scale=0.3)'
 
 sampler: # DONE - CAN BE REFINED
-  mcmc:
-    max_tries: 10000
+  #mcmc:
+  #  max_tries: 10000
+  minimize:
+    override_bobyqa:
+  # option: value
+  # Relaxed convergence criterion for numerically-noisy likelihoods
+      rhoend: 0.01
+    best_of: 500
+
+
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO/FCa_CMB_BAO_speed4
+output: chains/CMB+BAO/FCa_CMB_BAO
