@@ -14,10 +14,15 @@ sys.path.append('Cobaya_Chains')
 # Each data set needs to be imported differently
 
 # Current data being used:
-# Uncomment 3 lines when doing normal SN chains
-arr_size = int(np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_DATA.txt", names=True)
-cov_arr = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[1:]
+# Real Data
+#arr_size = int(np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[0])
+#DES5YR_UNBIN = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_DATA.txt", names=True)
+#cov_arr = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[1:]
+
+# Mock Data
+arr_size = int(np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_data.txt", names=True)
+cov_arr = np.genfromtxt(r"Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_cov.txt", comments='#',dtype=None)[1:]
 
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
@@ -303,8 +308,7 @@ def Fwz(om,w0,wz):
 
 # 6) Cardassian with 3x parameters, \Omega_M, q and n
 def FCa_Hz_inverse(z, om, q ,n ):
-    Hz = np.sqrt(
-        (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1)))))**(1/q))
+    Hz = np.sqrt( (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1) ))))**(1/q)  )
     return 1.0 / Hz
 
 def FCa(om, q, n):
@@ -431,6 +435,8 @@ def GAL(om, og):
     return logp
 
 if __name__ == "__main__":
-    logp = LCDM(0.3,0.7)
+    logp1 = -2*FCa(0.315,0.699, -0.546)
+    logp2 = -2*FCa(0.315,1.000, 0)
     #logp = wCDM(0.01, 0.2,1)
-    print(logp)
+    print(logp1)
+    print(logp2)
