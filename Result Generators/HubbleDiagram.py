@@ -31,7 +31,7 @@ def get_bestparams(model,label):
     return params_main
 
 #norm_bias = np.genfromtxt("/Users/RyanCamo/Downloads/PIPPIN_OUTPUT/New Mock Data/UNBIN_DES5YR_LOWZ_DATA.txt", names=True)
-norm_bias = np.genfromtxt("/Users/RyanCamo/Downloads/PIPPIN_OUTPUT/New Real Data/DES5YR_REAL_DIFFIMG_DATA.txt", names=True, comments='#')
+norm_bias = np.genfromtxt("Cobaya_Chains/data/hubble_diagram.txt", names=True, comments='#')
 mu_norm = norm_bias['MU']
 mu_err = norm_bias['MUERR']
 zz_norm = norm_bias['zCMB']
@@ -74,6 +74,7 @@ axs[0].tick_params(axis='both', labelsize=14)
 plt.legend(loc='lower left', ncol=1,frameon=False,fontsize=14)
 axs[0].set_xticklabels(['','','0.01','0.1','1.0'])
 axs[1].set_ylim(-0.7,0.7)
+axs[0].set_ylim(30,48)
 
 bestfit_FLCDM = FLCDM(np.array(zz_norm), 0.31454268118243)
 bestfit_FLCDMDES = FLCDM(np.array(zz_DES), 0.31454268118243)
