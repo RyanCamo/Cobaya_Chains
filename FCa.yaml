@@ -28,12 +28,8 @@ params: # DONE
 sampler: # DONE - CAN BE REFINED
   #mcmc:
   #  max_tries: 10000
-  minimize:
-    override_bobyqa:
-  # option: value
-  # Relaxed convergence criterion for numerically-noisy likelihoods
-      rhoend: 0.01
-    best_of: 500
+  evaluate:
+
 
 
 
