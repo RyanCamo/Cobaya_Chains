@@ -1,3 +1,4 @@
+theory: null
 likelihood:
   FLCDM:
     type: []
@@ -5,6 +6,9 @@ likelihood:
     stop_at_error: false
     version: null
     external: import_module('likelihoods_SN').FLCDM
+    input_params:
+    - om
+    output_params: []
 params:
   om:
     prior:
@@ -35,7 +39,9 @@ sampler:
     oversample_power: 0.4
     oversample_thin: true
     drag: false
-    blocking: null
+    blocking:
+    - - true
+      - - om
     callback_function: null
     callback_every: null
     seed: null
@@ -43,6 +49,6 @@ sampler:
     oversample: null
     drag_limits: null
     fallback_covmat_scale: 4
-    version: null
+    version: 3.1.1
 output: DIFFIMG_FLCDM
 version: 3.1.1

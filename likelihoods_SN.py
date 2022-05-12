@@ -21,8 +21,9 @@ sys.path.append('Cobaya_Chains')
 
 # Mock Data
 arr_size = int(np.genfromtxt(r"data/cov.txt", comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"Cobaya_Chains/data/hubble_diagram.txt", names=True)
+DES5YR_UNBIN = np.genfromtxt(r"data/hubble_diagram.txt", names=True, comments='#')
 cov_arr = np.genfromtxt(r"data/cov.txt", comments='#',dtype=None)[1:]
+
 
 zs = DES5YR_UNBIN['zCMB']
 mu = DES5YR_UNBIN['MU']
