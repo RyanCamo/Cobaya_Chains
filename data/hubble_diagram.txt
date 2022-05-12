@@ -1,7 +1,3 @@
-# MU        = distance modulus corrected for bias and contamination
-# MUERR     = stat-uncertainty on MU 
-# MUERR_SYS = sqrt(COVSYS_DIAG) for 'ALL' sys (diagnostic)
-#
 VARNAMES: CID IDSURVEY zCMB zHEL MU MUERR MUERR_VPEC MUERR_SYS
 SN: 2006bh       5 0.01028 0.01028 33.46033  0.22380  0.17700  0.06401
 SN: 2002dp      63 0.01061 0.01061 33.50348  0.22190  0.17160  0.06335
