@@ -20,9 +20,9 @@ sys.path.append('Cobaya_Chains')
 #cov_arr = np.genfromtxt(r"data/DES5YR_REAL_DIFFIMG_COV.txt", comments='#',dtype=None)[1:]
 
 # Mock Data
-arr_size = int(np.genfromtxt(r"data/cov1.txt", comments='#',dtype=None)[0])
-DES5YR_UNBIN = np.genfromtxt(r"data/hubble_diagram1.txt", names=True, comments='#')
-cov_arr = np.genfromtxt(r"data/cov1.txt", comments='#',dtype=None)[1:]
+arr_size = int(np.genfromtxt(r"data/cov.txt", comments='#',dtype=None)[0])
+DES5YR_UNBIN = np.genfromtxt(r"data/hubble_diagram.txt", names=True, comments='#')
+cov_arr = np.genfromtxt(r"data/cov.txt", comments='#',dtype=None)[1:]
 
 
 zs = DES5YR_UNBIN['zCMB']

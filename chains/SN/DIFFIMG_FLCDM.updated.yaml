@@ -40,7 +40,7 @@ sampler:
     oversample_thin: true
     drag: false
     blocking:
-    - - 1
+    - - true
       - - om
     callback_function: null
     callback_every: null
