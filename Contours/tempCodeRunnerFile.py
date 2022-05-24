@@ -1,1 +1,1 @@
-, labelsize=14)
+ax.text(0.15,1,r'$\Lambda$CDM', family='serif',color='black',rotation=0,fontsize=16,ha='left')

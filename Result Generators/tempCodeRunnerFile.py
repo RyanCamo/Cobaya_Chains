@@ -1,1 +1,1 @@
-xval = 0.75*(delta_err_up_scaled+delta_scaled)
+model_FLCDM
