@@ -60,7 +60,7 @@ BEFORE running a particular job:
   
     likelihoods_BAO_CMB_SN  - To constrain model Y against SN+CMB/BAO data
     
-    By default the SN data is using DES5YR_UNBIN. 
+    By default the SN data is currently using DES5YR_REAL_DIFFIMG_DATA  
     This can be changed within the likelihood files that constrain models against SN data by changing the relative file paths. 
     Note however that different SN data need to be imported differently.
   
@@ -81,11 +81,17 @@ BEFORE running a particular job:
     
     Fwz     - Flat linear parameterisation of omega as a function of redshift
     
-    IDE1    - Interacting Dark Energy & Dark Matter: Q = Hερ_d
+    IDEA    - Interacting Dark Energy & Dark Matter: Q = Hερ_d
     
-    IDE2    - Interacting Dark Energy & Dark Matter: Q = Hερ_c
+    IDEB    - Interacting Dark Energy & Dark Matter: Q = Hερ_c
     
-    IDE4    - Interacting Dark Energy & Dark Matter: Q = Hε (ρ_c * ρ_d)/(ρ_c + ρ_d)
+    IDEC    - Interacting Dark Energy & Dark Matter: Q = Hε (ρ_c * ρ_d)/(ρ_c + ρ_d)
+    
+    IDE1    - Obsolete
+    
+    IDE2    - Obsolete
+    
+    IDE3    - Obsolete
     
     Chap    - Standard Chaplygin Gas
     
