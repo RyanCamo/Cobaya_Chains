@@ -1,7 +1,7 @@
 likelihood:
   FLCDM1:
     #external: import_module('DES5YR_UNBIN_likelihoods').FwCDM # Change the model here
-    external: import_module('likelihoods_BAO_CMB_SN').FwCDM
+    external: import_module('likelihoods_SN').FwCDM
     
 
 params: # DONE 
@@ -27,4 +27,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO+SN/FwCDM_CMB_BAO_SN
+output: chains/SN/DIFFIMG_FwCDM_SN

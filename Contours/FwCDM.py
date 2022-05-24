@@ -45,19 +45,20 @@ L_ol = 0.693
 # Adding the model chains to chainconsumer to plot & plotting things
 fig, ax = plt.subplots(1, 1)
 c.add_chain(SN_2, parameters=label, weights=SN_2_weights, linewidth=1.0, name="SN_2", kde=1.5, color="red",num_free_params=len(begin))
-c.add_chain(SN, parameters=label, weights=SN_weights, linewidth=1.2, name="SN", kde=1.5, color="black", linestyle = '-.',num_free_params=len(begin))
-c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB", kde=1.5, color="#FFD700",num_free_params=len(begin))
-c.add_chain(BAO_CMB_SN, parameters=label, weights=BAO_CMB_SN_weights,linewidth=1.0, name="BAO/CMB+SN", kde=1.5, color="#1E90FF",num_free_params=len(begin))
-c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
-c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
+#c.add_chain(SN, parameters=label, weights=SN_weights, linewidth=1.2, name="SN", kde=1.5, color="black", linestyle = '-.',num_free_params=len(begin))
+#c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB", kde=1.5, color="#FFD700",num_free_params=len(begin))
+#c.add_chain(BAO_CMB_SN, parameters=label, weights=BAO_CMB_SN_weights,linewidth=1.0, name="BAO/CMB+SN", kde=1.5, color="#1E90FF",num_free_params=len(begin))
+#c.add_chain(BAO_CMB, parameters=label, weights=BAO_CMB_weights,linewidth=1.0, name="BAO/CMB_2", kde=1.5, color="#FFD700", linestyle = '--', num_free_params=len(begin))
+#c.configure(summary=True, shade_alpha=1, shade=[True, False, True, True, False],statistics="max")
+c.configure(summary=True, shade_alpha=1, shade=[True],statistics="max")
 
 xaxis = label[0] # Which slice to plot?
 yaxis = label[1] # Which slice to plot?
 c.plotter.plot_contour(ax,xaxis, yaxis)
 ax.set_xlabel(xaxis, fontsize = 18)
 ax.set_ylabel(yaxis, fontsize = 18) 
-ax.set_xlim(0.08,0.55)
-ax.set_ylim(-1.7,-0.5)
+ax.set_xlim(0.1,0.48)
+ax.set_ylim(-1.55,-0.5)
 #ax.set_xlim(0,1)
 #ax.set_ylim(0,1)
 plt.minorticks_on()
@@ -75,14 +76,14 @@ p1m_sn =c.analysis.get_summary(chains="SN_2")[label[1]][1]-c.analysis.get_summar
 print('%s = %.5s^{%.5s}_{%.5s}$' %(label[0],p0_sn,p0p_sn,p0m_sn))
 print('%s = %.5s^{%.5s}_{%.5s}$' %(label[1],p1_sn,p1p_sn,p1m_sn))
 # BAO/CMB + SN
-p0_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][1]
-p0p_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][2]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][1]
-p0m_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][1]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][0]
-p1_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][1]
-p1p_tot =c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][2]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][1]
-p1m_tot =c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][1]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][0]
-print('%s = %.5s^{%.5s}_{%.5s}$' %(label[0],p0_tot,p0p_tot,p0m_tot))
-print('%s = %.5s^{%.5s}_{%.5s}$' %(label[1],p1_tot,p1p_tot,p1m_tot))
+#p0_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][1]
+#p0p_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][2]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][1]
+#p0m_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][1]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[0]][0]
+#p1_tot = c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][1]
+#p1p_tot =c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][2]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][1]
+#p1m_tot =c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][1]-c.analysis.get_summary(chains="BAO/CMB+SN")[label[1]][0]
+#print('%s = %.5s^{%.5s}_{%.5s}$' %(label[0],p0_tot,p0p_tot,p0m_tot))
+#print('%s = %.5s^{%.5s}_{%.5s}$' %(label[1],p1_tot,p1p_tot,p1m_tot))
 
 
 #ax.text(0.55,0.57,'$\Omega_m = %10.5s\pm{%10.5s}$' %(om,omp), family='serif',color='black',rotation=0,fontsize=12,ha='right') 
@@ -95,7 +96,7 @@ blue_patch = mpatches.Patch(color='#1E90FF', label='SN+CMB/BAO', ec='k')
 
 #ax.set_xticklabels(['0.1','0.2','','0.3','','0.4','','0.5',''])
 #ax.set_yticklabels(['','','','','','',''])
-ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='lower left',frameon=False,fontsize=16)
+#ax.legend(handles=[red_patch, yellow_patch, blue_patch], loc='lower left',frameon=False,fontsize=16)
 ax.scatter(Flat_L_om, -1, marker = 'D', s = 20, c='black', label = r'Flat $\Lambda$')
 #plt.savefig('Cobaya_Chains/Contours/OUTPUT/%s.pdf' % (model), bbox_inches='tight', format = 'pdf')
 plt.show()
