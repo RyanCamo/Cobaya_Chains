@@ -94,6 +94,38 @@ def GAL(z, om, og):
     Hz = np.sqrt(0.5*ok*(1+z)**2 + 0.5*om*(1+z)**3 + np.sqrt(og + 0.25*((om*(1+z)+ok)**2)*(1+z)**4))
     return Hz
 
+
+# 15) IDE1 Q = H e rho_x
+def IDEA(z, cdm, w, e):
+    ol = 1.0 - cdm
+    Hz = np.sqrt(cdm*(1+z)**3 + ol*( ((e)/(w+e))*(1+z)**3 + ((w)/(w+e))*(1+z)**(3*(1+w+e))  )) 
+    return Hz
+
+# 16) IDE2 Q = H e rho_c
+def IDEB(z, cdm, ob, w, e):
+    ol = 1.0 - cdm - ob
+    Hz = np.sqrt(ob*(1+z)**(3)+ ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
+    return Hz
+
+# 18) IDE4 Q = H e [rho_c * rho_x / (rho_c + rho_x)]
+def IDEC(z, cdm, ob, w, e):
+    ol = 1-cdm - ob
+    constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
+    Hz = np.sqrt( ob*(1+z)**3 + cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
+    return Hz
+
+def IDEB_2(z, cdm, w, e):
+    ol = 1-cdm
+    Hz = np.sqrt(ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e)))) 
+    return Hz
+
+def IDEC_2(z, cdm, w, e):
+    ol = 1-cdm
+    constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
+    Hz = np.sqrt( cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
+    return Hz
+
+
 if __name__ == "__main__":
     print(LCDM(1.15838, 0.3, 0.7))
     
