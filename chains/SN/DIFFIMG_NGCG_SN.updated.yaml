@@ -1,18 +1,39 @@
+theory: null
 likelihood:
-  IDEA:
+  NGCG:
     type: []
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('likelihoods_SN').IDEA
+    external: import_module('likelihoods_SN').NGCG
+    input_params:
+    - om
+    - A
+    - a
+    - w
+    output_params: []
 params:
-  cdm:
+  om:
     prior:
       min: 0.1
       max: 0.8
     ref: 0.3
     proposal: 0.001
-    latex: \Omega_{cdm}
+    latex: \Omega_{m}
+  A:
+    prior:
+      min: 0.1
+      max: 1
+    ref: 0.5
+    proposal: 0.001
+    latex: A
+  a:
+    prior:
+      min: -0.5
+      max: 0.5
+    ref: 0.2
+    proposal: 0.001
+    latex: \alpha
   w:
     prior:
       min: -2
@@ -20,13 +41,6 @@ params:
     ref: -0.9
     proposal: 0.01
     latex: \omega
-  e:
-    prior:
-      min: -0.5
-      max: 0.5
-    ref: 0.05
-    proposal: 0.001
-    latex: \varepsilon
 sampler:
   mcmc:
     burn_in: 0
@@ -49,7 +63,12 @@ sampler:
     oversample_power: 0.4
     oversample_thin: true
     drag: false
-    blocking: null
+    blocking:
+    - - true
+      - - om
+        - A
+        - a
+        - w
     callback_function: null
     callback_every: null
     seed: null
@@ -57,6 +76,6 @@ sampler:
     oversample: null
     drag_limits: null
     fallback_covmat_scale: 4
-    version: null
-output: IDEA_SN
+    version: 3.1.1
+output: DIFFIMG_NGCG_SN
 version: 3.1.1

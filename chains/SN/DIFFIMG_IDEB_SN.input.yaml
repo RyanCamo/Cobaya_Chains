@@ -1,6 +1,6 @@
 likelihood:
   IDEA:
-    external: import_module('likelihoods_SN').IDEA
+    external: import_module('likelihoods_SN').IDEB
 params:
   cdm:
     prior:
@@ -9,6 +9,13 @@ params:
     ref: 0.3
     proposal: 0.001
     latex: \Omega_{cdm}
+  ob:
+    prior:
+      min: 0.001
+      max: 0.2
+    ref: 0.05
+    proposal: 0.001
+    latex: \Omega_{b}
   w:
     prior:
       min: -2
@@ -26,4 +33,4 @@ params:
 sampler:
   mcmc:
     max_tries: 10000
-output: IDEA_SN
+output: DIFFIMG_IDEB_SN

@@ -1,6 +1,6 @@
 likelihood:
   FCa:
-    external: import_module('likelihoods_BAO_CMB_cov').FCa # Change the model here
+    external: import_module('likelihoods_SN').FCa # Change the model here
     
 
 params: # DONE 
@@ -26,13 +26,13 @@ params: # DONE
 #                   x - y, loc=0, scale=0.3)'
 
 sampler: # DONE - CAN BE REFINED
-  #mcmc:
-  #  max_tries: 10000
-  evaluate:
+  mcmc:
+    max_tries: 10000
+
 
 
 
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/CMB+BAO/FCa_CMB_BAO
+output: chains/SN/DIFFIMG_FCa_SN

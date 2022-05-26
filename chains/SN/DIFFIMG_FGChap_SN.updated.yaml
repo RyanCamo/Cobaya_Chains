@@ -1,32 +1,30 @@
+theory: null
 likelihood:
-  IDEA:
+  FGChap:
     type: []
     speed: -1
     stop_at_error: false
     version: null
-    external: import_module('likelihoods_SN').IDEA
+    external: import_module('likelihoods_SN').FGChap
+    input_params:
+    - A
+    - a
+    output_params: []
 params:
-  cdm:
+  A:
     prior:
       min: 0.1
-      max: 0.8
+      max: 2
+    ref: 0.5
+    proposal: 0.001
+    latex: A
+  a:
+    prior:
+      min: -1
+      max: 2
     ref: 0.3
     proposal: 0.001
-    latex: \Omega_{cdm}
-  w:
-    prior:
-      min: -2
-      max: 2
-    ref: -0.9
-    proposal: 0.01
-    latex: \omega
-  e:
-    prior:
-      min: -0.5
-      max: 0.5
-    ref: 0.05
-    proposal: 0.001
-    latex: \varepsilon
+    latex: \alpha
 sampler:
   mcmc:
     burn_in: 0
@@ -49,7 +47,10 @@ sampler:
     oversample_power: 0.4
     oversample_thin: true
     drag: false
-    blocking: null
+    blocking:
+    - - true
+      - - A
+        - a
     callback_function: null
     callback_every: null
     seed: null
@@ -57,6 +58,6 @@ sampler:
     oversample: null
     drag_limits: null
     fallback_covmat_scale: 4
-    version: null
-output: IDEA_SN
+    version: 3.1.1
+output: DIFFIMG_FGChap_SN
 version: 3.1.1

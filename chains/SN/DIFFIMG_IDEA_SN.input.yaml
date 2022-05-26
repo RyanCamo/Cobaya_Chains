@@ -26,4 +26,4 @@ params:
 sampler:
   mcmc:
     max_tries: 10000
-output: IDEA_SN
+output: DIFFIMG_IDEA_SN
