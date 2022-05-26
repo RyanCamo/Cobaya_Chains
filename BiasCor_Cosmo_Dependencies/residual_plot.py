@@ -11,7 +11,8 @@ from matplotlib import rcParams, rc
 model = 'IDEB_2'
 
 # Data using Reference cosmology
-norm_data = np.genfromtxt("Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/%s_hubble_diagram_NORM.txt" % (model, model), names=True)
+norm_data = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/DES5YR_REAL_DIFFIMG_DATA.txt", names=True)
+#norm_data = np.genfromtxt("Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/%s_hubble_diagram_NORM.txt" % (model, model), names=True)
 #norm_data = np.genfromtxt("Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s_3/%s_hubble_diagram_MOD.txt" % (model, model), names=True)
 mu_norm = norm_data['MU']
 zz_norm = norm_data['zCMB']
@@ -31,6 +32,10 @@ mu_norm_des=np.array(mu_norm_des)
 zz_des=np.array(zz_des)
 mu_norm_lowz=np.array(mu_norm_lowz)
 zz_lowz=np.array(zz_lowz)
+print(len(mu_norm_des))
+print(len(mu_norm_lowz))
+print(len(mu_norm))
+exit()
 
 # Data after reperforming bias corrections
 mod_data = np.genfromtxt("Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/%s_hubble_diagram_MOD.txt" % (model, model), names=True)
