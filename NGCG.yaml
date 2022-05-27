@@ -1,6 +1,6 @@
 likelihood:
   NGCG:
-    external: import_module('likelihoods_SN').NGCG # Change the model here
+    external: import_module('likelihoods_BAO_CMB_cov').NGCG # Change the model here
     
 
 params: # DONE 
@@ -15,7 +15,7 @@ params: # DONE
     proposal: 0.001
     latex: A
   a:
-    prior: {min: -0.5, max: 0.5}
+    prior: {min: -1, max: 1}
     ref: 0.2
     proposal: 0.001
     latex: \alpha
@@ -36,4 +36,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/SN/DIFFIMG_NGCG_SN
+output: chains/CMB+BAO/NGCG_CMB_BAO_extended
