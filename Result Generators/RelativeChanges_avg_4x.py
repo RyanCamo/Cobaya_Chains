@@ -41,7 +41,7 @@ def get_bestparams(model):
 
 def plot_param(model,ax, xval, yval):
     label, begin, legend = get_info(model)
-    axs[ax].text(xval,yval, '%s' % (label[ax]), ha='center' ,fontsize=14)
+    axs[ax].text(xval,yval, '%s' % (label[ax]), ha='center' ,fontsize=18)
 
 def plot_err(ax, val, high_err, low_err, yval):
     axs[ax].errorbar(val, yval, xerr=np.array([[low_err ,high_err]]).T, fmt="o", ecolor = 'k', color = 'k', markersize=3, elinewidth=1, capsize=2)
@@ -118,10 +118,10 @@ if __name__ == "__main__":
         axs[i].set_xticklabels(['','$-1\overline{\sigma}$','0','$1\overline{\sigma}$',''])
         axs[i].set_yticks(yinterval)
         axs[i].set_yticklabels(['', *models_overleaf, ''])
-        axs[i].tick_params(which = 'both', bottom=False, top=False, left=False, right=False, labelsize=14)
+        axs[i].tick_params(which = 'both', bottom=False, top=False, left=False, right=False, labelsize=18)
         y_min, y_max = axs[i].get_ylim()
-        axs[i].text(0, 1.03*y_max, Sub_Names[i], va='center', ha='center' ,fontsize=14)
-    axs[0].text(-2,-2,r'Note for an Arb. estimate, $\mathrm{P}_{1}=x_{-~\sigma^{-}}^{+~\sigma^{+}}$, $\overline{\sigma}$ is defined as $\overline{\sigma}\equiv \frac{\sigma^{+}+\sigma^{-}}{2}$', family='serif',color='black',rotation=0,fontsize=14,ha='left', va='center')
+        axs[i].text(0, 1.03*y_max, Sub_Names[i], va='center', ha='center' ,fontsize=18)
+    axs[0].text(-2,-2,r'Note for an Arb. estimate, $\mathrm{P}_{1}=x_{-~\sigma^{-}}^{+~\sigma^{+}}$, $\overline{\sigma}$ is defined as $\overline{\sigma}\equiv \frac{\sigma^{+}+\sigma^{-}}{2}$', family='serif',color='black',rotation=0,fontsize=18,ha='left', va='center')
     #axs[3].text(1.8,1.5,r'For an Arb. estimate:', family='serif',color='black',rotation=0,fontsize=10,ha='center', va='center')
     #axs[3].text(1.8,1.25,r'$\mathrm{P}_{1}=x_{-~\sigma^{-}}^{+~\sigma^{+}}$', family='serif',color='black',rotation=0,fontsize=10,ha='center', va='center')
     #axs[3].text(1.8,1,r'$\overline{\sigma}=\frac{\sigma^{+}+\sigma^{-}}{2}$', family='serif',color='black',rotation=0,fontsize=10,ha='center', va='center')

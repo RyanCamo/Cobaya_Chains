@@ -407,6 +407,20 @@ def GAL(zs, om, og):
     dist_mod = 5 * np.log10(lum_dist)
     return dist_mod
 
+# 11) Galileon Tracker Solution 2x parameters, \Omega_m, \Omega_g
+def Linear_Hz_inverse(z):
+    Hz = 50*z + 60
+    return 1.0 / Hz
+
+def Linear(zs):
+    x = np.array([quad(Linear_Hz_inverse, 0, z)[0] for z in zs])
+    lum_dist = x * (1 + zs)
+    dist_mod = 5 * np.log10(lum_dist)
+    return dist_mod
+
+
+
+
 if __name__ == "__main__":
     logp = LCDM(0.3,0.7)
     #logp = wCDM(0.01, 0.2,1)

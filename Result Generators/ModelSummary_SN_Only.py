@@ -40,6 +40,9 @@ def get_bestparams(model,label):
     elif SN1 == 0 and SN2 == 1:
         main_chain =  np.loadtxt('Cobaya_Chains/chains/SN_BiasCor/%s_SN_2.1.txt' %(model), usecols=(cols), comments='#') 
         main_chain_weights =  np.loadtxt('Cobaya_Chains/chains/SN_BiasCor/%s_SN_2.1.txt' %(model), usecols=(0), comments='#') 
+    elif SN1 == 0 and SN2 == 0 and SN3 ==1:
+        main_chain =  np.loadtxt('Cobaya_Chains/chains/SN_BiasCor/%s_SN_3.1.txt' %(model), usecols=(cols), comments='#') 
+        main_chain_weights =  np.loadtxt('Cobaya_Chains/chains/SN_BiasCor/%s_SN_3.1.txt' %(model), usecols=(0), comments='#') 
     else:
         print('Not valid table options..')
         exit()
@@ -55,6 +58,8 @@ def get_summary(model, dataL):
     label, begin, legend = get_info(model.__name__)
     if SN2 == 1: 
         dataL = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s/MOD_%s_cov.txt" % (model.__name__, model.__name__), comments='#',dtype=None)[0])
+    if SN3 == 1: 
+        dataL = int(np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/PIPPIN_OUTPUTS/%s_3/MOD_%s_3_cov.txt" % (model.__name__, model.__name__), comments='#',dtype=None)[0])
     else:
         dataL=dataL
     params_main, params_main_upper, params_main_lower = get_bestparams(model.__name__,label)
@@ -83,6 +88,7 @@ if __name__ == "__main__":
     ## TABLE OPTIONS: 1 = True, 0 = False - ONLY SELECT 1 
     SN1 = 1 # Get SN-1 Only Constraints - Before BiasCor Sim changes
     SN2 = 0 # Get SN-2 Only Constraints - After BiasCor Sim changes
+    SN3 = 0 # Get SN-2 Only Constraints - After BiasCor Sim changes
 
     # amount of data points per dataset
     SN1_data = 1891
@@ -94,6 +100,10 @@ if __name__ == "__main__":
         print('ERROR: ONLY 1 SET OF CONSTRAINTS AT A TIME')
         exit()
     elif SN1 == 0 and SN2 == 1:
+        from likelihoods_SN_bias import *
+        dataL = 0
+        print('Make Sure line 19 in likelihoods_SN_bias.py matches the model you want constraints for!!')
+    elif SN1 == 0 and SN2 == 0 and SN3 == 1:
         from likelihoods_SN_bias import *
         dataL = 0
         print('Make Sure line 19 in likelihoods_SN_bias.py matches the model you want constraints for!!')
@@ -109,8 +119,12 @@ if __name__ == "__main__":
         refAIC = 1880.569167491951 # Manually calculated for Mock dataset
         refBIC = 1886.1140285606095 # Manually calculated for Mock dataset
 
+    if SN3 ==1: # These values arent correct - just test values for 3rd iterations.
+        refAIC = 1885.4922812247555 # Manually calculated for Mock dataset
+        refBIC = 1891.0387274985014 # Manually calculated for Mock dataset
+
 
     # Get 1 Model at a time: FOR SN2 constraints each time the likelihoods_SN_bias.py file needs the model changing!!
     #burnin
     burnin = 0
-    get_summary(IDEC, dataL)
+    get_summary(wCDM, dataL)
