@@ -5,56 +5,58 @@ sys.path.append('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains')
 from chainconsumer import ChainConsumer
 from matplotlib import pyplot as plt
 from model_info import *
-import scipy.special as sc
+#import scipy.special as sc
 from chainconsumer import ChainConsumer
+from pathlib import Path
 
-c = ChainConsumer() 
 
-
-# This file was designed to be used to check cosmological dependencies in the biascorrections part of Pippin.
-# These files are used as sim-input keys: 'HzFUN_FILE:' when creating a SIM using SNANA.
-
-# This code creates numerous files for different specified models.
+# This code takes an input chain and the model used when fitting for that chain.
+# extracts the best fit parameters and outputs a 'HzFUN_FILE' which is a sim-input 
+# key used to generate mock data.
 # The output format is 2 columns: z, H(z) with the first row being z=0.
 
 
-# Import the data - specifically the redshift range to mimic.
-DES5YR_UNBIN = np.genfromtxt("/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/data/UNBIN_DES5YR_LOWZ_data.txt", names=True)
-zs = DES5YR_UNBIN['zCMB']
-z_min = 0
-z_max = np.max(zs)
-z = np.linspace(0,1.4,500)
-#hz = np.linspace(60, 130, 500)
+# This function gets the best fit parameters for the specific chains used.
+def get_param(samples, label, weights):
+    c = ChainConsumer()
+    print('extracting best fit parameters...')
+    c.add_chain(samples, parameters=label, linewidth=2.0, weights=weights, name="MCMC", kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="cumulative")
+    params = []
+    for i, labelx in enumerate(label):
+        params.append(c.analysis.get_summary(chains="MCMC")[labelx][1])
+    print('the best fit parameters are:')
+    print('%s' %params)
+    return params
 
-#np.savetxt('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/Files_2/Fun.txt', np.c_[z, hz], fmt="%10.4f")
-#exit()
+def create_HzFUN(model, chain_path, save_path):
 
+    print('Creating HzFUN_FILE...')
 
-models = [IDEC_2] #[FLCDM, LCDM, FwCDM, wCDM, FGChap,Fwa, Fwz, DGP, GAL]
-# to do: 
+    # Generate a list of redshifts starting with z=0.
+    zs = np.geomspace(0.0001, 2.5, 1000)
+    z = np.insert(zs,0,0)
 
-#[FLCDM, LCDM, FwCDM, wCDM, IDE1, IDE2, IDE4, FGChap, GChap, FCa, Fwa, Fwz, DGP, GAL, NGCG]
-
-for i, model in enumerate(models):
-    #label, params, legend = get_info(model.__name__)
+    # Get model details
     label, params, legend = get_info(model.__name__)
+
+    # used to extract weights and correct columns
     cols = []
-    for s, parm in enumerate(params):
-        cols.append(2+s)
-    cols = np.array(cols)
-    cols  = cols.tolist()
-    #SN_2 = np.loadtxt('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/chains/SN_BiasCor/%s_SN_2.1.txt' %(model.__name__), usecols=cols, comments='#')
-    #weights = np.loadtxt('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/chains/SN_BiasCor/%s_SN_2.1.txt' %(model.__name__), usecols=(0), comments='#')
-    SN = np.loadtxt('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/chains/SN/%s_SN.1.txt' %(model.__name__), usecols=cols, comments='#')
-    weights = np.loadtxt('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/chains/SN/%s_SN.1.txt' %(model.__name__), usecols=0, comments='#')
-    c.add_chain(SN, parameters=label, weights=weights, linewidth=1.0, name="SN", kde=1.5, color="red",num_free_params=len(params)).configure(summary=True,shade_alpha=0.3,statistics="cumulative")
-    #c.add_chain(SN_2, parameters=label, linewidth=1.0, weights=weights, name="SN_2", kde=1.5, color="red",num_free_params=len(params))
-    best_fit = []
-    for t, best in enumerate(params):
-        best = c.analysis.get_summary(chains="SN")[label[t]][1]
-        best_fit.append(best)
-    c.remove_chain('SN')
-    print(best_fit)
-    Hz = model(z, *best_fit)
-    np.savetxt('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains/BiasCor_Cosmo_Dependencies/Files_2/%s.txt' % (model.__name__), np.c_[z, 70*Hz], fmt="%10.4f")
+    for i, l in enumerate(label):
+        cols.append(i+2)
+           
+    chain = np.loadtxt(chain_path, usecols=(cols), comments='#')
+    weights = np.loadtxt(chain_path, usecols=(0), comments='#')
+    params = get_param(chain,label, weights)
+    H0 = 70
+    Hz = H0*FLCDM(z, *params)
+    np.savetxt(save_path, np.c_[z, Hz], fmt="%10.4f")
+    print('HzFUN_FILE created and saved to: %s' %save_path)
+    
+
+if __name__ == "__main__":
+    model = FLCDM # model used in the fit
+    chain_path = Path('chains/SN_TESTS/FLCDM_11.1.txt')
+    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/FLCDM_11.1.txt')
+
+    create_HzFUN(model, chain_path, save_path)
 
