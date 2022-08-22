@@ -54,6 +54,8 @@ BEFORE running a particular job:
     likelihoods_BAO_CMB     - To constrain the model Y against CMB/BAO data
   
     likelihoods_SN          - To constrain the model Y against SN data (Iteration 1)
+    
+    likelihoods_SN_interp   - Same as likelihoods_SN but interpolates speeding up SN fitting.
 
     likelihoods_SN_bias     - To constrain the model Y against SN data (Iteration 2) - Need to change line 19 of 
                               likelihoods_SN_bias.py to the model your looking at
