@@ -1,0 +1,29 @@
+likelihood:
+  IDEA:
+    external: import_module('likelihoods_SN_interp').IDEA
+params:
+  cdm:
+    prior:
+      min: 0.1
+      max: 0.8
+    ref: 0.3
+    proposal: 0.001
+    latex: \Omega_{cdm}
+  w:
+    prior:
+      min: -2
+      max: 2
+    ref: -0.9
+    proposal: 0.01
+    latex: \omega
+  e:
+    prior:
+      min: -0.5
+      max: 0.5
+    ref: 0.05
+    proposal: 0.001
+    latex: \varepsilon
+sampler:
+  mcmc:
+    max_tries: 10000
+output: IDEA_31
