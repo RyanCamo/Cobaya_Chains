@@ -1,6 +1,6 @@
 likelihood:
   FLCDM:
-    external: import_module('likelihoods_SN').FLCDM # Change the model here
+    external: import_module('likelihoods_SN_interp').FLCDM # Change the model here
     
 
 params: # DONE 
@@ -20,4 +20,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/SN/DIFFIMG_FLCDM
+output: chains/SN_TESTS/FLCDM_12
