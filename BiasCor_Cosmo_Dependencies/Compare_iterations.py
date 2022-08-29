@@ -17,6 +17,7 @@ def get_true_cosmo(z, mock_data):
         cosmo = FLCDM_(z, 0.315)
     elif mock_data ==2:
         cosmo = wCDM_(z, 0.350, 0.600, -1.1)
+        cosmo2 = FLCDM_(z, 0.315)
     elif mock_data ==3:
         cosmo = GChap_(z, 0.65, 0.200, 0.05)
     elif mock_data ==4:
@@ -26,7 +27,7 @@ def get_true_cosmo(z, mock_data):
     else:
         print('NOT A VALID MOCK DATASET')
         exit()
-    return cosmo
+    return cosmo, cosmo2
 
 def get_distmod(z, model, params):
     cosmo = model(z, *params)
@@ -45,7 +46,7 @@ def compare_cosmo(mock_data, model, save_path):
     z = np.geomspace(0.0001, 2.5, 500)
 
     # The true cosmology
-    true_mu = get_true_cosmo(z, mock_data)
+    true_mu, cosmo2 = get_true_cosmo(z, mock_data)
 
     # Fitting model details
     label, params, legend = get_info(model.__name__.strip('_')) 
@@ -75,8 +76,9 @@ def compare_cosmo(mock_data, model, save_path):
     fig, ax = plt.subplots(1, 1, sharex=True,figsize=(5,4))
     ax.plot(z, first_distmod-true_mu, label = r'First Iteration', linestyle = ':', color = 'b')
     ax.plot(z, second_distmod-true_mu, label = r'Second Iteration', linestyle = '-.', color = 'y')
+    ax.plot(z, cosmo2-true_mu, label = r'Zero Iteration', linestyle = '-.', color = 'c')
     ax.plot(z, true_mu-true_mu, label = r'True Cosmology', linestyle = '--', color = 'k')
-    ax.text(0.01,-0.07,'%s' % model.__name__.strip('_'), family='serif',color='black',fontsize=12,ha='left') 
+    #ax.text(0.01,-0.07,'%s' % model.__name__.strip('_'), family='serif',color='black',fontsize=12,ha='left') 
     ax.legend()
     ax.set_xlabel('Redshift, z', fontsize=20)
     ax.set_ylabel(r'$\Delta \mu$', fontsize=20)
@@ -97,8 +99,8 @@ if __name__ == "__main__":
     # IDE1 = 4
     # GAL = 5 
 
-    mock_data = 1
-    model = wCDM_ # which fitting model to compare iterations?
+    mock_data = 2
+    model = FLCDM_ # which fitting model to compare iterations?
     save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
     compare_cosmo(mock_data, model, save_path)
 
