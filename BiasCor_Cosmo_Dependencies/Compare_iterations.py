@@ -118,7 +118,7 @@ if __name__ == "__main__":
     # GAL = 5 
 
     mock_data = 4
-    model = FLCDM_ # which fitting model to compare iterations?
+    model = GChap_ # which fitting model to compare iterations?
     save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
     compare_cosmo(mock_data, model, save_path)
     #compare_truths()
