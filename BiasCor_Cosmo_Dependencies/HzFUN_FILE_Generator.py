@@ -5,7 +5,6 @@ sys.path.append('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains')
 from chainconsumer import ChainConsumer
 from matplotlib import pyplot as plt
 from model_info import *
-#import scipy.special as sc
 from chainconsumer import ChainConsumer
 from pathlib import Path
 
@@ -21,6 +20,9 @@ def get_param(samples, label, weights):
     c = ChainConsumer()
     print('extracting best fit parameters...')
     c.add_chain(samples, parameters=label, linewidth=2.0, weights=weights, name="MCMC", kde=1.5, color="red").configure(summary=True,shade_alpha=0.3,statistics="cumulative")
+    #fig = c.plotter.plot(figsize="column")
+    #plt.show()
+    #exit()
     params = []
     for i, labelx in enumerate(label):
         params.append(c.analysis.get_summary(chains="MCMC")[labelx][1])
@@ -54,8 +56,8 @@ def create_HzFUN(model, chain_path, save_path):
     
 
 if __name__ == "__main__":
-    model = GAL # model used in the fit
-    chain_path = Path('chains/SN_TESTS/GAL_11.1.txt')
+    model = FLCDM # model used in the fit
+    chain_path = Path('chains/SN_TESTS/FLCDM_31.1.txt')
     save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/GAL_11.1.txt')
 
     create_HzFUN(model, chain_path, save_path)

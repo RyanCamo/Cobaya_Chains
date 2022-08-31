@@ -17,8 +17,8 @@ import time
 ## 3. Models
 
 # Mock Data
-cov_path = Path("data/data_TESTS/cov_GCG_22.txt")
-HD_path = Path("data/data_TESTS/HD_GCG_22.txt")
+cov_path = Path("data/data_TESTS/cov_GCG_42.txt")
+HD_path = Path("data/data_TESTS/HD_GCG_42.txt")
 arr_size = int(np.genfromtxt(cov_path, comments='#',dtype=None)[0])
 DES5YR_UNBIN = np.genfromtxt(HD_path, names=True, comments='#')
 cov_arr = np.genfromtxt(cov_path, comments='#',dtype=None)[1:]
