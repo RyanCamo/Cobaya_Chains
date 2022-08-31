@@ -1,8 +1,3 @@
-# MU        = distance modulus corrected for bias and contamination
-# MUERR     = stat-uncertainty on MU 
-# MUERR_SYS = sqrt(COVSYS_DIAG) for 'ALL' sys (diagnostic)
-# ISDATA_REAL: 0   # flag for cosmology fitter to choose blind option
-#
 VARNAMES: CID IDSURVEY zCMB zHEL MU MUERR MUERR_VPEC MUERR_SYS
 SN: 2240        64 0.01057 0.01057 33.14458  0.10400  0.00000  0.00000
 SN: 7731       150 0.01093 0.01093 33.10475  0.10490  0.00000  0.00000
