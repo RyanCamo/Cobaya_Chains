@@ -57,8 +57,8 @@ def create_HzFUN(model, chain_path, save_path):
 
 if __name__ == "__main__":
     model = FLCDM # model used in the fit
-    chain_path = Path('chains/SN_TESTS/FLCDM_31.1.txt')
-    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/GAL_11.1.txt')
+    chain_path = Path('chains/SN_TESTS/FLCDM_13.1.txt')
+    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/FLCDM_13.txt')
 
     create_HzFUN(model, chain_path, save_path)
 
