@@ -26,4 +26,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/SN_TESTS/GAL_42
+output: chains/SN_TESTS/GAL_21
