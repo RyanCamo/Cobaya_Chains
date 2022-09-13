@@ -20,6 +20,7 @@ def get_true_cosmo(z, mock_data):
         #cosmo2 = FLCDM_(z, 0.315)
     elif mock_data ==3:
         cosmo = GChap_(z, 0.65, 0.200, 0.05)
+        # A = 0.7, a = 0.1, ok = 0.05
         #cosmo2 = FLCDM_(z, 0.315)
     elif mock_data ==4:
         cosmo = IDEA_(z, 0.25, -1.2, 0.100)
