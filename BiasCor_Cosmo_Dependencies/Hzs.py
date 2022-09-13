@@ -74,7 +74,7 @@ def Chap(z, A, ok):
     return Hz
 
 # 10) General Chaplygin 3x parameters, \Omega_K, A and \alpha
-def GChap(z, ok, A ,a):
+def GChap(z, A ,a, ok):
     Hz = np.sqrt((ok*((1+z)**2)) + (1-ok)*(A + (1-A)*((1+z)**(3*(1+a))))**(1/(1+a)))
     return Hz
 
