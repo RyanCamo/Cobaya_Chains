@@ -39,7 +39,7 @@ def compare_cosmo(mock_data, model, save_path):
     # File paths for the first and second iteration chains.
     if model.__name__ == 'GChap_':
         first_path = Path('chains/SN_TESTS/GCG_%s1.1.txt' % (mock_data))
-        second_path = Path('chains/SN_TESTS/GCG_%s2.1.txt' % (mock_data))
+        #second_path = Path('chains/SN_TESTS/GCG_%s2.1.txt' % (mock_data))
     else:
         first_path = Path('chains/SN_TESTS/%s%s1.1.txt' % (model.__name__, mock_data))
         second_path = Path('chains/SN_TESTS/%s%s2.1.txt' % (model.__name__, mock_data))
@@ -64,32 +64,32 @@ def compare_cosmo(mock_data, model, save_path):
          
     first_chain = np.loadtxt(first_path, usecols=(cols), comments='#')
     first_weights = np.loadtxt(first_path, usecols=(0), comments='#')
-    second_chain = np.loadtxt(second_path, usecols=(cols), comments='#')
-    second_weights = np.loadtxt(second_path, usecols=(0), comments='#')
-    third_chain = np.loadtxt(third_path, usecols=(cols), comments='#')
-    third_weights = np.loadtxt(third_path, usecols=(0), comments='#')
-    fourth_chain = np.loadtxt(fourth_path, usecols=(cols), comments='#')
-    fourth_weights = np.loadtxt(fourth_path, usecols=(0), comments='#')
+    #second_chain = np.loadtxt(second_path, usecols=(cols), comments='#')
+    #second_weights = np.loadtxt(second_path, usecols=(0), comments='#')
+    #third_chain = np.loadtxt(third_path, usecols=(cols), comments='#')
+    #third_weights = np.loadtxt(third_path, usecols=(0), comments='#')
+    #fourth_chain = np.loadtxt(fourth_path, usecols=(cols), comments='#')
+    #fourth_weights = np.loadtxt(fourth_path, usecols=(0), comments='#')
 
     first_params = get_param(first_chain,label, first_weights)
-    second_params = get_param(second_chain,label, second_weights)
-    third_params = get_param(third_chain,label, third_weights)
-    fourth_params = get_param(fourth_chain,label, fourth_weights)
+    #second_params = get_param(second_chain,label, second_weights)
+    #third_params = get_param(third_chain,label, third_weights)
+    #fourth_params = get_param(fourth_chain,label, fourth_weights)
     
     # Calculate the distance modulus for the first and second iterations
     first_distmod = get_distmod(z, model, first_params)
-    second_distmod = get_distmod(z, model, second_params)
-    third_distmod = get_distmod(z, model, third_params)
-    fourth_distmod = get_distmod(z, model, fourth_params)
+    #second_distmod = get_distmod(z, model, second_params)
+    #third_distmod = get_distmod(z, model, third_params)
+    #fourth_distmod = get_distmod(z, model, fourth_params)
 
     # Create a plot
     plt.rc('font', family='serif')
     rcParams['mathtext.fontset'] = 'dejavuserif'
     fig, ax = plt.subplots(1, 1, sharex=True,figsize=(5,4))
     ax.plot(z, first_distmod-true_mu, label = r'First Iteration', linestyle = ':', color = 'b')
-    ax.plot(z, second_distmod-true_mu, label = r'Second Iteration', linestyle = '-.', color = 'y')
-    ax.plot(z, third_distmod-true_mu, label = r'Third Iteration', linestyle = '-.', color = 'c')
-    ax.plot(z, fourth_distmod-true_mu, label = r'Fourth Iteration', linestyle = ':', color = 'y')
+    #ax.plot(z, second_distmod-true_mu, label = r'Second Iteration', linestyle = '-.', color = 'y')
+    #ax.plot(z, third_distmod-true_mu, label = r'Third Iteration', linestyle = '-.', color = 'c')
+    #ax.plot(z, fourth_distmod-true_mu, label = r'Fourth Iteration', linestyle = ':', color = 'y')
     #ax.plot(z, cosmo2-true_mu, label = r'Zero Iteration', linestyle = '-.', color = 'c')
     ax.plot(z, true_mu-true_mu, label = r'True Cosmology', linestyle = '--', color = 'k')
     #ax.text(0.01,-0.07,'%s' % model.__name__.strip('_'), family='serif',color='black',fontsize=12,ha='left') 
@@ -97,7 +97,7 @@ def compare_cosmo(mock_data, model, save_path):
     ax.set_xlabel('Redshift, z', fontsize=20)
     ax.set_ylabel(r'$\Delta \mu$', fontsize=20)
     plt.tight_layout()
-    plt.savefig(save_path)  
+    #plt.savefig(save_path)  
     plt.show()
 
 def compare_truths():
@@ -133,8 +133,8 @@ if __name__ == "__main__":
     # IDE1 = 4
     # GAL = 5 
 
-    mock_data = 1
-    model = wCDM_ # which fitting model to compare iterations?
+    mock_data = 4
+    model = GChap_ # which fitting model to compare iterations?
     save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
     compare_cosmo(mock_data, model, save_path)
     #compare_truths()
