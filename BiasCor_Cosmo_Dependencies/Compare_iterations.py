@@ -1,7 +1,5 @@
 import numpy as np
-import sys
 from Hzs import *
-sys.path.append('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains')
 from model_info import *
 from matplotlib import pyplot as plt
 from matplotlib import rcParams, rc
