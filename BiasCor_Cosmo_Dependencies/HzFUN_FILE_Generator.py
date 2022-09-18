@@ -1,11 +1,10 @@
 import numpy as np
 import sys
+import os
 from Hzs import *
-sys.path.append('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains')
+#sys.path.append('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains')
 from chainconsumer import ChainConsumer
 from matplotlib import pyplot as plt
-from model_info import *
-from chainconsumer import ChainConsumer
 from pathlib import Path
 
 
@@ -51,14 +50,21 @@ def create_HzFUN(model, chain_path, save_path):
     params = get_param(chain,label, weights)
     H0 = 70
     Hz = H0*model(z, *params)
-    np.savetxt(save_path, np.c_[z, Hz], fmt="%10.4f")
+    #np.savetxt(save_path, np.c_[z, Hz], fmt="%10.4f")
     print('HzFUN_FILE created and saved to: %s' %save_path)
     
 
-if __name__ == "__main__":
-    model = GChap # model used in the fit
-    chain_path = Path('chains/SN_TESTS/GCG_21.1.txt')
-    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/GCG_21.txt')
+if __name__ == "__main__": 
+
+    here = os.path.dirname(__file__)
+    print(here)
+    exit()
+    sys.path.append(os.path.join(here, '..'))
+    from model_info import * 
+
+    model = GAL # model used in the fit
+    chain_path = Path('chains/SN_TESTS/GAL_51.1.txt')
+    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/GAL_51.txt')
 
     create_HzFUN(model, chain_path, save_path)
 
