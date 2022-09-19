@@ -37,7 +37,7 @@ def compare_cosmo(mock_data, model, save_path):
     # File paths for the first and second iteration chains.
     if model.__name__ == 'GChap_':
         first_path = Path('chains/SN_TESTS/GCG_%s1.1.txt' % (mock_data))
-        #second_path = Path('chains/SN_TESTS/GCG_%s2.1.txt' % (mock_data))
+        second_path = Path('chains/SN_TESTS/GCG_%s2.1.txt' % (mock_data))
     else:
         first_path = Path('chains/SN_TESTS/%s%s1.1.txt' % (model.__name__, mock_data))
         second_path = Path('chains/SN_TESTS/%s%s2.1.txt' % (model.__name__, mock_data))
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     # GAL = 5 
 
     mock_data = 2
-    model = wCDM_ # which fitting model to compare iterations?
+    model = FLCDM_ # which fitting model to compare iterations?
     save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
     compare_cosmo(mock_data, model, save_path)
     #compare_truths()
