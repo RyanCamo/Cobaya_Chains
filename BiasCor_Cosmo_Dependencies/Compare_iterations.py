@@ -109,8 +109,8 @@ def compare_truths():
     for i in range(5):
         cosmo = get_true_cosmo(z, i+1)
         plt.plot(z, cosmo-truth, label = 'Mock: %s' % str(i+1))
-    cosmo3 = FLCDM_(z, 0.3275684329632337)
-    ax.plot(z, cosmo3-truth, label='mine')
+    #cosmo3 = FLCDM_(z, 0.3275684329632337)
+    #ax.plot(z, cosmo3-truth, label='mine')
     ax.set_xlabel('Redshift, z', fontsize=20)
     ax.set_ylabel(r'$\Delta \mu$', fontsize=20)
     ax.legend()
@@ -131,8 +131,8 @@ if __name__ == "__main__":
     # IDE1 = 4
     # GAL = 5 
 
-    mock_data = 4
-    model = GChap_ # which fitting model to compare iterations?
+    mock_data = 2
+    model = IDEA_ # which fitting model to compare iterations?
     save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
     compare_cosmo(mock_data, model, save_path)
     #compare_truths()
