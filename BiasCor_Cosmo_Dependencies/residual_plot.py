@@ -2,9 +2,7 @@
 # simulations used for the Bias Corrections.
 
 import numpy as np
-import sys
 from Hzs import *
-sys.path.append('Cobaya_Chains')
 from matplotlib import pyplot as plt
 from matplotlib import rcParams, rc
 

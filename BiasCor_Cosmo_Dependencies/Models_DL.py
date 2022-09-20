@@ -2,8 +2,6 @@ from re import M
 import numpy as np
 from scipy.integrate import quad
 import pandas as pd
-import sys
-sys.path.append('Cobaya_Chains')
 
 # Calculates the Distance modulus for different models with H0 as below
 
@@ -299,6 +297,6 @@ def GAL_(zs, om, og):
 
 
 if __name__ == "__main__":
-    logp = LCDM(0.3,0.7)
+    logp = LCDM_(0.3,0.7)
     #logp = wCDM(0.01, 0.2,1)
     print(logp)

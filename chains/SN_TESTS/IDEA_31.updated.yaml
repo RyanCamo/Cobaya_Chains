@@ -67,6 +67,6 @@ sampler:
     oversample: null
     drag_limits: null
     fallback_covmat_scale: 4
-    version: 3.1.1
+    version: 3.2.1
 output: IDEA_31
-version: 3.1.1
+version: 3.2.1

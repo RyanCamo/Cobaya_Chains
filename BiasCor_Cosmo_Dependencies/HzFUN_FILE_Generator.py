@@ -1,16 +1,14 @@
 import numpy as np
-import sys
-import os
 from Hzs import *
-#sys.path.append('/Users/RyanCamo/Desktop/Cobaya/Cobaya_Chains')
 from chainconsumer import ChainConsumer
 from matplotlib import pyplot as plt
 from pathlib import Path
+from model_info import * 
 
 
 # This code takes an input chain and the model used when fitting for that chain.
 # extracts the best fit parameters and outputs a 'HzFUN_FILE' which is a sim-input 
-# key used to generate mock data.
+# key used to generate mock data and BiasCor Sims.
 # The output format is 2 columns: z, H(z) with the first row being z=0.
 
 
@@ -50,21 +48,14 @@ def create_HzFUN(model, chain_path, save_path):
     params = get_param(chain,label, weights)
     H0 = 70
     Hz = H0*model(z, *params)
-    #np.savetxt(save_path, np.c_[z, Hz], fmt="%10.4f")
+    np.savetxt(save_path, np.c_[z, Hz], fmt="%10.4f")
     print('HzFUN_FILE created and saved to: %s' %save_path)
-    
+
 
 if __name__ == "__main__": 
-
-    here = os.path.dirname(__file__)
-    print(here)
-    exit()
-    sys.path.append(os.path.join(here, '..'))
-    from model_info import * 
-
     model = GAL # model used in the fit
-    chain_path = Path('chains/SN_TESTS/GAL_51.1.txt')
-    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/GAL_51.txt')
+    chain_path = Path('chains/SN_TESTS/GAL_31.1.txt') # filepath of chain
+    save_path = Path('BiasCor_Cosmo_Dependencies/CONV_TEST_HzFUN_FILES/GAL_31.txt')
 
     create_HzFUN(model, chain_path, save_path)
 
