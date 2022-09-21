@@ -7,12 +7,12 @@ params: # DONE
   A:
     prior: {min: 0.1, max: 2}
     ref: 0.5
-    proposal: 0.001
+    proposal: 0.01
     latex: A
   a:
     prior: {min: -1, max: 2}
     ref: 0.3
-    proposal: 0.001
+    proposal: 0.01
     latex: \alpha
 
 

@@ -12,12 +12,12 @@ params: # DONE
   q:
     prior: {min: 0, max: 3}
     ref: 0.9
-    proposal: 0.5
+    proposal: 0.01
     latex: q
   n:
     prior: {min: -3, max: 2}
     ref: 0.01
-    proposal: 0.5
+    proposal: 0.01
     latex: n
 
 
