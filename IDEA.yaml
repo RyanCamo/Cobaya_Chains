@@ -13,7 +13,7 @@ params: # DONE
     prior: {min: -2, max: 2}
     ref: -0.9
     proposal: 0.01
-    latex: \omega
+    latex: w
   e:
     prior: {min: -0.5, max: 0.5}
     ref: 0.05
