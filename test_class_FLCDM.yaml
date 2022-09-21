@@ -1,5 +1,6 @@
 likelihood:
-  non_standards.FLCDM: 
+  Test1: 
+    class: non_standards.FLCDM
     python_path: likelihoods
     cov_path: data/data_TESTS/cov_FLCDM_13.txt
     HD_path: data/data_TESTS/HD_FLCDM_13.txt
@@ -7,7 +8,7 @@ likelihood:
 sampler: 
   mcmc:
 
-output: chains/2
+output: chains/Testing
 
 # 1. Specify the model by changing - non_standards.____: 
 # 2. Specify the file path to the HD and covariance matrix to test - cov_path: & HD_path:
