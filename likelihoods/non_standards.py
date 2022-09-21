@@ -54,9 +54,15 @@ class FLCDMclass(Likelihood):
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
         om = params_values['om']
-        dl_interp = interp_dl(self.lum_dist_interp, om)
-        dl_data = dl_interp(self.z_data)
-        dist_mod = 5 * np.log10(dl_data)
+        # interpolates by default. Can be changed using the interp flag in the input .yaml
+        if self.interp == True:       
+            dl_interp = interp_dl(self.lum_dist_interp, om)
+            dl_data = dl_interp(self.z_data)
+            dist_mod = 5 * np.log10(dl_data)
+        elif self.interp == False:
+            dist_mod = self.distmod(om)      
+
+          
         return cov_log_likelihood(dist_mod, self.mu_data, self.cov)
 
     def Hz_inverse(self, z, om, ol):
