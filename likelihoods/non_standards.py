@@ -30,7 +30,7 @@ def interp_dl(model, *params):
     return dl_interp
 
 
-class FLCDMclass(Likelihood):
+class FLCDM(Likelihood):
 
     def initialize(self):
         """
@@ -106,7 +106,7 @@ class FLCDMclass(Likelihood):
         return [r"$\Omega_{\text{m}}$"]
 
 
-class LCDMclass(Likelihood):
+class LCDM(Likelihood):
 
     def initialize(self):
         """
