@@ -131,9 +131,34 @@ if __name__ == "__main__":
     # IDE1 = 4
     # GAL = 5 
 
-    mock_data = 4
-    model = GChap_ # which fitting model to compare iterations?
-    save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
-    compare_cosmo(mock_data, model, save_path)
+    ##########################
+
+
+    # Fitting model details
+    label, params, legend = get_info(FLCDM.__name__) 
+
+    # Get the best fit parameters for the first and second iterations
+
+    ### used to extract weights and correct columns of the chain
+    cols = []
+    for i, l in enumerate(label):
+        cols.append(i+2)     
+
+    first_chain = np.loadtxt('chains/2.1.txt', usecols=(cols), comments='#')
+    first_weights = np.loadtxt('chains/2.1.txt', usecols=(0), comments='#')
+    first_params = get_param(first_chain,label, first_weights)
+    print(first_params)
+    first_chain = np.loadtxt('chains/SN_TESTS/FLCDM_13.1.txt', usecols=(cols), comments='#')
+    first_weights = np.loadtxt('chains/SN_TESTS/FLCDM_13.1.txt', usecols=(0), comments='#')
+    first_params = get_param(first_chain,label, first_weights)
+    print(first_params)
+    exit()
+
+    ##########################
+
+    #mock_data = 4
+    #model = IDEA_ # which fitting model to compare iterations?
+    #save_path = Path('BiasCor_Cosmo_Dependencies/Comparing_Iterations/Mock:%s_Fit:%s.png' % (mock_data, model.__name__)) # where to save the figure
+    #compare_cosmo(mock_data, model, save_path)
     #compare_truths()
 
