@@ -1,0 +1,23 @@
+# These are default settings for the FCa likelihood.
+
+HD_path: data/data_TESTS/HD_11.txt
+cov_path: data/data_TESTS/cov_11.txt
+interp: True
+
+params:
+  om:
+    prior: {min: 0, max: 0.7}
+    ref: 0.3
+    proposal: 0.01
+    latex: \Omega_{m}
+  q:
+    prior: {min: 0, max: 3}
+    ref: 0.9
+    proposal: 0.01
+    latex: q
+  n:
+    prior: {min: -3, max: 2}
+    ref: 0.01
+    proposal: 0.01
+    latex: n
+

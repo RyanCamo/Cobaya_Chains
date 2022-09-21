@@ -1,0 +1,18 @@
+# These are default settings for the DGP likelihood.
+
+HD_path: data/data_TESTS/HD_11.txt
+cov_path: data/data_TESTS/cov_11.txt
+interp: True
+
+params: 
+  rc:
+    prior: {min: 0, max: 1}
+    ref: 0.1
+    proposal: 0.01
+    latex: \Omega_{rc}
+  ok:
+    prior: {min: -0.5, max: 0.5}
+    ref: 0.2
+    proposal: 0.01
+    latex: \Omega_{K}
+

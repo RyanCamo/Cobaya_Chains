@@ -1,0 +1,23 @@
+# These are default settings for the IDEA likelihood.
+
+HD_path: data/data_TESTS/HD_11.txt
+cov_path: data/data_TESTS/cov_11.txt
+interp: True
+
+params: 
+  cdm:
+    prior: {min: 0.1, max: 0.8}
+    ref: 0.3
+    proposal: 0.01
+    latex: \Omega_{cdm}
+  w:
+    prior: {min: -2, max: 2}
+    ref: -0.9
+    proposal: 0.01
+    latex: w
+  e:
+    prior: {min: -0.5, max: 0.5}
+    ref: 0.05
+    proposal: 0.001
+    latex: \varepsilon
+
