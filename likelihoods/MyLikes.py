@@ -2,7 +2,6 @@ from tkinter import W
 from cobaya.likelihood import Likelihood
 import numpy as np
 from scipy.integrate import quad
-import os
 
 class FLCDM(Likelihood):
 
@@ -52,9 +51,7 @@ class FLCDM(Likelihood):
         chi2 = chit2 - (B**2 / C) + np.log(C / (2* np.pi))
         return -chi2 / 2
 
-
     def Hz_inverse(self, z, om, ol):
-        #ol = 1-om
         Hz = np.sqrt((1 + z) ** 2 * (om * z + 1) - ol * z * (z + 2))
         return 1.0 / Hz
 

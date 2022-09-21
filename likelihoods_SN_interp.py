@@ -15,8 +15,8 @@ from functools import lru_cache
 ## 3. Models
 
 # Mock Data
-cov_path = Path("data/data_TESTS/cov_GCG_42.txt")
-HD_path = Path("data/data_TESTS/HD_GCG_42.txt")
+cov_path = Path("data/data_TESTS/cov_IDEA_42.txt")
+HD_path = Path("data/data_TESTS/HD_IDEA_42.txt")
 arr_size = int(np.genfromtxt(cov_path, comments='#',dtype=None)[0])
 DES5YR_UNBIN = np.genfromtxt(HD_path, names=True, comments='#')
 cov_arr = np.genfromtxt(cov_path, comments='#',dtype=None)[1:]
@@ -192,7 +192,7 @@ def dl_FLCDM(om, H0=False):
     x = np.array([quad(FLCDM_Hz_inverse, 0, z, args=(om, ol))[0] for z in zs])
     D = x
     lum_dist = D * (1 + zs) 
-    dist_mod = 5 * np.log10(lum_dist/10)
+    dist_mod = 5 * np.log10(lum_dist)
     if H0 == True:
         #h0_ = 1 / (FLCDM_Hz_inverse(0, om, ol))
         h0_ = getH0(dist_mod, mu)

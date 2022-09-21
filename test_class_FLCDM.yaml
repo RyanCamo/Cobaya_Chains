@@ -1,23 +1,10 @@
 likelihood:
-  #FLCDM:
-  MyLikes.FLCDM:
+  non_standards.FLCDMclass:
     python_path: likelihoods
-    #external: import_module('likelihoods_SN').FLCDM # Change the model here
-    #requires: {data: 0}
-    
+    cov_path:
+    HD_path: 
 
-#params: # DONE 
-#  om:
-#    prior: {min: 0.1, max: 2}
-#    ref: 0.5
-#    proposal: 0.01
-#    latex: \Omega_m
-  #model: 2
-
-
-sampler: # DONE - CAN BE REFINED
+sampler: 
   mcmc:
 
-#theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
-
-output: chains/zzzz_test_delete # DONE
+output: chains/ 
