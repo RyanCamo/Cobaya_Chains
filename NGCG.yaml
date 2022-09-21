@@ -23,7 +23,7 @@ params: # DONE
     prior: {min: -2, max: 2}
     ref: -0.9
     proposal: 0.01
-    latex: \omega
+    latex: w
 
 
 #prior: # Addition prios to be imposed

@@ -18,7 +18,7 @@ params: # DONE
     prior: {min: -2, max: 1}
     ref: -0.9
     proposal: 0.01
-    latex: \omega
+    latex: w
 
 #prior: # Addition prios to be imposed
 #  x_eq_y_band: 'lambda x,y: stats.norm.logpdf(
