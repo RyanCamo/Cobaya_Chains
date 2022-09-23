@@ -1,4 +1,4 @@
-# These are default settings for the GChap likelihood.
+# These are default settings for the GCG likelihood.
 
 HD_path: data/data_TESTS/HD_11.txt
 cov_path: data/data_TESTS/cov_11.txt
@@ -19,5 +19,5 @@ params:
     prior: {min: -0.9, max: 0.9}
     ref: 0.5
     proposal: 0.01
-    latex: \Omega_{K}
+    latex: \Omega_{k}
 
