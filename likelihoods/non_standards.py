@@ -517,9 +517,7 @@ class Fwz(Likelihood):
     def label(self):
         return [r"$\Omega_{\text{m}}$", r"$w_0$", r"$w_z$"]
 
-##############################################################################################################################################
-
-class NAME(Likelihood): ################### CHANGE NAME
+class IDEA(Likelihood): 
 
     def initialize(self):
         """
@@ -559,59 +557,44 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
-        w = params_values['w'] 
+        cdm = params_values['cdm']  
+        w = params_values['w']
+        e = params_values['e'] 
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, cdm, w, e) 
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(cdm, w, e) 
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, cdm, ol, w, e): 
+        Hz = np.sqrt(cdm*(1+z)**3 + ol*( ((e)/(w+e))*(1+z)**3 + ((w)/(w+e))*(1+z)**(3*(1+w+e))  ))
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, cdm, w, e):
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        ol = 1.0 - cdm 
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(cdm, ol, w, e))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, cdm, w, e): 
+        ol = 1.0 - cdm
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(cdm, ol, w, e))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$\Omega_{CDM}$", r"$\omega$", r"$\varepsilon$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+class IDEB(Likelihood):
 
     def initialize(self):
         """
@@ -651,59 +634,45 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
-        w = params_values['w'] 
+        cdm = params_values['cdm']
+        ob = params_values['ob']
+        w = params_values['w']
+        e = params_values['e'] 
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, cdm, ob, w, e)
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(cdm, ob, w, e)
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, cdm, ol, w, e, ob): 
+        Hz = np.sqrt(ob*(1+z)**(3)+ ol*(1+z)**(3*(1+w)) + cdm*(((e)/(w+e))*(1+z)**(3*(1+w))  + ((w)/(w+e))*(1+z)**(3*(1-e))))
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, cdm, ob, w, e): 
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        ol = 1 - ob - cdm
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, cdm, ob, w, e): 
+        ol = 1 - ob - cdm
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$\Omega_{CDM}$", r"$\Omega_{b}$", r"$\omega$", r"$\varepsilon$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+class IDEC(Likelihood): 
 
     def initialize(self):
         """
@@ -743,59 +712,46 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
+        cdm = params_values['cdm']
+        ob = params_values['ob']
         w = params_values['w'] 
+        e = params_values['e'] 
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, cdm, ob, w, e) 
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(cdm, ob, w, e) 
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, cdm, ol, w, e, ob): 
+        constC = ((cdm)/(ol+cdm) + ((ol)/(ol+cdm))*(1+z)**(3*(w+e)))**(-(e)/(w+e))
+        Hz = np.sqrt( ob*(1+z)**3 + cdm*constC*(1+z)**3 +  ol*constC*(1+z)**(3*(1+w+e))) 
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, cdm, ob, w, e): 
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        ol = 1.0 - cdm - ob 
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, cdm, ob, w, e): 
+        ol = 1.0 - cdm - ob
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(cdm, ol, w, e, ob))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$\Omega_{CDM}$", r"$\Omega_{b}$", r"$\omega$", r"$\varepsilon$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+class MPC(Likelihood):
 
     def initialize(self):
         """
@@ -835,59 +791,42 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
-        w = params_values['w'] 
+        om = params_values['om']
+        q = params_values['q']
+        n = params_values['n'] 
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, om, q, n)
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(om, q, n)
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, om, q, n):
+        Hz = np.sqrt( (om*((z+1)**3))*(1+(((om**(-q))-1)*((z+1)**(3*q*(n-1) ))))**(1/q)  )
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, om, q, n):
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, q, n))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, om, q, n): 
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, q, n))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$\Omega_m$",r"$q$",r"$n$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+class SCG(Likelihood):
 
     def initialize(self):
         """
@@ -927,31 +866,28 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
-        w = params_values['w'] 
+        A = params_values['A'] 
+        ok = params_values['ok']
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, A, ok)
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(A, ok)
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, A, ok):
+        Hz = np.sqrt(ok*((1+z)**2)+(1-ok)*np.sqrt(A + (1-A)*((1+z)**6)))
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, A, ok):
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(A, ok))[0] for z in zx])
         if ok < 0.0:
             R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
+            D = R0 * np.sin(x / R0)
         elif ok > 0.0:
             R0 = 1 / np.sqrt(ok)
             D = R0 * np.sinh(x / R0)
@@ -961,13 +897,12 @@ class NAME(Likelihood): ################### CHANGE NAME
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, A, ok):
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(A, ok))[0] for z in zx])
         if ok < 0.0:
             R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
+            D = R0 * np.sin(x / R0)
         elif ok > 0.0:
             R0 = 1 / np.sqrt(ok)
             D = R0 * np.sinh(x / R0)
@@ -977,9 +912,9 @@ class NAME(Likelihood): ################### CHANGE NAME
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$A$", r"$\Omega_{\text{k}}$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+class FGCG(Likelihood):
 
     def initialize(self):
         """
@@ -1019,59 +954,41 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
-        w = params_values['w'] 
+        A = params_values['A']
+        a = params_values['a']
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, A, a)
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(A, a)
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, A, a): 
+        Hz = np.sqrt((A + (1-A)*((1+z)**(3*(1+a))))**(1.0/(1+a)))
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, A, a):
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(A, a))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, A, a): 
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
-        if ok < 0.0:
-            R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
-        elif ok > 0.0:
-            R0 = 1 / np.sqrt(ok)
-            D = R0 * np.sinh(x / R0)
-        else:
-            D = x
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(A, a))[0] for z in zx])
+        D = x
         lum_dist = D * (1 + zx) 
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$A$", r"$\alpha$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+class GCG(Likelihood): 
 
     def initialize(self):
         """
@@ -1111,31 +1028,29 @@ class NAME(Likelihood): ################### CHANGE NAME
 
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
-        om = params_values['om']  ############ CHANGE PARAMS
-        ol = params_values['ol']
-        w = params_values['w'] 
+        A = params_values['A'] 
+        a = params_values['a']
+        ok = params_values['ok'] 
         # interpolates by default. Can be changed using the interp flag in the input .yaml
         if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om, ol, w) ####### CHANGE PARAMS
+            dl_interp = interp_dl(self.lum_dist_interp, A, a, ok) 
             dl_data = dl_interp(self.z_data)
             dist_mod = 5 * np.log10(dl_data)
         elif self.interp == False:
-            dist_mod = self.distmod(om, ol, w) ####### CHANGE PARAMS
+            dist_mod = self.distmod(A, a, ok) 
 
         return self.like_func(dist_mod, self.mu_data, self.cov)
 
-    def Hz_inverse(self, z, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        Hz = np.sqrt((ok*(1+z)**(2) + om*(1+z)**(3) + ol*(1+z)**(3*(1+w)))) ####### CHANGE FUNC
+    def Hz_inverse(self, z, A, a, ok): 
+        Hz = np.sqrt((ok*((1+z)**2)) + (1-ok)*(A + (1-A)*((1+z)**(3*(1+a))))**(1/(1+a)))
         return 1.0 / Hz
 
-    def distmod(self, om, ol, w): ####### CHANGE PARAMS
+    def distmod(self, A, a, ok): 
         zx = self.z_data
-        ok = 1.0 - om - ol ####### CHANGE PARAMS
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(A, a, ok))[0] for z in zx])
         if ok < 0.0:
             R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)            ####### CHECK CURVATURE?
+            D = R0 * np.sin(x / R0)
         elif ok > 0.0:
             R0 = 1 / np.sqrt(ok)
             D = R0 * np.sinh(x / R0)
@@ -1145,13 +1060,12 @@ class NAME(Likelihood): ################### CHANGE NAME
         dist_mod = 5 * np.log10(lum_dist)
         return dist_mod 
 
-    def lum_dist_interp(self, om, ol, w): ####### CHANGE PARAMS
-        ok = 1.0 - om - ol
+    def lum_dist_interp(self, A, a, ok): 
         zx = self.z_interp
-        x = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol, w))[0] for z in zx]) ####### CHANGE PARAMS
+        x = np.array([quad(self.Hz_inverse, 0, z, args=(A, a, ok))[0] for z in zx])
         if ok < 0.0:
             R0 = 1 / np.sqrt(-ok)
-            D = R0 * np.sin(x / R0)  ####### CHECK CURVATURE?
+            D = R0 * np.sin(x / R0)
         elif ok > 0.0:
             R0 = 1 / np.sqrt(ok)
             D = R0 * np.sinh(x / R0)
@@ -1161,9 +1075,11 @@ class NAME(Likelihood): ################### CHANGE NAME
         return lum_dist
 
     def label(self):
-        return [r"$\Omega_{\text{m}}$", r"$\Omega_{\Lambda}$", r"$w$"] ####### CHANGE PARAMS
+        return [r"$A$",r"$\alpha$", r"$\Omega_k$"]
 
-class NAME(Likelihood): ################### CHANGE NAME
+###################################################################################
+
+class NGCG(Likelihood):
 
     def initialize(self):
         """
