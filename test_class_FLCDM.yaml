@@ -5,6 +5,8 @@ likelihood:
     cov_path: data/data_TESTS/cov_11.txt
     HD_path: data/data_TESTS/HD_11.txt
     CMB_BAO: True
+    interp: False
+    
 
 sampler: 
   mcmc:

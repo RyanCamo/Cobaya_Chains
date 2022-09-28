@@ -4,7 +4,7 @@ likelihood:
     HD_path: data/data_TESTS/HD_11.txt
     cov_path: data/data_TESTS/cov_11.txt
     CMB_BAO: true
-    interp: true
+    interp: false
     type: []
     speed: -1
     stop_at_error: false
@@ -17,7 +17,7 @@ likelihood:
 params:
   om:
     prior:
-      min: 0.1
+      min: 0.01
       max: 2
     ref: 0.5
     proposal: 0.01

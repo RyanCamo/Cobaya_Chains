@@ -1,7 +1,8 @@
 # These are default settings for the MPC likelihood.
 
-HD_path: data/data_TESTS/HD_11.txt
-cov_path: data/data_TESTS/cov_11.txt
+HD_path: False
+cov_path: False
+CMB_BAO: False
 interp: True
 
 params:

@@ -4,9 +4,6 @@ import pandas as pd
 from pathlib import Path
 
 # This is a file that contains all of the raw CMB/BAO data. 
-# Currently has no output but has the data in the same form used at the top of
-# the current likelihood files (that dont use classes)
-#TODO: Put into an optimal output that can be used in the likelihood classes.
 
 def get_CMB_BAO_data():
     ######### correlated data
