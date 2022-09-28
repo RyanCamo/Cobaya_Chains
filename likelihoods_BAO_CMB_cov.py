@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.integrate import quad
 import pandas as pd
-from astropy.cosmology import w0wzCDM, FlatLambdaCDM
+#from astropy.cosmology import w0wzCDM, FlatLambdaCDM
 
 # Calculates the likelihood for different models against BAO/CMB data
 # Organised as:
@@ -1287,8 +1287,7 @@ def IDEC_2(cdm,w,e):
 
 
 if __name__ == "__main__":
-    logp_astro = Fwz_astro(0.3, -1.59, 0.334)
-    logp_norm = Fwz(0.3, -1.59, 0.334)
-    #logp_mod = FCa_mod()
+
+    logp_norm = FLCDM(0.3)
+
     print(logp_norm)
-    print(logp_astro)

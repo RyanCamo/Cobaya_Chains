@@ -2,14 +2,17 @@ likelihood:
   Test1: 
     class: non_standards.FLCDM
     python_path: likelihoods
-    cov_path: data/data_TESTS/cov_FLCDM_13.txt
-    HD_path: data/data_TESTS/HD_FLCDM_13.txt
+    cov_path: data/data_TESTS/cov_11.txt
+    HD_path: data/data_TESTS/HD_11.txt
+    CMB_BAO: True
 
 sampler: 
   mcmc:
+    max_tries: 10000
 
-output: chains/Testing
+output: chains/Test_Class
 
 # 1. Specify the model by changing - non_standards.____: 
-# 2. Specify the file path to the HD and covariance matrix to test - cov_path: & HD_path:
-# 3. Specify the output directory
+# 2. IF testing against SN data, specify the file path to the HD and covariance matrix to test - cov_path: & HD_path:
+# 3. IF testing against CMB_BAO data set CMB_BAO: True
+# 4. Specify the output directory

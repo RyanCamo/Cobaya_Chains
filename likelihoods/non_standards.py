@@ -3,7 +3,7 @@ import numpy as np
 from scipy.integrate import quad
 from scipy.interpolate import interp1d
 from functools import lru_cache
-
+from data.CMB_BAO.imports import get_CMB_BAO_data
 
 def cov_log_likelihood(mu_model, mu, cov):
     delta = np.array([mu_model - mu])
@@ -23,6 +23,23 @@ def log_likelihood(mu_model, mu, cov):
     chi2 = chit2 - (B**2 / C) + np.log(C/(2* np.pi))
     return -0.5*chi2
 
+# CMB/BAO
+# Using for the uncorrelated data
+def CMB_BAO_log_likelihood(f, f_err, model): 
+    delta = model - f
+    chit2 = np.sum(delta**2 / f_err**2)
+    chi2 = chit2 
+    return -0.5*chi2
+
+# For the correlated data
+def CMB_BAO_cov_log_likelihood(mu_model, mu, cov):
+    delta = mu_model - mu
+    inv_cov = np.linalg.inv(cov)
+    deltaT = np.transpose(delta)
+    chit2 = np.sum(delta @ inv_cov @ deltaT)
+    chi2 = chit2
+    return -0.5*chi2 
+
 @lru_cache(maxsize=4096)
 def interp_dl(model, *params):
     z_interp = np.geomspace(0.0001, 2.5, 1000)
@@ -39,28 +56,33 @@ class FLCDM(Likelihood):
          e.g. here we load some data file, with default cl_file set in .yaml below,
          or overridden when running Cobaya.
         """
-        # Load in data
-        self.cov_size = int(np.genfromtxt(self.cov_path, comments='#',dtype=None)[0])
-        HD = np.genfromtxt(self.HD_path, names=True, comments='#')
-        self.cov_arr = np.genfromtxt(self.cov_path, comments='#',dtype=None)[1:]
-        self.z_data = HD['zCMB']
-        self.mu_data = HD['MU']
-        self.mu_error = HD['MUERR']
-        cov_reshape = self.cov_arr.reshape(self.cov_size,self.cov_size) 
-        mu_diag = np.diag(self.mu_error)**2
-        self.cov = mu_diag+cov_reshape
+        # Load in SN data
+        if (self.HD_path != False) & (self.cov_path != False):
+            self.cov_size = int(np.genfromtxt(self.cov_path, comments='#',dtype=None)[0])
+            HD = np.genfromtxt(self.HD_path, names=True, comments='#')
+            self.cov_arr = np.genfromtxt(self.cov_path, comments='#',dtype=None)[1:]
+            self.z_data = HD['zCMB']
+            self.mu_data = HD['MU']
+            self.mu_error = HD['MUERR']
+            cov_reshape = self.cov_arr.reshape(self.cov_size,self.cov_size) 
+            mu_diag = np.diag(self.mu_error)**2
+            self.cov = mu_diag+cov_reshape
 
-        # list of redshifts to interpolate between.
-        self.z_interp = np.geomspace(0.0001, 2.5, 1000) 
+            # list of redshifts to interpolate between.
+            self.z_interp = np.geomspace(0.0001, 2.5, 1000) 
 
-        # Check if the covariance matrix is a zero matrix or not. (ie. Have we used fitopts?)
-        # This is done to speed up the job and use a different likelihood function if not.
-        if np.sum(self.cov_arr) == 0:
-            self.cov = self.mu_error
-            self.like_func = log_likelihood
-            print('Covariance matrix is a zero matrix, check Fitops')
-        else:
-            self.like_func = cov_log_likelihood  
+            # Check if the covariance matrix is a zero matrix or not. (ie. Have we used fitopts?)
+            # This is done to speed up the job and use a different likelihood function if not.
+            if np.sum(self.cov_arr) == 0:
+                self.cov = self.mu_error
+                self.like_func = log_likelihood
+                print('Covariance matrix is a zero matrix, check Fitops')
+            else:
+                self.like_func = cov_log_likelihood  
+
+        if self.CMB_BAO != False:
+            self.BOSS_cov, self.BOSS_zz, self.BOSS_data, self.eBOSS_LRG_cov, self.eBOSS_LRG_zz, self.eBOSS_LRG_data, self.eBOSS_QSO_cov, self.eBOSS_QSO_zz, self.eBOSS_QSO_data, self.DMonDH_zz, self.DMonDH_data, self.DMonDH_err, self.DMonDM_zz, self.DMonDM_data, self.DMonDM_err, self.DMonDV_zz, self.DMonDV_data, self.DMonDV_err = get_CMB_BAO_data()
+            
 
 
     def logp(self, **params_values):
@@ -71,15 +93,46 @@ class FLCDM(Likelihood):
         e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
         """
         om = params_values['om']
-        # interpolates by default. Can be changed using the interp flag in the input .yaml
-        if self.interp == True:       
-            dl_interp = interp_dl(self.lum_dist_interp, om)
-            dl_data = dl_interp(self.z_data)
-            dist_mod = 5 * np.log10(dl_data)
-        elif self.interp == False:
-            dist_mod = self.distmod(om)      
+        SN_like = 0
+        CMB_BAO_like = 0
+    
+        if (self.HD_path != False) & (self.cov_path != False):
+            # interpolates by default. Can be changed using the interp flag in the input .yaml
+            if self.interp == True:       
+                dl_interp = interp_dl(self.lum_dist_interp, om)
+                dl_data = dl_interp(self.z_data)
+                dist_mod = 5 * np.log10(dl_data)
+            elif self.interp == False:
+                dist_mod = self.distmod(om)      
+            SN_like = self.like_func(dist_mod, self.mu_data, self.cov)
 
-        return self.like_func(dist_mod, self.mu_data, self.cov)
+        if self.CMB_BAO != False:
+            # uncorrelated data
+            DM_on_DV_model = self.DM_on_DV(self.DMonDV_zz, om)
+            DM_on_DM_model = self.DM_on_DM(self.DMonDM_zz, om)
+            DM_on_DH_model = self.DM_on_DH(self.DMonDH_zz, om)
+            like_DM_on_DV = CMB_BAO_log_likelihood(self.DMonDV_data, self.DMonDV_err, DM_on_DV_model)
+            like_DM_on_DM = CMB_BAO_log_likelihood(self.DMonDM_data, self.DMonDM_err, DM_on_DM_model)
+            like_DM_on_DH = CMB_BAO_log_likelihood(self.DMonDH_data, self.DMonDH_err, DM_on_DH_model)
+
+            # correlated data
+            BOSS_DM_on_DM = self.DM_on_DM(self.BOSS_zz, om)
+            BOSS_DM_on_DH = self.DM_on_DH(self.BOSS_zz, om)
+            BOSS_model = np.array([elem for singleList in list(zip(BOSS_DM_on_DM, BOSS_DM_on_DH)) for elem in singleList])
+            like_BOSS = CMB_BAO_cov_log_likelihood(BOSS_model, self.BOSS_data, self.BOSS_cov) 
+
+            eBOSS_LRG_DM_on_DM = self.DM_on_DM(self.eBOSS_LRG_zz, om)
+            eBOSS_LRG_DM_on_DH = self.DM_on_DH(self.eBOSS_LRG_zz, om)
+            eBOSS_LRG_model = np.array([elem for singleList in list(zip(eBOSS_LRG_DM_on_DM, eBOSS_LRG_DM_on_DH)) for elem in singleList])
+            like_LRG = CMB_BAO_cov_log_likelihood(eBOSS_LRG_model, self.eBOSS_LRG_data, self.eBOSS_LRG_cov)
+
+            eBOSS_QSO_DM_on_DM = self.DM_on_DM(self.eBOSS_QSO_zz, om)
+            eBOSS_QSO_DM_on_DH = self.DM_on_DH(self.eBOSS_QSO_zz, om)
+            eBOSS_QSO_model = np.array([elem for singleList in list(zip(eBOSS_QSO_DM_on_DM, eBOSS_QSO_DM_on_DH)) for elem in singleList])
+            like_QSO = CMB_BAO_cov_log_likelihood(eBOSS_QSO_model, self.eBOSS_QSO_data, self.eBOSS_QSO_cov)
+            CMB_BAO_like = like_DM_on_DH + like_DM_on_DM + like_DM_on_DV  #+ like_BOSS + like_LRG + like_QSO
+
+        return SN_like + CMB_BAO_like
 
     def Hz_inverse(self, z, om, ol):
         Hz = np.sqrt((1 + z) ** 2 * (om * z + 1) - ol * z * (z + 2))
@@ -101,6 +154,34 @@ class FLCDM(Likelihood):
         D = x
         lum_dist = D * (1 + zx) 
         return lum_dist
+
+    def DM_on_DV(self, z_, om):
+        ol = 1 - om
+        last_scat = np.array([quad(self.Hz_inverse, 0, 1090, args=(om, ol))[0]]) # Last Scattering
+        ang_star = last_scat / (1+1090)
+        DV_rd_model = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol))[0] for z in z_]) # dv/rd data
+        ang_dist = DV_rd_model / (1 + z_)
+        Hz = 1 / self.Hz_inverse(z_, om, ol)
+        DV = ((1 + z_)**2 * ang_dist**2 * (z_)/Hz)**(1/3)
+        model = (ang_star)*(1+1090) / DV
+        return model
+
+    def DM_on_DM(self, z_, om):
+        ol = 1 - om
+        m = np.array([quad(self.Hz_inverse, 0, z, args=(om, ol))[0] for z in z_]) #dm/rd data
+        last_scat = np.array([quad(self.Hz_inverse, 0, 1090, args=(om, ol))[0]]) # Last Scattering
+        ang_star_0 = last_scat / (1+1090)
+        ang_dist_1 =  m / (1 + z_)
+        model = ((ang_star_0)*(1+1090)) / ((ang_dist_1)*(1+z_))
+        return model  
+
+    def DM_on_DH(self, z_, om):
+        ol = 1 - om
+        Hz = 1 / self.Hz_inverse(z_, om, ol)
+        last_scat = np.array([quad(self.Hz_inverse, 0, 1090, args=(om, ol))[0]]) # Last Scattering
+        ang_star = last_scat / (1+1090)
+        model = ((ang_star)*(1+1090)) / Hz
+        return model 
 
     def label(self):
         return [r"$\Omega_{\text{m}}$"]
@@ -1331,3 +1412,11 @@ class GAL(Likelihood):
 
     def label(self):
         return [r"$\Omega_{\text{m}}$", r"$\Omega_{g}$"]
+
+if __name__ == "__main__":
+    from chainconsumer import ChainConsumer
+    c = ChainConsumer()
+    SN = np.loadtxt('chains/Test_Class.1.txt', usecols=(2), comments='#')
+    SN_weights = np.loadtxt('chains/Test_Class.1.txt', usecols=(0), comments='#')
+    c.add_chain(SN, weights=SN_weights, name='SN')
+    print(c.analysis.get_summary(chains="SN"))
