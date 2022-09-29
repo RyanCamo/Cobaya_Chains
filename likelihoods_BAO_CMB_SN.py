@@ -18,7 +18,7 @@ import sys
 
 # Each data set needs to be imported differently
 
-model = 'FLCDM'
+model = 'GAL'
 
 # Current data being used:
 # Below is for second run with BiasCor  - just change model name

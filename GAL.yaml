@@ -1,6 +1,7 @@
 likelihood:
   GAL:
-    external: import_module('likelihoods_SN_interp').GAL # Change the model here
+    external: import_module('likelihoods_BAO_CMB_SN').GAL # Change the model here
+    #external: import_module('likelihoods_SN_interp').GAL # Change the model here
     
 
 params: # DONE 
@@ -26,4 +27,4 @@ sampler: # DONE - CAN BE REFINED
 
 #theory: # Specifies the theory code(s) with which to compute the observables used by the likelihoods and their options
 
-output: chains/SN_TESTS/GAL_52
+output: chains/Test_Orig
