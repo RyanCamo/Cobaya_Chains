@@ -101,12 +101,6 @@ class FLCDM(Likelihood):
 
 
     def logp(self, **params_values):
-        """
-        Taking a dictionary of (sampled) nuisance parameter values params_values
-        and return a log-likelihood.
-
-        e.g. here we calculate chi^2  using cls['tt'], H0_theory, my_foreground_amp
-        """
         om = params_values['om']
         SN_like = 0
         CMB_BAO_like = 0
@@ -2214,6 +2208,7 @@ class GAL(Likelihood):
 
 if __name__ == "__main__":
     from chainconsumer import ChainConsumer
+
     c = ChainConsumer()
     SN = np.loadtxt('chains/Test_Class.1.txt', usecols=(2,3), comments='#')
     SN_weights = np.loadtxt('chains/Test_Class.1.txt', usecols=(0), comments='#')

@@ -18,3 +18,9 @@ output: chains/Test_Class
 # 2. IF testing against SN data, specify the file path to the HD and covariance matrix to test - cov_path: & HD_path:
 # 3. IF testing against CMB_BAO data set CMB_BAO: True
 # 4. Specify the output directory
+
+# Models:
+# FLCDM   # LCDM    # FwCDM   # wCDM
+# Fwa     # Fwz     # IDEA    # IDEB
+# IDEC    # MPC     # SGC     # GCG 
+# FGCG    # NGCG    # DGP     # GAL
