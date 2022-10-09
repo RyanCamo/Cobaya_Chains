@@ -1,0 +1,18 @@
+likelihood:
+  Test: 
+    class: likelihood.SALT2mu
+    python_path: SALT2mu
+    FITRES_path: '/Users/uqrcamil/Documents/RyanCamo/PhD/project.non-standard.models/PIPPIN/PIPPIN_OUTPUTS/BBC_outputs/nonstandard.FITRES'
+    
+
+sampler: 
+  minimize: 
+      best_of: 5
+      override_bobyqa:
+       rhoend: 0.005
+      ignore_prior: True
+  #mcmc:
+  #  max_tries: 10000
+
+output: chains/SALT2mu_min_test
+
