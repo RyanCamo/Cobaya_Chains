@@ -36,16 +36,20 @@ class SALT2mu(Likelihood):
         self.fid_h0 = self.p4
 
 
-    #TODO: not calculating any bias corrections and where is the alpha/beta grid?? - Just grabbing from the output file..
+    # NOTE: I am not calculating any bias corrections, just grabbing the correct ones from the output file..
+    #       Therefore they are the correct bias corrections for {z, x0, x1, c} but im applying the wrong 
+    #       bias corrections as I sample alpha/beta....  Thought this would bias me to the correct alpha/beta though..?
+
     def logp(self, **params_values):
+        # Sampled parameters from SALT2mu.yaml (the binned M0DIFS are called in the bin loop.
         alpha = params_values['alpha']
         beta = params_values['beta']
-        sig_int = params_values['sig_int'] # NOTE: I could put my intrinsic scatter model here.
+        sig_int = params_values['sig_int'] 
 
-        # This is currently set up using 2 bins. 0 - 0.1 and 0.1 - 1.5.
+        # This is currently set up using 20 bins. Same as BBC output. (To run a quick MCMC, reduce the bin size...)
         # For 20 bins: [0.010, 0.031, 0.052, 0.076, 0.101, 0.127, 0.156, 0.187, 0.221, 0.258, 0.298, 0.343, 0.392, 0.447, 0.510, 0.581, 0.664, 0.760, 0.877, 1.019, 1.200] 
+        # For 1 bin: [0, 1.5] & For 2 bins: [0, 0.1, 1.5]
         bins = [0.010, 0.031, 0.052, 0.076, 0.101, 0.127, 0.156, 0.187, 0.221, 0.258, 0.298, 0.343, 0.392, 0.447, 0.510, 0.581, 0.664, 0.760, 0.877, 1.019, 1.200] 
-        #bins = #[0, 1.5]#[0, 0.1, 1.5] # Define bins, could be done better...
         self.dfFITRES['bins'] = np.digitize(self.dfFITRES['zHD'].values, bins) # adds an index to the data defining what bin 
         num_bins = len(bins) - 1 
         chi2_tmp = [] # temp stores the chi2 values for each bin
@@ -57,12 +61,15 @@ class SALT2mu(Likelihood):
             df = self.dfFITRES.loc[self.dfFITRES['bins'] == b]
             fid_cosmo = self.distmod(df['zHD'].values, self.fid_om, self.fid_ol, self.fid_w) + 10
             M0DIF = params_values['M0DIF%s' % b]
-            mu_data = -2.5*np.log10(df['x0'].values) + alpha * (df['x1'].values) - beta * (df['c'].values) - df['biasCor_mu'] - M0DIF
+            mu_data = -2.5*np.log10(df['x0'].values) + alpha * (df['x1'].values) - beta * (df['c'].values) - df['biasCor_mu'] - M0DIF 
 
-            # calculating the term in the denominator from Kessler 2017 Eq. 3
+            # calculating sigma_mu^2, the term in the denominator from Kessler 2017 Eq. 3, this varies depending on the paper and intrinsic scatter model.
 
-            # NOTE: No intrinsic scatter model. Using the already calculated error on zHD instead of calculating myself (hashed out)
-            sigma_lens2 = (0.055*df['zHD'].values)**2
+            sigma_lens2 = (0.055*df['zHD'].values)**2 # I included the lensing term here but wasnt included in Kessler 2017 Eq. 3. Check Pantheon+ paper
+
+            # NOTE: No intrinsic scatter model and im using the already calculated error on zHD instead of calculating myself (hashed out)
+            #       This should be ok as the uncertainty on the redshift shouldnt change as I sample alpha/beta/M0DIF
+
             sigma_z2 = df['zHDERR'].values**2 #(5/(np.log(10))) * ( (1+self.dfFITRES['zHD'].values) / (self.dfFITRES['zHD'].values*(1+(self.dfFITRES['zHD'].values/2))) ) * np.sqrt(self.dfFITRES['zHDERR'].values**2 + (self.dfFITRES['VPECERR'].values/self.c)**2)
             sigma_mu2 = sig_int**2  + sigma_lens2 + sigma_z2 + df['x0ERR'].values**2 + (alpha**2)*df['x1ERR'].values**2 + (beta**2)*df['cERR'].values**2 + 2*alpha*df['COV_x1_x0'].values - 2*beta*df['COV_c_x0'].values - 2*alpha*beta*df['COV_x1_c'].values
             chi2_tmp.append(np.sum(((mu_data - fid_cosmo)**2)/sigma_mu2 + 2*np.log(np.sqrt(sigma_mu2)))) #- guassian normalization term required if using bias corrections
@@ -88,6 +95,7 @@ class SALT2mu(Likelihood):
 
 
 if __name__ == "__main__":
+    # Testing things...
     FITRES_path = '/Users/uqrcamil/Documents/RyanCamo/PhD/project.non-standard.models/PIPPIN/PIPPIN_OUTPUTS/BBC_outputs/nonstandard.FITRES'
     dfFITRES = pd.read_csv(FITRES_path, delim_whitespace=True, comment="#")
     df = dfFITRES[["zHEL", "zHELERR", "zCMB", "zCMBERR", "zHD", "zHDERR", "VPEC", "VPECERR"]]
