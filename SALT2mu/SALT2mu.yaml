@@ -29,96 +29,96 @@ params:
     ref: -25
     proposal: 10
     latex: M0DIF2
-  M0DIF3:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF3
-  M0DIF4:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF4
-  M0DIF5:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF5
-  M0DIF6:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF6
-  M0DIF7:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF7
-  M0DIF8:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF8
-  M0DIF9:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF9
-  M0DIF10:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF10
-  M0DIF11:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 1
-    latex: M0DIF11
-  M0DIF12:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF12
-  M0DIF13:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF13
-  M0DIF14:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF14
-  M0DIF15:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF15
-  M0DIF16:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF16
-  M0DIF17:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF17
-  M0DIF18:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF18
-  M0DIF19:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF19
-  M0DIF20:
-    prior: {min: -100, max: 100}
-    ref: -25
-    proposal: 10
-    latex: M0DIF20
+  # M0DIF3:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF3
+  # M0DIF4:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF4
+  # M0DIF5:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF5
+  # M0DIF6:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF6
+  # M0DIF7:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF7
+  # M0DIF8:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF8
+  # M0DIF9:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF9
+  # M0DIF10:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF10
+  # M0DIF11:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 1
+  #   latex: M0DIF11
+  # M0DIF12:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF12
+  # M0DIF13:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF13
+  # M0DIF14:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF14
+  # M0DIF15:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF15
+  # M0DIF16:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF16
+  # M0DIF17:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF17
+  # M0DIF18:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF18
+  # M0DIF19:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF19
+  # M0DIF20:
+  #   prior: {min: -100, max: 100}
+  #   ref: -25
+  #   proposal: 10
+  #   latex: M0DIF20
   sig_int:
     prior: {min: -5, max: 10}
     ref: 0.5

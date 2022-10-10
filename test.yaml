@@ -6,13 +6,13 @@ likelihood:
     
 
 sampler: 
-  minimize: 
-      best_of: 5
-      override_bobyqa:
-       rhoend: 0.005
-      ignore_prior: True
-  #mcmc:
-  #  max_tries: 10000
+  #minimize: 
+  #    best_of: 5
+  #    override_bobyqa:
+  #     rhoend: 0.005
+  #    ignore_prior: True
+  mcmc:
+    max_tries: 10000
 
 output: chains/SALT2mu_min_test
 
