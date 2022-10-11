@@ -73,12 +73,13 @@ class SALT2mu(Likelihood):
 
             sigma_z2 = df['zHDERR'].values**2 #(5/(np.log(10))) * ( (1+self.dfFITRES['zHD'].values) / (self.dfFITRES['zHD'].values*(1+(self.dfFITRES['zHD'].values/2))) ) * np.sqrt(self.dfFITRES['zHDERR'].values**2 + (self.dfFITRES['VPECERR'].values/self.c)**2)
             sigma_mu2 = sig_int**2 - (sig_int*beta*df['zHDERR'].values)**2  + sigma_lens2 + sigma_z2 + df['x0ERR'].values**2 + (alpha**2)*df['x1ERR'].values**2 + (beta**2)*df['cERR'].values**2 + 2*alpha*df['COV_x1_x0'].values - 2*beta*df['COV_c_x0'].values - 2*alpha*beta*df['COV_x1_c'].values
-            chi2_tmp.append(np.sum(((mu_data - fid_cosmo)**2)/sigma_mu2 + 2*np.log(np.sqrt(sigma_mu2)))) #- guassian normalization term required if using bias corrections
+            chi2_tmp.append(np.sum(((mu_data - fid_cosmo)**2)/sigma_mu2 + 2*np.log(np.sqrt(sigma_mu2)) - 5)) #- guassian normalization term required if using bias corrections
 
-            #G10 = sig_int**2 - (sig_int*beta*df['zHDERR'].values)**2 my attempt at simplified G10 scatter model.. fitting now
+            #G10 = sig_int**2 - (sig_int*beta*df['zHDERR'].values)**2 my attempt at simplified G10 scatter model, recoved sig_int quite well
 
-        chi2 = np.sum(chi2_tmp) 
-        return -0.5*chi2 
+        # chi2 first term should = 1*N_data = 1796. Penality term 2*log(typical uncertainty)*N = 2*log(0.1)*1796 = -8270. TOT = -6470
+        loglike = -0.5*np.sum(chi2_tmp) 
+        return loglike
 
     def Hz_inverse(self, z, om, ol, w):
         self.c = 299792458
