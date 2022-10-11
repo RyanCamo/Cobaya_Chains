@@ -1,0 +1,8 @@
+likelihood:
+  Test:
+    class: likelihood.SALT2mu
+    python_path: SALT2mu
+    FITRES_path: /SALT2mu/nonstandard.FITRES
+sampler:
+  minimize: null
+output: SALT2mu_eval1

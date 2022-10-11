@@ -1,0 +1,66 @@
+likelihood:
+  Test:
+    FITRES_path: /SALT2mu/nonstandard.FITRES
+    p1: 0.3
+    p2: 0.7
+    p3: -1.0
+    p4: 70
+    type: []
+    speed: -1
+    stop_at_error: false
+    version: null
+    class: likelihood.SALT2mu
+    python_path: SALT2mu
+params:
+  alpha:
+    prior:
+      min: 0.12
+      max: 0.2
+    ref: 0.15
+    proposal: 0.01
+    latex: \alpha
+  beta:
+    prior:
+      min: 2.7
+      max: 3.5
+    ref: 2.9
+    proposal: 0.01
+    latex: \beta
+  M0DIF1:
+    prior:
+      min: -100
+      max: 100
+    ref: -25
+    proposal: 1
+    latex: M0DIF1
+  M0DIF2:
+    prior:
+      min: -100
+      max: 100
+    ref: -25
+    proposal: 10
+    latex: M0DIF2
+  sig_int:
+    prior:
+      min: -5
+      max: 10
+    ref: 0.5
+    proposal: 0.1
+    latex: \sigma_{\text{int}}
+sampler:
+  minimize:
+    method: bobyqa
+    ignore_prior: false
+    max_evals: 1e6d
+    best_of: 2
+    confidence_for_unbounded: 0.9999995
+    seed: null
+    override_scipy: null
+    override_bobyqa:
+      rhoend: 0.05
+    covmat: null
+    covmat_params: null
+    version: null
+    fallback_covmat_scale: 4
+output: SALT2mu_eval1
+version: 3.2.1
