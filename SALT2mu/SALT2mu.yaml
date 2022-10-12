@@ -3,9 +3,9 @@
 FITRES_path: False
 
 # Fiducial Cosmology
-p1: 0.3   # om
-p2: 0.7   # ol 
-p3: -1.0  # w
+p1: 0.5   # om
+p2: 0.5   # ol 
+p3: -1.5  # w
 p4: 70    # H0
 
 params: 

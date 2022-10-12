@@ -6,13 +6,13 @@ likelihood:
     
 
 sampler: 
-  #minimize: 
-  #    best_of: 5
-  #    override_bobyqa:
-  #     rhoend: 0.005
-  #    ignore_prior: True
-  mcmc:
-    max_tries: 10000
+  minimize: 
+      best_of: 5
+      override_bobyqa:
+       rhoend: 0.005
+      ignore_prior: True
+  #mcmc:
+  #  max_tries: 10000
   #evaluate: # Evaluate can be used to get the likelihood at a reference point
   #  override:
   #    alpha: 0.1601
@@ -21,4 +21,4 @@ sampler:
   #    M0DIF2: -30.0122
   #    sig_int: 0.0941
 
-output: chains/SALT2mu_tyestpath
+output: chains/SALT2mu_eval2
