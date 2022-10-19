@@ -4,7 +4,8 @@ from scipy.integrate import quad
 from scipy.interpolate import interp1d
 from functools import lru_cache
 from data.CMB_BAO.imports import get_CMB_BAO_data
-
+import pandas as pd
+from dyn_interp_mu import dyn_mu
 
 ## SN Likelihood functions
 def cov_log_likelihood(mu_model, mu, cov):
@@ -61,6 +62,19 @@ def curv(ok, x):
         D = x
         return D
 
+#TODO: doesnt remove the associated values from the covariance matrix...
+def remove_odd_SN(df0, df1, df2):
+    # Removes all odd SN. 
+    df1 = df1[df1['CID'].isin(df0['CID'])]
+    df1 = df1[df1['CID'].isin(df2['CID'])]
+    df2 = df2[df2['CID'].isin(df0['CID'])]
+    df2 = df2[df2['CID'].isin(df1['CID'])]
+    df0 = df0[df0['CID'].isin(df1['CID'])]
+    df0 = df0[df0['CID'].isin(df2['CID'])]
+    df0.reset_index(drop=True, inplace=True)
+    df1.reset_index(drop=True, inplace=True)
+    df2.reset_index(drop=True, inplace=True)
+    return df0, df1, df2
 
 class FLCDM(Likelihood):
 
@@ -346,7 +360,7 @@ class FwCDM(Likelihood):
          or overridden when running Cobaya.
         """
         # Load in SN data
-        if (self.HD_path != False) & (self.cov_path != False):
+        if (self.HD_path != False) & (self.cov_path != False) :
             self.cov_size = int(np.genfromtxt(self.cov_path, comments='#',dtype=None)[0])
             HD = np.genfromtxt(self.HD_path, names=True, comments='#')
             self.cov_arr = np.genfromtxt(self.cov_path, comments='#',dtype=None)[1:]
@@ -355,7 +369,7 @@ class FwCDM(Likelihood):
             self.mu_error = HD['MUERR']
             cov_reshape = self.cov_arr.reshape(self.cov_size,self.cov_size) 
             mu_diag = np.diag(self.mu_error)**2
-            self.cov = mu_diag+cov_reshape
+            #self.cov = mu_diag+cov_reshape
 
             # list of redshifts to interpolate between.
             self.z_interp = np.geomspace(0.0001, 2.5, 1000) 
@@ -367,7 +381,17 @@ class FwCDM(Likelihood):
                 self.like_func = log_likelihood
                 print('Covariance matrix is a zero matrix, check Fitops')
             else:
-                self.like_func = cov_log_likelihood  
+                self.like_func = cov_log_likelihood
+
+        if (self.HD1_path != False) & (self.HD2_path != False) & (self.HD_path != False):
+            self.HD0= pd.read_csv(self.HD_path, delim_whitespace=True, comment="#")  # nominal run
+            self.HD1= pd.read_csv(self.HD1_path, delim_whitespace=True, comment="#")  # +mu offset
+            self.HD2= pd.read_csv(self.HD2_path, delim_whitespace=True, comment="#")  # -mu offset
+            self.HD0, self.HD1, self.HD2 = remove_odd_SN(self.HD0, self.HD1, self.HD2)
+            self.mu_error = self.HD0['MUERR'] # THIS IS bad - no consideration for covariance matrices...
+            self.z_data = self.HD0['zCMB'] # THIS IS bad - no consideration for covariance matrices...
+            self.cov = self.mu_error
+            self.mu_data = self.HD0['MU']
 
         if self.CMB_BAO != False:
             self.BOSS_cov, self.BOSS_zz, self.BOSS_data, self.eBOSS_LRG_cov, self.eBOSS_LRG_zz, self.eBOSS_LRG_data, self.eBOSS_QSO_cov, self.eBOSS_QSO_zz, self.eBOSS_QSO_data, self.DMonDH_zz, self.DMonDH_data, self.DMonDH_err, self.DMonDM_zz, self.DMonDM_data, self.DMonDM_err, self.DMonDV_zz, self.DMonDV_data, self.DMonDV_err = get_CMB_BAO_data()
@@ -385,7 +409,7 @@ class FwCDM(Likelihood):
         SN_like = 0
         CMB_BAO_like = 0
     
-        if (self.HD_path != False) & (self.cov_path != False):
+        if (self.HD_path != False) & (self.cov_path != False) & (self.HD1_path == False) & (self.HD2_path == False) :
             # interpolates by default. Can be changed using the interp flag in the input .yaml
             if self.interp == True:       
                 dl_interp = interp_dl(self.lum_dist_interp, om, w)
@@ -394,6 +418,18 @@ class FwCDM(Likelihood):
             elif self.interp == False:
                 dist_mod = self.distmod(om, w)      
             SN_like = self.like_func(dist_mod, self.mu_data, self.cov)
+
+        if (self.HD1_path != False) & (self.HD2_path != False) & (self.HD_path != False):
+            if self.interp == True:       
+                dl_interp = interp_dl(self.lum_dist_interp, om, w)
+                dl_data = dl_interp(self.z_data)
+                dist_mod = 5 * np.log10(dl_data)
+                dist_mod = dyn_mu(dist_mod, self.HD0, self.HD1, self.HD2)
+            elif self.interp == False:
+                dist_mod = self.distmod(om, w)
+                dist_mod = dyn_mu(dist_mod, self.HD0, self.HD1, self.HD2)      
+            SN_like = self.like_func(dist_mod, self.mu_data, self.cov)
+
 
         if self.CMB_BAO != False:
             # uncorrelated data

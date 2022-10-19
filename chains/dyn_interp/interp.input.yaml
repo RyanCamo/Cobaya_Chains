@@ -1,0 +1,13 @@
+likelihood:
+  Test:
+    class: non_standards.FwCDM
+    python_path: likelihoods
+    HD_path: /Users/uqrcamil/Documents/GitHub/RyanCamosRepo/midway/outputs/RC_3HD/7_CREATE_COV/CCNOMNS_BBCNOMNS/output/hubble_diagram.txt
+    cov_path: /Users/uqrcamil/Documents/GitHub/RyanCamosRepo/midway/outputs/RC_3HD/7_CREATE_COV/CCNOMNS_BBCNOMNS/output/covsys_001.txt
+    interp: true
+    HD1_path: /Users/uqrcamil/Documents/GitHub/RyanCamosRepo/midway/outputs/RC_3HD/WIDE/HIGH/hubble_diagram.txt
+    HD2_path: /Users/uqrcamil/Documents/GitHub/RyanCamosRepo/midway/outputs/RC_3HD/WIDE/LOW/hubble_diagram.txt
+sampler:
+  mcmc:
+    max_tries: 10000
+output: interp

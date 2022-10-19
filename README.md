@@ -4,7 +4,6 @@ Repository for computing MCMC chains for non-standard models using Cobaya.
 The output chains are saved into the 'chains' folder - which have various sub folders depending on which data set we are using to constrain a model
 ie. SN, SN_BiasCor, CMB/BAO, SN+CMB/BAO
 
-
 # Data
 The 'data' folder containts supernova data.
 
@@ -43,73 +42,9 @@ residual_plot.py          - compares the original Hubble diagram to the new Hubb
 
 The .yaml files represent jobs to be completed much like pippin. 
 The current .yaml files here are jobs that have already been run and can be used as examples or changed as required.
-
-Each .yaml file will have a line of the form:
-  external: import_module('X').Y
-
-BEFORE running a particular job:
-
-'X' can be changed to:
-
-    likelihoods_BAO_CMB     - To constrain the model Y against CMB/BAO data
-  
-    likelihoods_SN          - To constrain the model Y against SN data (Iteration 1)
-    
-    likelihoods_SN_interp   - Same as likelihoods_SN but interpolates speeding up SN fitting.
-
-    likelihoods_SN_bias     - To constrain the model Y against SN data (Iteration 2) - Need to change line 19 of 
-                              likelihoods_SN_bias.py to the model your looking at
-  
-    likelihoods_BAO_CMB_SN  - To constrain model Y against SN+CMB/BAO data
-    
-    By default the SN data is currently using DES5YR_REAL_DIFFIMG_DATA  
-    This can be changed within the likelihood files that constrain models against SN data by changing the relative file paths. 
-    Note however that different SN data need to be imported differently.
-  
-  
-  Y represents the abbreviation for a particular non standard model. 
-  
-  The non-standard models currently supported are:
-  
-    FLCDM   - Flat Lambda_CDM
-    
-    LCDM    - Lambda_CDM
-    
-    FwCDM   - Flat omega_CDM
-    
-    wCDM    - omega_CDM
-    
-    Fwa     - Flat linear parameterisation of omega as a function of scalefactor
-    
-    Fwz     - Flat linear parameterisation of omega as a function of redshift
-    
-    IDEA    - Interacting Dark Energy & Dark Matter: Q = Hερ_d
-    
-    IDEB    - Interacting Dark Energy & Dark Matter: Q = Hερ_c
-    
-    IDEC    - Interacting Dark Energy & Dark Matter: Q = Hε (ρ_c * ρ_d)/(ρ_c + ρ_d)
-    
-    IDE1    - Obsolete
-    
-    IDE2    - Obsolete
-    
-    IDE3    - Obsolete
-    
-    Chap    - Standard Chaplygin Gas
-    
-    FGChap  - Flat Generalised Chaplygin Gas
-    
-    GChap   - Generalised Chaplygin Gas
-    
-    NGCG    - New Generalised Chaplygin Gas
-    
-    FCa     - Flat Cardassian 
-    
-    DGP     - DGP 
-
+example.yaml has instructions at the bottom of the file.
 
 Finally, make sure to change the name of the output file at the bottom of the .yaml and the file path depending on where you want your output saved.
-
 
 To run a job:
 
